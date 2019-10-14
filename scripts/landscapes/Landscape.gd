@@ -12,6 +12,9 @@ func init(map, cell_pos3):
 	map.map_landscape.set_cellv(cell_pos, get_tile_id() + map.tile_height_id_dst * cell_pos3.z); # dirt
 	return self
 
+func time_update(time:float):
+	pass
+		
 func get_tile_id():
 	return 0
 	

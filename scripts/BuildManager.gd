@@ -2,6 +2,8 @@ extends Node
 
 var selected_building_or_null = null
 
+var map
+
 onready var Panda = preload("res://scenes/Panda.tscn")
 
 var ressourceManager
@@ -11,6 +13,7 @@ func _ready():
 		ressourceManager = ressourceManager[0]
 	else:
 		ressourceManager = null
+	map = get_parent().get_node("Map")
 	
 		
 func has_selected_building():
@@ -18,6 +21,7 @@ func has_selected_building():
 
 func select_building(building):
 	selected_building_or_null = building
+	show_possible_build_sites()
 	
 func cancel():
 	selected_building_or_null = null
@@ -36,15 +40,25 @@ func input(event):
 			var rect = get_viewport().get_visible_rect().size
 			var cam = get_parent().get_node("Camera2D")
 			var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
-			var map = get_parent().get_node("Map")
+			
 			var cell_pos = map.map_overlay.world_to_map(click_pos + map.map_overlay.cell_size / 2.0)
 			
 			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and !map.blocks.has(cell_pos):
 				buy(map, cell_pos)
+				hide_possible_build_sites()
 			return true
 	
 	return false
-	
+
+func show_possible_build_sites():
+	for pos in map.landscapes:
+		if map.landscapes[pos].can_build_on(map, pos) and !map.blocks.has(pos):
+			map.map_overlay.set_cellv(pos, 11);
+			
+func hide_possible_build_sites():
+	for pos in map.map_overlay.get_used_cells():
+		map.map_overlay.set_cellv(pos, -1);
+
 func buy(map, cell_pos):
 	
 	ressourceManager.add_ressource("bamboo", -selected_building_or_null.costs_bamboo)

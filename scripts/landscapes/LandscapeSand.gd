@@ -20,10 +20,17 @@ func get_tile_id():
 func tick():
 	pass
 
-var time = 0.0
-func _process(delta:float):
-	time += delta
-	pass
+func time_update(time:float):
+	var s = sin(time * 2.0*PI / LandscapeWater.TIDE_TIME)
+	var deep = cell_pos3.z == 3
+	
+	var humidity_bonus = 1 * (humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 0.5]
+	if deep and s > -0.4 + humidity_bonus:
+		conv()
+		return
+	if !deep and s > 0.4 + humidity_bonus:
+		conv()
+		return
 	
 
 func conv():

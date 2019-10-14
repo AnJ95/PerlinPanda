@@ -29,6 +29,7 @@ export(Array, Texture) var landscapeBlocksOverlayTextures
 
 var layer_px_dst = 8
 
+var time = 0
 
 # State
 var cur_gen = 0
@@ -96,6 +97,7 @@ func _ready():
 	
 func _process(delta:float):
 	tick_time_left -= delta
+	time += delta
 	if tick_time_left <= 0:
 		reset_tick_time_left()
 		var cells = map_landscape.get_used_cells()
@@ -106,6 +108,9 @@ func _process(delta:float):
 		landscapes[cell].tick()
 		if blocks.has(cell) and blocks[cell] != null:
 			blocks[cell].tick()
+			
+	for landscape in landscapes:
+		landscapes[landscape].time_update(time)
 		
 
 func init_map_gens():

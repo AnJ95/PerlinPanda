@@ -30,18 +30,43 @@ onready var tile_ids = {
 	"stone_down_2" : 		3 + 4*map.tile_cols
 	}
 
+var c:Color = Color(1,1,1,0)
 func _input(event: InputEvent):
-	var buildMgr = get_parent().get_node("BuildManager")
 	
+	# Hover effect: show panda path when mouse over house
+	if event is InputEventMouseMotion:
+		# first hide all lines
+		for panda in get_tree().get_nodes_in_group("panda"):
+			if panda.line != null:
+				c.a = 0.0
+				panda.line.default_color = c
+				
+		# then calc where mouse is
+		var rect = get_viewport().get_visible_rect().size
+		var cam = get_parent().get_node("Camera2D")
+		
+		# if panda in range: show its line
+		var other = get_panda_in_range((event.position - rect / 2) * cam.zoom + cam.offset)
+		if other != null:
+			
+			if other.line != null:
+				c.a = 0.8
+				other.line.default_color = c
+				
+	# build manager first!
+	var buildMgr = get_parent().get_node("BuildManager")
 	if buildMgr.input(event):
 		return
 	
+	
+	
+	# cancel
 	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
 		if active:
 			active = false
 			update_preview()
-			map.show_homes()
-			
+			map.show_homes()	
+	
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		var rect = get_viewport().get_visible_rect().size
 		var cam = get_parent().get_node("Camera2D")
@@ -53,7 +78,11 @@ func _input(event: InputEvent):
 		else:
 			try_start_path(click_pos)
 				
-
+func get_panda_in_range(click_pos):
+	for panda in get_tree().get_nodes_in_group("panda"):
+		if map.map_landscape.map_to_world(panda.home_pos).distance_to(click_pos) < 40:
+			return panda
+	
 func add_to_current_path(click_pos):
 	if !active or !panda or path.size() == 0:
 		printerr("IllegalStateException: add_to_current_path() before try_start_path() worked")
@@ -137,7 +166,7 @@ func done_with_path():
 		get_parent().get_node("Map/Navigation2D/PathHolder").add_child(panda.line)
 		panda.line.points = PoolVector2Array()
 	
-	panda.line.modulate = Color(panda.line.modulate.r, panda.line.modulate.g, panda.line.modulate.b, 0.5)
+	panda.line.modulate = Color(panda.line.modulate.r, panda.line.modulate.g, panda.line.modulate.b, 0.6)
 	var pts = Array(panda.line.points)
 	# only at start of path, to prevent popFront too early
 	if pts.size() == 0:
@@ -149,12 +178,12 @@ func done_with_path():
 	
 	
 func try_start_path(click_pos):
-	for panda in get_tree().get_nodes_in_group("panda"):	
-		if map.map_landscape.map_to_world(panda.home_pos).distance_to(click_pos) < 50:
+		var panda = get_panda_in_range(click_pos)
+		if panda != null:
 			active = true
 			self.panda = panda
 			path = [panda.home_pos]
-			
+			panda.stop_particles()
 			update_preview()
 			return
 			

@@ -7,12 +7,12 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_UP:
-				zoom.x = min(2, zoom.x * 1.02)
-				zoom.y = min(2, zoom.y * 1.02)
+				zoom.x = min(2, zoom.x * 1.03)
+				zoom.y = min(2, zoom.y * 1.03)
 				return
 			if event.button_index == BUTTON_WHEEL_DOWN:
-				zoom.x = max(1, zoom.x / 1.02)
-				zoom.y = max(1, zoom.y / 1.02)
+				zoom.x = max(1, zoom.x / 1.03)
+				zoom.y = max(1, zoom.y / 1.03)
 				return
 			dragging = true
 			drag_offset = event.position + offset

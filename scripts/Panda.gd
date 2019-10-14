@@ -23,6 +23,19 @@ var timer = 0
 
 var ressourceManager
 
+var inventory = {}
+
+func move_inventory():
+	for res_name in inventory:
+		ressourceManager.add_ressource(res_name, inventory[res_name])
+		
+		
+func add_to_inventory(res_name, res_value):
+	if !inventory.has(res_name):
+		inventory[res_name] = res_value
+	else:
+		inventory[res_name] += res_value
+
 func prep(map, home_pos3):
 	self.map = map
 	self.home_pos3 = home_pos3
@@ -40,6 +53,7 @@ func _ready():
 		ressourceManager = null
 		
 	map.show_homes()
+	$Particles_sleeping.emitting = true
 		
 	
 func _process(delta: float) -> void:
@@ -52,9 +66,10 @@ func _process(delta: float) -> void:
 		time_left_to_work -= delta
 		if time_left_to_work <= 0:
 			working_on_ressource = false
+			stop_particles()
 			var ressource_name = ressource_working_on.ressource_name_or_null()
 			var ressource_value = ressource_working_on.get_ressource_amount_after_work_done()
-			ressourceManager.add_ressource(ressource_name, ressource_value)
+			add_to_inventory(ressource_name, ressource_value)
 			print("Got " + str(ressource_value) + " " + ressource_name)
 		else:
 			var angle = 15*sin(5 * (ressource_working_on.ressource_work_time() - time_left_to_work) * (2*PI))
@@ -67,6 +82,15 @@ func _process(delta: float) -> void:
 	var standing_on = map.map_landscape.world_to_map(position + map.map_landscape.cell_size / 2.0)
 	var landscape_standing_on = map.landscapes[standing_on]
 	speed_factor *= landscape_standing_on.get_speed_factor()
+	
+	for panda in get_tree().get_nodes_in_group("panda"):
+		if panda != self:
+			var a:Vector2 = panda.position
+			var b:Vector2 = self.position
+			if a.distance_squared_to(b) < 80*80 and a.distance_to(b) < 80:
+				speed_factor *= 0.75
+			if a.distance_squared_to(b) < 40*40 and a.distance_to(b) < 40:
+				speed_factor *= 0.5
 	
 	var dhdx = 0
 	if last_target != null:
@@ -101,6 +125,9 @@ func _process(delta: float) -> void:
 			var landscape = map.landscapes[reached_cell]
 			landscape.panda_in_center(self)
 		
+		# move pandas inventory to global ressources
+		move_inventory()
+		
 		curr_path_pos += 1
 		# when panda walked full circle
 		if curr_path_pos == path.size():
@@ -110,7 +137,7 @@ func _process(delta: float) -> void:
 				path = next_paths.pop_front()
 			else:
 				path = null
-				# todo anim sleep
+				$Particles_sleeping.emitting = true
 				update_sprite(Vector2(1,1))
 
 
@@ -141,5 +168,11 @@ func start_working_on_ressource(ressource):
 	ressource_working_on = ressource
 	time_left_to_work = ressource.ressource_work_time()
 	
+	get_node("Particles_" + ressource.ressource_name_or_null()).emitting = true
+	
+func stop_particles():
+	$Particles_bamboo.emitting = false
+	$Particles_stone.emitting = false
+	$Particles_sleeping.emitting = false
 	
 	

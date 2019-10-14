@@ -8,7 +8,7 @@ func initOverload(map, cell_pos3, _Panda):
 	return self
 	
 func get_tile_id():
-	return 14
+	return 16
 
 func get_speed_factor():
 	return 2.5

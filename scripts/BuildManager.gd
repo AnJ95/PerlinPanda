@@ -44,16 +44,21 @@ func input(event):
 			
 			var cell_pos = map.map_overlay.world_to_map(click_pos + map.map_overlay.cell_size / 2.0)
 			
-			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and !map.blocks.has(cell_pos):
+			var clazz = load(selected_building_or_null.building_script_path)
+			var proto = clazz.new()
+			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and proto.can_be_build_on(map, cell_pos):
 				buy(map, cell_pos)
 			return true
 	
 	return false
 
+
 func show_possible_build_sites():
+	var clazz = load(selected_building_or_null.building_script_path)
+	var proto = clazz.new()
 	for pos in map.landscapes:
-		if map.landscapes[pos].can_build_on(map, pos) and !map.blocks.has(pos):
-			map.map_overlay.set_cellv(pos, 11 + map.landscapes[pos].cell_pos3.z * map.tile_height_id_dst);
+		if map.landscapes[pos].can_build_on(map, pos) and proto.can_be_build_on(map, pos):
+			map.map_overlay.set_cellv(pos, 13 + map.landscapes[pos].cell_pos3.z * map.tile_height_id_dst);
 			
 func hide_possible_build_sites():
 	for pos in map.map_overlay.get_used_cells():

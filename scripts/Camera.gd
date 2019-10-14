@@ -7,8 +7,8 @@ func _input(event):
 	if event is InputEventMouseButton:
 		if event.is_pressed():
 			if event.button_index == BUTTON_WHEEL_UP:
-				zoom.x = min(2, zoom.x * 1.03)
-				zoom.y = min(2, zoom.y * 1.03)
+				zoom.x = min(2.5, zoom.x * 1.03)
+				zoom.y = min(2.5, zoom.y * 1.03)
 				return
 			if event.button_index == BUTTON_WHEEL_DOWN:
 				zoom.x = max(1, zoom.x / 1.03)

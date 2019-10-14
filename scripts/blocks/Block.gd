@@ -5,6 +5,7 @@ var map
 var cell_pos3
 var stock:int
 
+var is_bamboo = false
 
 func init(map, cell_pos3):
 	self.map = map
@@ -15,7 +16,7 @@ func init(map, cell_pos3):
 	
 	# add tile id offset stock (if this is a ressource)
 	if ressource_name_or_null() != null:
-		tile_id += (3 - stock) * map.tile_cols
+		tile_id += (get_max_stock() - stock) * map.tile_cols
 	
 	# add tile id offset for height
 	tile_id += map.tile_height_id_dst * (cell_pos3.z)
@@ -51,13 +52,13 @@ func update_tile():
 
 	var current_tile = map.map_blocks.get_cellv(cell_pos)
 	var original_tile = ((current_tile % map.tile_height_id_dst) % map.tile_cols)
-	var new_tile = (3-stock)*map.tile_cols + original_tile
+	var new_tile = (get_max_stock()-stock)*map.tile_cols + original_tile
 	new_tile += map.tile_height_id_dst * cell_pos3.z
 	map.map_blocks.set_cellv(cell_pos, new_tile)
 		
 func tick():
 	if ressource_name_or_null() != null and randi()%100 < get_stack_increase_prob():
-		stock = min(3, stock + 1)
+		stock = min(get_max_stock(), stock + 1)
 		print("increased stock from " + str(stock-1) + " to " + str(stock))
 		update_tile()
 		print("... increased stock of ressource " + ressource_name_or_null())
@@ -75,6 +76,9 @@ func get_speed_factor():
 	
 func get_stack_increase_prob():
 	return 0
+	
+func can_be_build_on(map, cell_pos):
+	return !map.blocks.has(cell_pos)
 	
 func remove():
 	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)

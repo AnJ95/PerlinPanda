@@ -3,6 +3,7 @@ extends "Block.gd"
 
 func initOverload(map, cell_pos3, stock):
 	self.stock = stock
+	is_bamboo = true
 	return .init(map, cell_pos3)
 	
 func get_tile_id():
@@ -16,6 +17,9 @@ func get_ressource_amount():
 	return 1
 func get_sprite_num():
 	return 4
+
+func get_regrow_factor():
+	return 0.8
 	
 func get_stack_increase_prob():
 	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
@@ -36,6 +40,6 @@ func get_stack_increase_prob():
 					else:
 						num_non_spreading += 1
 	if num_spreading > 0:
-		var prob_to_spread = 80 * (num_spreading / float(num_spreading + num_non_spreading))
+		var prob_to_spread = get_regrow_factor() * 100 * (num_spreading / float(num_spreading + num_non_spreading))
 		return prob_to_spread
 	return 0

@@ -12,7 +12,7 @@ func init(map, cell_pos3):
 	map.map_landscape.set_cellv(cell_pos, get_tile_id() + map.tile_height_id_dst * cell_pos3.z); # dirt
 	return self
 
-func time_update(time:float):
+func time_update(_time:float):
 	pass
 		
 func get_tile_id():
@@ -30,7 +30,7 @@ func can_spread_grass():
 func get_speed_factor():
 	return 1.0
 
-func can_build_on(map, cell_pos):
+func can_build_on(_map, _cell_pos):
 	return true
 	
 func remove():

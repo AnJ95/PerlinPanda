@@ -67,7 +67,7 @@ func conv():
 	map.landscapes[Vector2(cell_pos3.x, cell_pos3.y)] = LandscapeSand.new().initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity) # dirt
 
 func can_spread_grass():
-	return true # TODO
+	return true
 	
 func get_speed_factor():
 	return 0.25

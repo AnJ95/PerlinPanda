@@ -17,6 +17,9 @@ func initOverload(map, cell_pos3, Panda):
 	
 func get_tile_id():
 	return  4
+	
+func get_speed_factor():
+	return 1.2
 
 func ressource_name_or_null():
 	return null

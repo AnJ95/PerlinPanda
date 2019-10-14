@@ -183,10 +183,10 @@ func generate_tile(var cell_pos:Vector2):
 	# landscape
 	if height <= 1:
 		if noiseFertility < -0.2: 
-			landscapes[cell_pos] = LandscapeDirt.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt)
+			landscapes[cell_pos] = LandscapeDirt.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt, noiseFertility)
 			landscape = "dirt"
 		else:  
-			landscapes[cell_pos] = LandscapeGrass.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt)
+			landscapes[cell_pos] = LandscapeGrass.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt, noiseFertility)
 			landscape = "grass"
 	else: # sand
 		if height == 3:

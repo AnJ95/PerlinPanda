@@ -47,9 +47,9 @@ onready var all_maps = [map_landscape, map_blocks, map_overlay]
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 4, "period": 7.0, "persistence": 0.8, "seed": 11},
-	"fertility" : {"octaves": 4, "period": 1.0, "persistence": 0.8, "seed": 12},
-	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 13}
+	"height" : {"octaves": 4, "period": 7.0, "persistence": 0.8, "seed": 21},
+	"fertility" : {"octaves": 4, "period": 1.0, "persistence": 0.8, "seed": 22},
+	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 23}
 }
 var map_gens = {}
 
@@ -61,25 +61,6 @@ func _ready():
 	
 	if Engine.editor_hint:
 		update_tileset_regions()
-	else:
-		for map in all_maps:
-			var tile_set = map.tile_set
-			var tile_ids = tile_set.get_tiles_ids()
-			
-			for z in range(0, 3):
-				var next_tile_id = (z+1) * tile_height_id_dst
-				var extra_offset = Vector2(0, (z+1) * layer_px_dst)
-				var c = 1.0 - 0.05 * (z+1)
-				var extra_col = Color(c,c,c,1)
-				for tile_id in tile_ids:
-					tile_set.create_tile(next_tile_id)
-					tile_set.tile_set_texture(next_tile_id, tile_set.tile_get_texture(tile_id))
-					tile_set.tile_set_texture_offset(next_tile_id, tile_set.tile_get_texture_offset(tile_id) + extra_offset)
-					tile_set.tile_set_region(next_tile_id, tile_set.tile_get_region(tile_id))
-					
-					if map != map_overlay:
-						tile_set.tile_set_modulate(next_tile_id, extra_col)
-					next_tile_id += 1
 			
 			
 	
@@ -94,8 +75,7 @@ func _ready():
 	show_homes()
 	
 	if Engine.editor_hint:
-		generate_next(Vector2(), 5)
-	#generate_next()
+		generate_next(Vector2(), 8)
 	
 func _process(delta:float):
 	# too much lag
@@ -240,7 +220,8 @@ func generate_tile(var cell_pos:Vector2):
 	
 	
 func update_tileset_regions():
-	
+
+	# create original tile_cols * tile_rows (for every map)
 	var i = 0
 	for map in $Navigation2D.get_children():
 		if map is TileMap:
@@ -260,4 +241,30 @@ func update_tileset_regions():
 				# set this cells region
 				map.tile_set.tile_set_region(id, region)
 				map.tile_set.tile_set_texture_offset(id, Vector2(-57, -69))
+	
+	# create extra tiles for height
+	for map in all_maps:
+		var tile_set = map.tile_set
+		var tile_ids = tile_set.get_tiles_ids()
+		
+		# clear first
+		for tile_id in tile_ids:
+			if tile_id >= tile_height_id_dst:
+				tile_set.remove_tile(tile_id)
+		
+		# then create all layers
+		for z in range(0, 3):
+			var next_tile_id = (z+1) * tile_height_id_dst
+			var extra_offset = Vector2(0, (z+1) * layer_px_dst)
+			var c = 1.0 - 0.05 * (z+1)
+			var extra_col = Color(c,c,c,1)
+			for tile_id in tile_ids:
+				tile_set.create_tile(next_tile_id)
+				tile_set.tile_set_texture(next_tile_id, tile_set.tile_get_texture(tile_id))
+				tile_set.tile_set_texture_offset(next_tile_id, tile_set.tile_get_texture_offset(tile_id) + extra_offset)
+				tile_set.tile_set_region(next_tile_id, tile_set.tile_get_region(tile_id))
+				
+				if map != map_overlay:
+					tile_set.tile_set_modulate(next_tile_id, extra_col)
+				next_tile_id += 1
 	

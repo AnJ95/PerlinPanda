@@ -1,0 +1,39 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://scenes/ui/Ressource.gd" type="Script" id=1]
+[ext_resource path="res://assets/zorque.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="DynamicFont" id=1]
+
+font_data = ExtResource( 2 )
+
+[node name="Ressource" type="HBoxContainer"]
+margin_right = 200.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 200, 70 )
+script = ExtResource( 1 )
+value = 1
+ressource_name = ""
+show_max_value = false
+max_ressource_name = ""
+max_value = 1
+do_update = true
+small = false
+
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_right = 60.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 60, 70 )
+expand = true
+stretch_mode = 6
+
+[node name="Label" type="Label" parent="."]
+margin_left = 64.0
+margin_right = 70.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 0, 70 )
+custom_fonts/font = SubResource( 1 )
+text = "1"
+align = 2
+valign = 1
+

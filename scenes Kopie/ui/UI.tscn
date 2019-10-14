@@ -1,0 +1,79 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/images/food.png" type="Texture" id=2]
+[ext_resource path="res://assets/images/stone.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/population.png" type="Texture" id=4]
+[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+bg_color = Color( 0.580392, 0.556863, 0.45098, 1 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+bg_color = Color( 0, 0, 0, 0.117647 )
+
+[node name="UI" type="MarginContainer"]
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+margin_right = 1024.0
+margin_bottom = 601.0
+
+[node name="RessourceBamboo" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_right = 1024.0
+ressource_name = "bamboo"
+texture = ExtResource( 2 )
+
+[node name="RessourceStone" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 74.0
+margin_right = 1024.0
+margin_bottom = 144.0
+ressource_name = "stone"
+texture = ExtResource( 3 )
+
+[node name="RessourcePopulation" parent="VBoxContainer" instance=ExtResource( 1 )]
+margin_top = 148.0
+margin_right = 1024.0
+margin_bottom = 218.0
+ressource_name = "population"
+max_ressource_name = "population_max"
+texture = ExtResource( 4 )
+
+[node name="Container" type="Container" parent="VBoxContainer"]
+margin_top = 222.0
+margin_right = 1024.0
+margin_bottom = 527.0
+rect_min_size = Vector2( 0, 305 )
+
+[node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
+margin_top = 531.0
+margin_right = 1024.0
+margin_bottom = 601.0
+custom_styles/panel = SubResource( 1 )
+
+[node name="Border" type="PanelContainer" parent="VBoxContainer/PanelContainer"]
+margin_right = 1024.0
+margin_bottom = 70.0
+custom_styles/panel = SubResource( 2 )
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
+margin_right = 1024.0
+margin_bottom = 70.0
+
+[node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
+costs_stone = 3
+building_script_path = "scripts/blocks/BlockHouse.gd"
+
+[node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
+margin_left = 134.0
+margin_right = 264.0
+building_animation_frame = 14
+costs_bamboo = 2
+costs_stone = 2
+building_script_path = "scripts/blocks/BlockStreet.gd"
+

@@ -1,0 +1,83 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://scripts/ui/Building.gd" type="Script" id=1]
+[ext_resource path="res://assets/tilesBlocks.png" type="Texture" id=2]
+[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/images/food.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/stone.png" type="Texture" id=5]
+
+[sub_resource type="StyleBoxFlat" id=1]
+
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+bg_color = Color( 0.321563, 0, 0, 0.235294 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+
+bg_color = Color( 0, 0, 0, 0.117647 )
+
+[node name="Buyable" type="Button"]
+margin_right = 130.0
+margin_bottom = 70.0
+rect_min_size = Vector2( 130, 70 )
+focus_mode = 0
+custom_styles/hover = SubResource( 1 )
+custom_styles/pressed = SubResource( 2 )
+custom_styles/focus = SubResource( 3 )
+custom_styles/disabled = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+script = ExtResource( 1 )
+building_animation_frame = 4
+building_script_path = ""
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+margin_right = 164.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 0, 70 )
+
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
+margin_right = 60.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 60, 70 )
+
+[node name="Sprite" type="Sprite" parent="HBoxContainer/TextureRect"]
+position = Vector2( 32, 35 )
+scale = Vector2( 0.4, 0.4 )
+texture = ExtResource( 2 )
+vframes = 5
+hframes = 5
+frame = 4
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+margin_left = 64.0
+margin_right = 164.0
+margin_bottom = 74.0
+rect_min_size = Vector2( 0, 70 )
+custom_constants/separation = 0
+
+[node name="CostsBamboo" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+margin_right = 100.0
+margin_bottom = 35.0
+rect_min_size = Vector2( 100, 35 )
+value = 6
+texture = ExtResource( 4 )
+do_update = false
+small = true
+
+[node name="CostsStone" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+margin_top = 35.0
+margin_right = 100.0
+rect_min_size = Vector2( 100, 35 )
+value = 0
+texture = ExtResource( 5 )
+do_update = false
+small = true
+
+[connection signal="pressed" from="." to="." method="_on_pressed"]

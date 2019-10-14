@@ -15,7 +15,7 @@ func initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity):
 	return self
 	
 func get_tile_id():
-	return 10
+	return 10 + randi()%5
 
 func tick():
 	pass

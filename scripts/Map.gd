@@ -96,6 +96,10 @@ func _ready():
 	#generate_next()
 	
 func _process(delta:float):
+	# too much lag
+	if Engine.editor_hint:
+		return
+		
 	tick_time_left -= delta
 	time += delta
 	if tick_time_left <= 0:

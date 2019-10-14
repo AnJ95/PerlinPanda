@@ -62,6 +62,8 @@ func tick():
 		update_tile()
 		print("... increased stock of ressource " + ressource_name_or_null())
 	
+func get_max_stock():
+	return 3
 func ressource_name_or_null():
 	return null
 func ressource_work_time():

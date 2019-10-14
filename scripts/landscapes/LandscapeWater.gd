@@ -18,7 +18,7 @@ func initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity):
 	return self
 	
 func get_tile_id():
-	return 15
+	return 3 * 6 # TODO  6 = map.tile_cols
 
 func tick():
 	pass
@@ -36,7 +36,7 @@ func time_update(time:float):
 		anim_time_left = anim_time
 		
 		cur_anim_tile_id += 1
-		if cur_anim_tile_id > 19:
+		if cur_anim_tile_id > 3 * map.tile_cols + 4:
 			cur_anim_tile_id = get_tile_id()
 		
 	last_time = time

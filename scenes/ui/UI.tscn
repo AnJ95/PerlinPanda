@@ -72,7 +72,7 @@ building_script_path = "scripts/blocks/BlockHouse.gd"
 [node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
 margin_left = 134.0
 margin_right = 264.0
-building_animation_frame = 14
+building_animation_frame = 16
 costs_bamboo = 2
 costs_stone = 2
 building_script_path = "scripts/blocks/BlockStreet.gd"

@@ -17,7 +17,7 @@ func initOverload(map, cell_pos3, LandscapeGrass, LandscapeDirt, fertility):
 	return self
 
 func get_tile_id():
-	return randi()%5+5
+	return randi()%5+6 # TODO  6 = map.tile_cols
 	
 func tick():
 	var percent = get_adjacent_spreadable_percent()

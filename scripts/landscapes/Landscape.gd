@@ -26,7 +26,9 @@ func can_spread_grass():
 	
 func get_speed_factor():
 	return 1.0
-	
+
+func can_build_on(map, cell_pos):
+	return true
 	
 func remove():
 	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)

@@ -39,7 +39,7 @@ func input(event):
 			var map = get_parent().get_node("Map")
 			var cell_pos = map.map_overlay.world_to_map(click_pos + map.map_overlay.cell_size / 2.0)
 			
-			if map.landscapes.has(cell_pos) and !map.blocks.has(cell_pos):
+			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and !map.blocks.has(cell_pos):
 				buy(map, cell_pos)
 			return true
 	

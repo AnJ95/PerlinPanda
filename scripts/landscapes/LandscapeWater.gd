@@ -14,12 +14,14 @@ func initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity):
 	return self
 	
 func get_tile_id():
-	return randi()%5+0
+	return 15
 
 func tick():
 	pass
 	
+var time = 0.0
 func _process(delta:float):
+	time += delta
 	pass
 	
 
@@ -31,3 +33,6 @@ func can_spread_grass():
 	
 func get_speed_factor():
 	return 0.25
+	
+func can_build_on(_map, _cell_pos):
+	return false

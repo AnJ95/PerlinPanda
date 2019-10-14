@@ -41,7 +41,6 @@ func _ready():
 	else:
 		buildManager = null
 	
-onready var rand = randi()%100
 func ressource_changed(_ressource_name, _value):
 	#print(str(rand) + " unfocus")
 	if !Engine.editor_hint:

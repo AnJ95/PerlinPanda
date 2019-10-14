@@ -76,7 +76,8 @@ func _ready():
 					tile_set.tile_set_texture_offset(next_tile_id, tile_set.tile_get_texture_offset(tile_id) + extra_offset)
 					tile_set.tile_set_region(next_tile_id, tile_set.tile_get_region(tile_id))
 					
-					
+					if map != map_overlay:
+						tile_set.tile_set_modulate(next_tile_id, extra_col)
 					next_tile_id += 1
 			
 			
@@ -89,6 +90,8 @@ func _ready():
 		panda.queue_free()
 	
 	generate_tile(Vector2())
+	if Engine.editor_hint:
+		generate_next(Vector2(), 5)
 	#generate_next()
 	
 func _process(delta:float):
@@ -115,8 +118,8 @@ func init_map_gens():
 func generate_next(from:Vector2, rd:int):
 	cur_gen += 1
 		
-	for y in range(-3, 3):
-		for x in range(-3, 3):
+	for y in range(-rd-1, rd+2):
+		for x in range(-rd-1, rd+2):
 			var pos = from + Vector2(x, y)
 			if landscapes.has(pos):
 				continue
@@ -145,6 +148,7 @@ func generate_tile(var cell_pos:Vector2):
 	noiseFertility += start_bonus
 	noiseHumidity += start_bonus
 	
+	
 	var landscape = ""
 	var block = ""
 	
@@ -155,6 +159,9 @@ func generate_tile(var cell_pos:Vector2):
 		height = 2
 	if noiseHeight < -0.3:
 		height = 3
+		
+	if cell_pos == Vector2():
+		height = 0
 	
 	var cell_pos3 = Vector3(cell_pos.x, cell_pos.y, height)
 	height_layer[cell_pos] = height
@@ -198,7 +205,7 @@ func generate_tile(var cell_pos:Vector2):
 			blocks[cell_pos] = BlockBamboo.new().initOverload(self, cell_pos3, bamboo_fertility)
 			block = "bamboo"
 	
-	if block == "" and cell_pos != Vector2():
+	if block == "" and landscape != "water" and cell_pos != Vector2():
 		var prob_stone = 0
 		var stone_stock = 0
 		if noiseFertility < -0.1 and noiseHumidity < -0.1:

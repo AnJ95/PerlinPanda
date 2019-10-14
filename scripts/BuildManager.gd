@@ -25,6 +25,7 @@ func select_building(building):
 	
 func cancel():
 	selected_building_or_null = null
+	hide_possible_build_sites()
 	
 	
 func input(event):
@@ -45,7 +46,6 @@ func input(event):
 			
 			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and !map.blocks.has(cell_pos):
 				buy(map, cell_pos)
-				hide_possible_build_sites()
 			return true
 	
 	return false
@@ -53,7 +53,7 @@ func input(event):
 func show_possible_build_sites():
 	for pos in map.landscapes:
 		if map.landscapes[pos].can_build_on(map, pos) and !map.blocks.has(pos):
-			map.map_overlay.set_cellv(pos, 11);
+			map.map_overlay.set_cellv(pos, 11 + map.landscapes[pos].cell_pos3.z * map.tile_height_id_dst);
 			
 func hide_possible_build_sites():
 	for pos in map.map_overlay.get_used_cells():

@@ -44,10 +44,10 @@ func time_update(time:float):
 	var s = sin(time * 2.0*PI / TIDE_TIME)
 	var deep = (cell_pos3.z == 3)
 	
-	var humidity_bonus = 1 * (humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 0.5]
+	var humidity_bonus = 1 * (humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 1]
 	
 	if deep: 
-		if s > -0.4 + humidity_bonus:
+		if s > -1.0 + humidity_bonus:
 			cur_water_level = 3
 		if s > 0.4 + humidity_bonus:
 			cur_water_level = 2
@@ -55,7 +55,7 @@ func time_update(time:float):
 	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
 	map.map_landscape.set_cellv(cell_pos, cur_anim_tile_id + cur_water_level * map.tile_height_id_dst)
 		
-	if deep and s < -0.4 + humidity_bonus:
+	if deep and s < -1.0 + humidity_bonus:
 		conv()
 		return
 	if !deep and s < 0.4 + humidity_bonus:

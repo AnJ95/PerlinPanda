@@ -4,6 +4,7 @@ var selected_building_or_null = null
 
 var map
 
+onready var BlockWIP = preload("res://scripts/blocks/BlockWIP.gd")
 onready var Panda = preload("res://scenes/Panda.tscn")
 
 var ressourceManager
@@ -74,6 +75,7 @@ func buy(map, cell_pos):
 	var clazz = load(selected_building_or_null.building_script_path)
 	
 	var cell_pos3 = Vector3(cell_pos.x, cell_pos.y, map.height_layer[cell_pos])
-	map.blocks[cell_pos] = clazz.new().initOverload(map, cell_pos3, Panda)
+	map.blocks[cell_pos] = BlockWIP.new().initOverload(map, cell_pos3, Panda, clazz)
+	
 	
 	cancel()

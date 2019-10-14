@@ -6,6 +6,7 @@ var cell_pos3
 var stock:int
 
 var is_bamboo = false
+var is_wip = false
 
 func init(map, cell_pos3):
 	self.map = map
@@ -73,6 +74,8 @@ func get_sprite_num():
 	return 4
 func get_speed_factor():
 	return 1.0
+func get_build_time():
+	return 8.0
 	
 func get_stack_increase_prob():
 	return 0

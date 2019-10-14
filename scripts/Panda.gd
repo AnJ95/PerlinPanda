@@ -16,8 +16,14 @@ var last_target = null
 
 # for working on ressource
 var working_on_ressource = false
-var ressource_working_on = null
-var time_left_to_work = 1
+
+# for building
+var building = false
+
+# for working and building
+var job_on = null
+var job_time_left = 1
+
 
 var timer = 0
 
@@ -26,8 +32,9 @@ var ressourceManager
 var inventory = {}
 
 func move_inventory():
-	for res_name in inventory:
+	for res_name in inventory.keys():
 		ressourceManager.add_ressource(res_name, inventory[res_name])
+		inventory.erase(res_name)
 		
 		
 func add_to_inventory(res_name, res_value):
@@ -62,20 +69,31 @@ func _process(delta: float) -> void:
 	if path == null or path.size() == 0:
 		return
 	
-	if working_on_ressource:
-		time_left_to_work -= delta
-		if time_left_to_work <= 0:
-			working_on_ressource = false
-			stop_particles()
-			var ressource_name = ressource_working_on.ressource_name_or_null()
-			var ressource_value = ressource_working_on.get_ressource_amount_after_work_done()
-			add_to_inventory(ressource_name, ressource_value)
-			print("Got " + str(ressource_value) + " " + ressource_name)
+	
+	#### IS DOING A JOB
+	if building or working_on_ressource:
+		job_time_left -= delta
+		#### DONE
+		if job_time_left <= 0:
+			#### DONE BUILDING
+			if building:
+				building = false
+				job_on.inst_actual_block()
+				stop_particles()
+			### DONE WORKING
+			if working_on_ressource:
+				working_on_ressource = false
+				stop_particles()
+				var ressource_name = job_on.ressource_name_or_null()
+				var ressource_value = job_on.get_ressource_amount_after_work_done()
+				add_to_inventory(ressource_name, ressource_value)
+				print("Got " + str(ressource_value) + " " + ressource_name)
+		#### NOT DONE
 		else:
-			var angle = 15*sin(5 * (ressource_working_on.ressource_work_time() - time_left_to_work) * (2*PI))
+			var angle = 15*sin(5 * (job_on.ressource_work_time() - job_time_left) * (2*PI))
 			$Sprite.rotation_degrees = angle
-			return # prevent path walking	
-		
+			return # prevent path walking
+
 	var target_pos = map.map_landscape.map_to_world(path[curr_path_pos])
 	
 	var speed_factor = 1.0
@@ -116,6 +134,7 @@ func _process(delta: float) -> void:
 		var reached_cell = path[curr_path_pos]
 		map.generate_next(reached_cell, 1)
 		last_target = reached_cell
+		
 		# give blocks and landscapes below their triggers
 		if map.blocks.has(reached_cell):
 			var block = map.blocks[reached_cell]
@@ -125,12 +144,14 @@ func _process(delta: float) -> void:
 			var landscape = map.landscapes[reached_cell]
 			landscape.panda_in_center(self)
 		
-		# move pandas inventory to global ressources
-		move_inventory()
+		
 		
 		curr_path_pos += 1
 		# when panda walked full circle
 		if curr_path_pos == path.size():
+			# move pandas inventory to global ressources
+			move_inventory()
+			
 			curr_path_pos = 0
 			# when he is scheduled to change path
 			if next_paths.size() > 0:
@@ -159,14 +180,23 @@ func set_path(path):
 		self.path = path
 	else:
 		next_paths.append(path)
-		
+	
+
+func start_building(BlockWIP):
+	building = true
+	job_on = BlockWIP
+	job_time_left = BlockWIP.actual_block.get_build_time()
+	
+	$Particles_bamboo.emitting = true
+	$Particles_stone.emitting = true
+	
 func start_working_on_ressource(ressource):
 	if ressource.ressource_name_or_null() == null:
 		printerr("Tried working on non-ressource block")
 		return
 	working_on_ressource = true
-	ressource_working_on = ressource
-	time_left_to_work = ressource.ressource_work_time()
+	job_on = ressource
+	job_time_left = ressource.ressource_work_time()
 	
 	get_node("Particles_" + ressource.ressource_name_or_null()).emitting = true
 	

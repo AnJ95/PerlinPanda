@@ -27,7 +27,7 @@ export var avg_tick_time_of_one_tile:float = 50
 
 export(Array, Texture) var landscapeBlocksOverlayTextures
 
-var layer_px_dst = 8
+var layer_px_dst = 10
 
 var time = 0
 

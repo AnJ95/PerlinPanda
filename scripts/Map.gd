@@ -91,6 +91,8 @@ func _ready():
 		panda.queue_free()
 	
 	generate_tile(Vector2())
+	show_homes()
+	
 	if Engine.editor_hint:
 		generate_next(Vector2(), 5)
 	#generate_next()
@@ -145,6 +147,9 @@ func reset_tick_time_left():
 	var num_tiles = map_landscape.get_used_cells().size()
 	tick_time_left = avg_tick_time_of_one_tile / float(num_tiles)
 	
+func show_homes():
+	for panda in get_tree().get_nodes_in_group("panda"):
+		map_overlay.set_cellv(panda.home_pos, 0)
 	
 func generate_tile(var cell_pos:Vector2):
 	if landscapes.has(cell_pos):

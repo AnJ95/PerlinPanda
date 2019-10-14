@@ -40,6 +40,7 @@ func _input(event: InputEvent):
 		if active:
 			active = false
 			update_preview()
+			map.show_homes()
 			
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		var rect = get_viewport().get_visible_rect().size
@@ -73,6 +74,7 @@ func update_preview():
 	map.map_overlay.clear()
 	if !active:
 		$Line2D.hide()
+		map.show_homes()
 		return
 		
 	var cur_tile = path[path.size()-1]
@@ -148,7 +150,7 @@ func done_with_path():
 	
 func try_start_path(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):	
-		if panda.position.distance_to(click_pos) < 50:
+		if map.map_landscape.map_to_world(panda.home_pos).distance_to(click_pos) < 50:
 			active = true
 			self.panda = panda
 			path = [panda.home_pos]

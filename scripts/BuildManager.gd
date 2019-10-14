@@ -58,6 +58,8 @@ func show_possible_build_sites():
 func hide_possible_build_sites():
 	for pos in map.map_overlay.get_used_cells():
 		map.map_overlay.set_cellv(pos, -1);
+		
+	map.show_homes()
 
 func buy(map, cell_pos):
 	

@@ -39,6 +39,8 @@ func _ready():
 	else:
 		ressourceManager = null
 		
+	map.show_homes()
+		
 	
 func _process(delta: float) -> void:
 	timer += delta

@@ -8,8 +8,11 @@ func initOverload(map, cell_pos3, Panda):
 	if !Engine.editor_hint:
 		panda = Panda.instance().prep(map, cell_pos3)
 		map.get_parent().call_deferred("add_child", panda)
+		map.show_homes()
 	
 	map.generate_next(Vector2(cell_pos3.x, cell_pos3.y), 2)
+	
+	
 	return self
 	
 func get_tile_id():

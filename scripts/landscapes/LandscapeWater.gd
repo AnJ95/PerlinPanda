@@ -38,8 +38,6 @@ func time_update(time:float):
 		cur_anim_tile_id += 1
 		if cur_anim_tile_id > 19:
 			cur_anim_tile_id = get_tile_id()
-		print(cur_anim_tile_id)
-		
 		
 	last_time = time
 	

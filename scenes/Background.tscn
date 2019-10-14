@@ -3,8 +3,11 @@
 [ext_resource path="res://assets/bg.png" type="Texture" id=1]
 
 [node name="ParallaxBackground" type="ParallaxBackground"]
+layer = 0
 
 [node name="ParallaxLayer" type="ParallaxLayer" parent="."]
+scale = Vector2( 2, 2 )
+motion_scale = Vector2( 0.1, 0.1 )
 
 [node name="Sprite" type="Sprite" parent="ParallaxLayer"]
 texture = ExtResource( 1 )

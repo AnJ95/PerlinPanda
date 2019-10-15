@@ -83,13 +83,13 @@ func prepare_presets():
 	preset_cache = {}
 	preset_poss = {}
 	for i in range(0, 10):
-		var r = 10 + i * 4
+		var r = 9 + i * 4
 		var a = i * 360 * 0.618
 		var pos = Vector2(r, 0).rotated(a)
 		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
 		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
 
-		var preset_id = i%6 + 1 #[1,6]
+		var preset_id = randi()%6 + 1 #[1,6]
 		var preset = ensure_cache_singleton(preset_id)
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
 		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")

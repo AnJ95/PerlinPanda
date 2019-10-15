@@ -1,7 +1,5 @@
 extends "Block.gd"
 
-var panda
-
 func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	

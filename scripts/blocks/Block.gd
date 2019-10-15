@@ -87,7 +87,7 @@ func get_stack_increase_prob():
 	return 0
 	
 func is_passable():
-	return false
+	return true
 	
 func can_be_build_on(map, cell_pos):
 	return !map.blocks.has(cell_pos)

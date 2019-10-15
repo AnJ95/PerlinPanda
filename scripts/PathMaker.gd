@@ -90,14 +90,16 @@ func add_to_current_path(click_pos):
 	var last_tile = path[path.size()-1]
 	var this_tile = map.map_overlay.world_to_map(click_pos + map.map_landscape.cell_size / 2.0)
 	
-	if map.map_landscape.get_cellv(this_tile) >= 0 and are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile):
+	if is_valid_next(last_tile, this_tile):
 		path.append(this_tile)
 		
 		if this_tile == path[0]:
 			done_with_path()
 		
 		update_preview()
-		
+
+func is_valid_next(last_tile, this_tile):
+	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile) 
 
 func update_preview():
 	map.map_overlay.clear()
@@ -113,7 +115,7 @@ func update_preview():
 		for x in range(cur_tile.x - 1, cur_tile.x + 2):
 			var that_tile = Vector2(x, y)
 			# if valid adjacent tile
-			if map.map_landscape.get_cellv(that_tile) >= 0 and are_tiles_adjacent(cur_tile, that_tile) and cell_pos_not_already_in_path(that_tile):
+			if is_valid_next(cur_tile, that_tile):
 				
 				
 				var dhdx = map.cell_infos[cur_tile].height - map.cell_infos[that_tile].height

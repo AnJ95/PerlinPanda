@@ -9,8 +9,8 @@ export var is_preset = false
 
 # Consts
 export var tile_cols:int = 5
-export var tile_rows:int = 5
-export var layer_offset:int = 100
+export var tile_rows:int = 6
+var layer_offset:int = 100
 
 export var region_width:int = 116
 export var region_height:int = 140

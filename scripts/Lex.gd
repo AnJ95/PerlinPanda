@@ -6,7 +6,7 @@ var block_sheet = [
 	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_1", "stone_var_1_stock_1", "street", "farm_stock_2",
 	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_0", "stone_var_1_stock_0", "wip_of_16", "farm_stock_1",
 	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_4", "", "farm_stock_0",
-	"", "", "", "", "", "wip_of_21",
+	"", "", "", "", "", "wip_of_29",
 ]
 
 var landscape_sheet = [

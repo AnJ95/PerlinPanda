@@ -27,6 +27,9 @@ func init(map, cell_pos, cell_info, args, nth):
 		else:
 			args.var = 0
 			
+	if args.has("stock"):
+		stock = args.stock
+			
 	update_tile()
 	
 	return self
@@ -40,7 +43,6 @@ func panda_in_center(panda):
 
 func get_ressource_amount_after_work_done():
 	# if stock was 0 before (only when multiple pandas or other influences decreased stock)
-	# since shouldnt start working when stock = 0
 	if stock == 0:
 		return 0
 	
@@ -57,8 +59,6 @@ func update_tile():
 	tile_id += args.var
 	
 	# add stock id offset if this is a ressource (always to top with rising stock)
-	if args.has("stock"):
-		stock = args.stock
 	if ressource_name_or_null() != null:
 		tile_id += (get_max_stock() - stock) * map.tile_cols
 	

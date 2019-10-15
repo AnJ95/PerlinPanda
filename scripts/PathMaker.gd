@@ -10,24 +10,11 @@ var path = []
 onready var tile_ids = {
 	"home_start" : 			0,
 	"home_end" : 			0 + map.tile_cols,
-	
-	"walk_up_2" : 			1,
-	"walk_up_1" : 			1 + 1*map.tile_cols,
-	"walk" : 				1 + 2*map.tile_cols,
-	"walk_down_1" : 		1 + 3*map.tile_cols,
-	"walk_down_2" : 		1 + 4*map.tile_cols,
-	
-	"bamboo_up_2" : 		2,
-	"bamboo_up_1" : 		2 + 1*map.tile_cols,
-	"bamboo" : 				2 + 2*map.tile_cols,
-	"bamboo_down_1" : 		2 + 3*map.tile_cols,
-	"bamboo_down_2" : 		2 + 4*map.tile_cols,
-	
-	"stone_up_2" : 			3,
-	"stone_up_1" : 			3 + 1*map.tile_cols,
-	"stone" : 				3 + 2*map.tile_cols,
-	"stone_down_1" : 		3 + 3*map.tile_cols,
-	"stone_down_2" : 		3 + 4*map.tile_cols
+	"path" : 				0 + 2*map.tile_cols,
+	"walk" : 				1,
+	"bamboo" : 				2,
+	"stone" : 				3,
+	"build" : 				4
 	}
 
 var c:Color = Color(1,1,1,0)
@@ -108,8 +95,12 @@ func update_preview():
 		map.show_homes()
 		return
 		
-	var cur_tile = path[path.size()-1]
+	for cur_tile in path:
+		var tile_id_offset = map.cell_infos[cur_tile].height * map.tile_height_id_dst
+		map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
+			
 	
+	var cur_tile = path[path.size()-1]
 	
 	for y in range(cur_tile.y - 1, cur_tile.y + 2):
 		for x in range(cur_tile.x - 1, cur_tile.x + 2):
@@ -117,20 +108,17 @@ func update_preview():
 			# if valid adjacent tile
 			if is_valid_next(cur_tile, that_tile):
 				
-				
-				var dhdx = map.cell_infos[cur_tile].height - map.cell_infos[that_tile].height
-				
-				var height_suffix = y(dhdx == 0, "",
-					y(dhdx > 0, "_up_" + str(min(2, dhdx)), "_down_" + str(min(2, -dhdx)))
-				)
-				var tile_id = tile_ids["walk" + height_suffix]
+				var tile_id = tile_ids.walk
 				
 				# if home pos = goal pos
 				if that_tile == panda.home_pos:
 					tile_id = tile_ids.home_end
 				# check for ressources
-				if map.blocks.has(that_tile) and map.blocks[that_tile].ressource_name_or_null() != null:
-					tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null() + height_suffix]
+				if map.blocks.has(that_tile):
+					if map.blocks[that_tile].ressource_name_or_null() != null:
+						tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null()]
+					if map.blocks[that_tile].is_wip:
+						tile_id = tile_ids.build
 	
 				# set calculated tile id
 				var tile_id_offset = map.cell_infos[that_tile].height * map.tile_height_id_dst

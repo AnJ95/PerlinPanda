@@ -50,7 +50,7 @@ func prep(map, cell_pos, cell_info):
 	return self
 	
 func _ready():
-	position = map.map_landscape.map_to_world(home_pos)
+	position = map.calc_px_pos_on_tile(home_pos)
 	
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
 	if ressourceManager.size() > 0:
@@ -96,7 +96,7 @@ func _process(delta: float) -> void:
 			$Sprite.rotation_degrees = angle
 			return # prevent path walking
 
-	var target_pos = map.map_landscape.map_to_world(path[curr_path_pos])
+	var target_pos = map.calc_px_pos_on_tile(path[curr_path_pos])
 	
 	# Check if current target in vicinity
 	var d:float = position.distance_to(target_pos)
@@ -137,10 +137,11 @@ func _process(delta: float) -> void:
 				path = null
 				$Particles_sleeping.emitting = true
 				update_sprite(Vector2(1,1))
-
+	
 func calc_speed_factor():
 	var speed_factor = 1.0
-	var standing_on = map.map_landscape.world_to_map(position + map.map_landscape.cell_size / 2.0)
+	
+	var standing_on = map.calc_closest_tile_from(position + map.map_landscape.cell_size / 2.0)
 	var landscape_standing_on = map.landscapes[standing_on]
 	speed_factor *= landscape_standing_on.get_speed_factor()
 	

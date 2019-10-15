@@ -20,7 +20,8 @@ export var avg_tick_time_of_one_tile:float = 50
 
 export(Array, Texture) var landscapeBlocksOverlayTextures
 
-var layer_px_dst = 22
+var layers = 6
+var layer_px_dst = 17
 
 var time = 0
 
@@ -123,7 +124,7 @@ func _process(delta:float):
 		var cell_id = randi()%cells.size()
 		var cell = cells[cell_id]
 		
-		print("ticking " + str(cell) + "...")
+		#print("ticking " + str(cell) + "...")
 		landscapes[cell].tick()
 		if blocks.has(cell) and blocks[cell] != null:
 			blocks[cell].tick()
@@ -176,14 +177,18 @@ func create_cell_info(cell_pos:Vector2):
 	
 	var rawHeight = map_gens.height.get_noise_2dv(cell_pos)
 	var height = 0
-	if rawHeight < -0.1:
+	if rawHeight < 0.21:
 		height = 1
-	if rawHeight < -0.2:
+	if rawHeight < 0.11:
 		height = 2
-	if rawHeight < -0.3:
+	if rawHeight < -0.00:
 		height = 3
-	if cell_pos == Vector2():
-		height = 1
+	if rawHeight < -0.11:
+		height = 4
+	if rawHeight < -0.21:
+		height = 5
+	if cell_pos.distance_to(Vector2()) <= 1.25:
+		height = 2
 		
 	var start_bonus = 0.1 * max(0, 2 - cell_pos.distance_to(Vector2()))
 	
@@ -226,15 +231,15 @@ func generate_tile(var cell_pos:Vector2):
 
 	########################################
 	#### LANDSCAPE
-	if cell_info.height <= 1:
+	if cell_info.height < layers - 2: # lowest two for sand and water
 		if cell_info.fertility < -0.2: 
 			landscape = "dirt"
 		else:  
 			landscape = "grass"
 	else:
-		if cell_info.height == 3:
+		if cell_info.height == layers-1:
 			landscape = "water"
-		if cell_info.height == 2:
+		if cell_info.height == layers-2:
 			landscape = "sand"
 	
 	if landscape != "":
@@ -252,17 +257,21 @@ func generate_tile(var cell_pos:Vector2):
 	if block == "" and (mountain_a or mountain_b):
 		block = "mountain"
 	
-	if landscape == "grass" and block == "":
-		if cell_info.fertility > 0.20 and cell_info.humidity > 0.20:
+	if (landscape == "grass" or landscape == "sand") and block == "":
+		var bamboo_a = landscape == "grass" and cell_info.fertility > 0.21 and cell_info.humidity > 0.21
+		var bamboo_b = landscape == "sand" and cell_info.fertility > 0.02 and cell_info.humidity > 0.02
+		if bamboo_a or bamboo_b:
 			block = "bamboo"
 	
 	if block == "" and landscape != "water":
 		if cell_info.fertility < 0:
-			var stone_a = (cell_info.height == 0 or block == "dirt") 	and cell_info.humidity < 0.05
-			var stone_b = cell_info.height == 1 						and cell_info.humidity < -0.05
-			var stone_c = cell_info.height == 2 						and cell_info.humidity < -0.10
+			var stone_a = (cell_info.height == 0 or block == "dirt") 	and cell_info.humidity < 0.22
+			var stone_b = cell_info.height == 1 						and cell_info.humidity < -0.12
+			var stone_c = cell_info.height == 2 						and cell_info.humidity < -0.06
+			var stone_d = cell_info.height == 3 						and cell_info.humidity < -0.14
+			var stone_e = cell_info.height == 4 						and cell_info.humidity < -0.20
 			
-			if stone_a or stone_b or stone_c:
+			if stone_a or stone_b or stone_c or stone_d or stone_e:
 				block = "stone"
 			
 	if block != "":
@@ -304,10 +313,10 @@ func update_tileset_regions():
 				tile_set.remove_tile(tile_id)
 		
 		# then create all layers
-		for z in range(0, 3):
+		for z in range(0, layers):
 			var next_tile_id = (z+1) * layer_offset
 			var extra_offset = Vector2(0, (z+1) * layer_px_dst)
-			var c = 1.0 - 0.05 * (z+1)
+			var c = 1.0 - 0.025 * (z+1)
 			var extra_col = Color(c,c,c,1)
 			for tile_id in tile_ids:
 				tile_set.create_tile(next_tile_id)
@@ -319,6 +328,34 @@ func update_tileset_regions():
 				if map != map_overlay:
 					tile_set.tile_set_modulate(next_tile_id, extra_col)
 				next_tile_id += 1
+
+func calc_px_pos_on_tile(tile_pos):
+	var px_pos = map_landscape.map_to_world(tile_pos)
+	if cell_infos.has(tile_pos):
+		px_pos.y += cell_infos[tile_pos].height * layer_px_dst 
+	return px_pos
+	
+func calc_closest_tile_from(tile_pos):
+	var center_pos = map_overlay.world_to_map(tile_pos + map_overlay.cell_size / 2.0)
+	var best_pos = center_pos
+	var best_dst = 0
+	if landscapes.has(best_pos):
+		best_dst = tile_pos.distance_to(calc_px_pos_on_tile(best_pos))
+	
+	# select best fitting
+	for x in range(center_pos.x - 2, center_pos.x + 3):
+		for y in range(center_pos.y - 2, center_pos.y + 3):
+			var pos = Vector2(x, y)
+			
+			var px_pos = map_overlay.map_to_world(pos)
+			if landscapes.has(pos):
+				px_pos = calc_px_pos_on_tile(pos)
+				
+			var dst = tile_pos.distance_to(px_pos)
+			if dst < best_dst:
+				best_dst = dst
+				best_pos = pos
+	return best_pos
 	
 func reset_tick_time_left():
 	var num_tiles = map_landscape.get_used_cells().size()

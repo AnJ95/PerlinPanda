@@ -20,6 +20,9 @@ onready var tile_ids = {
 var c:Color = Color(1,1,1,0)
 func _input(event: InputEvent):
 	
+	
+				
+				
 	# Hover effect: show panda path when mouse over house
 	if event is InputEventMouseMotion:
 		# first hide all lines
@@ -39,7 +42,8 @@ func _input(event: InputEvent):
 			if other.line != null:
 				c.a = 0.8
 				other.line.default_color = c
-				
+	
+	
 	# build manager first!
 	var buildMgr = get_parent().get_node("BuildManager")
 	if buildMgr.input(event):
@@ -58,24 +62,23 @@ func _input(event: InputEvent):
 		var rect = get_viewport().get_visible_rect().size
 		var cam = get_parent().get_node("Camera2D")
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
-		
+		var clicked_tile = map.calc_closest_tile_from(click_pos)
 		
 		if active:
-			add_to_current_path(click_pos)
+			add_to_current_path(clicked_tile)
 		else:
 			try_start_path(click_pos)
 				
 func get_panda_in_range(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):
-		if map.map_landscape.map_to_world(panda.home_pos).distance_to(click_pos) < 40:
+		if map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
 			return panda
 	
-func add_to_current_path(click_pos):
+func add_to_current_path(this_tile):
 	if !active or !panda or path.size() == 0:
 		printerr("IllegalStateException: add_to_current_path() before try_start_path() worked")
 		
 	var last_tile = path[path.size()-1]
-	var this_tile = map.map_overlay.world_to_map(click_pos + map.map_landscape.cell_size / 2.0)
 	
 	if is_valid_next(last_tile, this_tile):
 		path.append(this_tile)

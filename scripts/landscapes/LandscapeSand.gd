@@ -17,7 +17,7 @@ func tick():
 
 func time_update(time:float):
 	var s = sin(time * 2.0*PI / TIDE_TIME)
-	var deep = cell_info.height == 3
+	var deep = cell_info.height == map.layers - 1
 	
 	var humidity_bonus = 1 * (cell_info.humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 0.5]
 	if deep and s > -0.4 + humidity_bonus:

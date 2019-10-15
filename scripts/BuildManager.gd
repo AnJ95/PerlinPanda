@@ -38,13 +38,13 @@ func input(event):
 		if event.button_index == BUTTON_LEFT and event.pressed:
 			var rect = get_viewport().get_visible_rect().size
 			var cam = get_parent().get_node("Camera2D")
+
 			var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
-			
-			var cell_pos = map.map_overlay.world_to_map(click_pos + map.map_overlay.cell_size / 2.0)
+			var clicked_tile = map.calc_closest_tile_from(click_pos)
 			
 			var proto = map.lex.get_proto_block_by_tile_id(selected_building_or_null.block_tile_id)
-			if map.landscapes.has(cell_pos) and map.landscapes[cell_pos].can_build_on(map, cell_pos) and proto.can_be_build_on(map, cell_pos):
-				buy(map, cell_pos)
+			if map.landscapes.has(clicked_tile) and map.landscapes[clicked_tile].can_build_on(map, clicked_tile) and proto.can_be_build_on(map, clicked_tile):
+				buy(map, clicked_tile)
 			return true
 	
 	return false

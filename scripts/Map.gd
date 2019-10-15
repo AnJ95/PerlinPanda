@@ -158,6 +158,10 @@ func generate_next(from:Vector2, rd:int):
 func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
 	
+	cell_infos[map_pos].height = landscape_id / tile_height_id_dst
+	landscape_id %= tile_height_id_dst
+	block_id %= tile_height_id_dst
+	
 	var info = lex.get_info_on_landscape_tile_id(landscape_id)
 	landscapes[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 	

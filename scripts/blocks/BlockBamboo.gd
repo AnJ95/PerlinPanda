@@ -10,7 +10,7 @@ func init(map, cell_pos, cell_info, args, nth):
 		elif cell_info.fertility > 0.05 and cell_info.humidity > 0.05:
 			stock = 1
 		else:
-			stock = 0		
+			stock = 0
 				
 	return .init(map, cell_pos, cell_info, args, nth)
 	

@@ -5,7 +5,7 @@ var durability = 0
 	
 func init(map, cell_pos, cell_info, args, nth):
 	if args.has("durability"):
-		durability = args[durability]
+		durability = args["durability"]
 	else:
 		durability = min(4, int(((cell_info.fertility+1.0)/2.0) * 5))
 	return .init(map, cell_pos, cell_info, args, nth)

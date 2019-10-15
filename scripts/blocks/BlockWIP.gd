@@ -1,17 +1,16 @@
 extends "Block.gd"
 
-var Panda;
 var actual_block;
 
-func initOverload(map, cell_pos3, Panda, actual_class):
+
+func init(map, cell_pos, cell_info, args, nth):
 	is_wip = true
-	self.Panda = Panda
-	self.actual_block = actual_class.new()
 	
-	return .init(map, cell_pos3)
+	.init(map, cell_pos, cell_info, args, nth)
+
 
 func inst_actual_block():
-	map.blocks[Vector2(cell_pos3.x, cell_pos3.y)] = actual_block.initOverload(map, cell_pos3, Panda)
+	map.blocks[cell_pos] = nth.actual_class.init(map, cell_pos, cell_info, args, nth) # TODO actual class
 	
 func get_tile_id():
 	return 4 + 4 * 6

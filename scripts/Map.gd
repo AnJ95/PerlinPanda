@@ -3,17 +3,9 @@ extends Node2D
 
 signal generate_next
 
-# Classes
-onready var BlockBamboo = preload("blocks/BlockBamboo.gd")
-onready var BlockStone = preload("blocks/BlockStone.gd")
-onready var BlockHouse = preload("blocks/BlockHouse.gd")
-
-onready var LandscapeGrass = preload("landscapes/LandscapeGrass.gd")
-onready var LandscapeDirt = preload("landscapes/LandscapeDirt.gd")
-onready var LandscapeWater = preload("landscapes/LandscapeWater.gd")
-onready var LandscapeSand = preload("landscapes/LandscapeSand.gd")
-
-onready var Panda = preload("res://scenes/Panda.tscn")
+export var preprocess_tile_sets_in_editor = true
+export var show_case_map_in_editor = true
+export var is_preset = false
 
 # Consts
 export var tile_cols:int = 5
@@ -35,7 +27,7 @@ var time = 0
 var cur_gen = 0
 var blocks = {}
 var landscapes = {}
-var height_layer = {}
+var cell_infos = {}
 var tick_time_left = 1000
 
 # Nodes
@@ -44,6 +36,9 @@ onready var map_blocks:TileMap = $Navigation2D/MapBlocks
 onready var map_overlay:TileMap = $Navigation2D/MapOverlay
 onready var all_maps = [map_landscape, map_blocks, map_overlay]
 
+onready var lex = preload("res://scripts/Lex.gd").new()
+
+onready var nth = {"Panda":preload("res://scenes/Panda.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
@@ -57,25 +52,62 @@ func _ready():
 	init_map_gens()
 	
 	connect("generate_next", self, "generate_next")
-	#emit_signal("generate_next")
 	
-	if Engine.editor_hint:
+	if Engine.editor_hint and preprocess_tile_sets_in_editor:
 		update_tileset_regions()
+	
+	if !is_preset:
+		# Clear everything
+		map_landscape.clear()
+		map_blocks.clear()
+		map_overlay.clear()
+		for panda in get_tree().get_nodes_in_group("panda"):
+			panda.queue_free()
+		
+		prepare_presets()
+		generate_tile(Vector2())
+		show_homes()
+	
+		
 			
-			
+	if Engine.editor_hint and show_case_map_in_editor:
+		generate_next(Vector2(), 5)
+
 	
-	# Clear everything
-	map_landscape.clear()
-	map_blocks.clear()
-	map_overlay.clear()
-	for panda in get_tree().get_nodes_in_group("panda"):
-		panda.queue_free()
+
+var preset_cache = {}
+var preset_poss = {}
+
+func prepare_presets():
+	preset_cache = {}
+	preset_poss = {}
+	for i in range(0, 10):
+		var r = 10 + i * 4
+		var a = i * 360 * 0.618
+		var pos = Vector2(r, 0).rotated(a)
+		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
+		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
+
+		var preset_id = i%6 + 1 #[1,6]
+		var preset = ensure_cache_singleton(preset_id)
+		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
+		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")
+		# take a Dictionary an fill it with all blocks that are part of any preset
+		
+		for preset_pos in preset_landscape.get_used_cells():
+			var landscape_id = preset_landscape.get_cellv(preset_pos)
+			var block_id = preset_blocks.get_cellv(preset_pos)
+			preset_poss[cell_pos+preset_pos] = [landscape_id, block_id]
+		
+func is_part_of_preset(pos):
+	return preset_poss.has(pos)
+
+func ensure_cache_singleton(preset_id):
+	if !preset_cache.has(preset_id):
+		preset_cache[preset_id] = load("res://scenes/presets/%02d.tscn" % preset_id).instance()
+	return preset_cache[preset_id]
 	
-	generate_tile(Vector2())
-	show_homes()
-	
-	if Engine.editor_hint:
-		generate_next(Vector2(), 8)
+
 	
 func _process(delta:float):
 	# too much lag
@@ -123,100 +155,128 @@ func generate_next(from:Vector2, rd:int):
 				
 	reset_tick_time_left()
 
-func reset_tick_time_left():
-	var num_tiles = map_landscape.get_used_cells().size()
-	tick_time_left = avg_tick_time_of_one_tile / float(num_tiles)
+
 	
-func show_homes():
-	for panda in get_tree().get_nodes_in_group("panda"):
-		map_overlay.set_cellv(panda.home_pos, 0)
+	
+func generate_preset_tile(map_pos, landscape_id, block_id):
+	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
+	
+	map_landscape.set_cellv(map_pos, landscape_id)
+	map_blocks.set_cellv(map_pos, block_id)
+	
+	var info = lex.get_info_on_landscape_tile_id(map_landscape)
+	landscapes[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
+	
+	info = lex.get_info_on_block_tile_id(map_landscape)
+	blocks[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
+	
+	#landscapes[map_pos] = LandscapeDirt.new().initOverload(self, Vector3(map_pos.x, map_pos.y, 3), LandscapeGrass, LandscapeDirt, -0.5)
+	#return
+	
+	# singleton instance
+	#var preset = ensure_cache_singleton(preset_id)
+	
+	#var preset_landscape = preset.landscapes[preset_pos]
+	
+	#var new_cell_pos3 = Vector3(map_pos.x, map_pos.y, preset_landscape.cell_pos3.y)
+	#landscapes[map_pos] = preset_landscape.init(self, new_cell_pos3)
+	
+	#if preset.blocks.has(preset_pos):
+	#	var preset_blocks = preset.blocks[preset_pos]
+	#	blocks[map_pos] = blocks.init(self, preset_landscape.cell_pos3)
+
+func create_cell_info(cell_pos:Vector2):
+	# Create this tiles info object
+	var cell_info = {}
+	
+	var rawHeight = map_gens.height.get_noise_2dv(cell_pos)
+	var height = 0
+	if rawHeight < -0.1:
+		height = 1
+	if rawHeight < -0.2:
+		height = 2
+	if rawHeight < -0.3:
+		height = 3
+	if cell_pos == Vector2():
+		height = 1
+		
+	var start_bonus = 0.1 * max(0, 2 - cell_pos.distance_to(Vector2()))
+	
+	cell_info.fertility = map_gens.fertility.get_noise_2dv(cell_pos) + start_bonus
+	cell_info.humidity = map_gens.humidity.get_noise_2dv(cell_pos) + start_bonus
+	cell_info.height = height
+	
+	return cell_info
+
+func set_landscape_by_descriptor(cell_pos:Vector2, descriptor:String):
+	var info = lex.get_info_on_landscape_descriptor(descriptor)
+	landscapes[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
+	pass
+func set_block_by_descriptor(cell_pos:Vector2, descriptor:String):
+	var info = lex.get_info_on_block_descriptor(descriptor)
+	blocks[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
+	pass
 	
 func generate_tile(var cell_pos:Vector2):
 	if landscapes.has(cell_pos):
 		return
-	var noiseFertility = map_gens.fertility.get_noise_2dv(cell_pos)
-	var noiseHumidity = map_gens.humidity.get_noise_2dv(cell_pos)
-	var noiseHeight = map_gens.height.get_noise_2dv(cell_pos)
 	
-	var start_bonus = 0.1 * max(0, 2 - cell_pos.distance_to(Vector2()))
-	noiseFertility += start_bonus
-	noiseHumidity += start_bonus
-	
-	
+	var cell_info = create_cell_info(cell_pos)
+	cell_infos[cell_pos] = cell_info
+		
+	# Preset Structures
+	if is_part_of_preset(cell_pos):
+		var preset_info = preset_poss[cell_pos]
+		#preset_poss[pos+preset_pos] = [preset_id, preset_pos]
+		#load_preset_tile(map_pos, preset_id, preset_pos)
+		generate_preset_tile(cell_pos, preset_info[0], preset_info[1])
+		return
+
 	var landscape = ""
 	var block = ""
-	
-	var height = 0
-	if noiseHeight < -0.1:
-		height = 1
-	if noiseHeight < -0.2:
-		height = 2
-	if noiseHeight < -0.3:
-		height = 3
-		
-	if cell_pos == Vector2():
-		height = 0
-	
-	var cell_pos3 = Vector3(cell_pos.x, cell_pos.y, height)
-	height_layer[cell_pos] = height
-	
-	# landscape
-	if height <= 1:
-		if noiseFertility < -0.2: 
-			landscapes[cell_pos] = LandscapeDirt.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt, noiseFertility)
+
+	########################################
+	#### LANDSCAPE
+	if cell_info.height <= 1:
+		if cell_info.fertility < -0.2: 
 			landscape = "dirt"
 		else:  
-			landscapes[cell_pos] = LandscapeGrass.new().initOverload(self, cell_pos3, LandscapeGrass, LandscapeDirt, noiseFertility)
 			landscape = "grass"
-	else: # sand
-		if height == 3:
-			landscapes[cell_pos] = LandscapeWater.new().initOverload(self, cell_pos3, LandscapeWater, LandscapeSand, noiseHumidity)
+	else:
+		if cell_info.height == 3:
 			landscape = "water"
-		if height == 2:
-			landscapes[cell_pos] = LandscapeSand.new().initOverload(self, cell_pos3, LandscapeWater, LandscapeSand, noiseHumidity)
+		if cell_info.height == 2:
 			landscape = "sand"
-		
 	
+	if landscape != "":
+		set_landscape_by_descriptor(cell_pos, landscape)
+	########################################
+	
+	
+	########################################
+	#### BLOCKS
 	if cell_pos == Vector2():
 		block = "house"
-		blocks[cell_pos] = BlockHouse.new().initOverload(self, cell_pos3, Panda)
 	
-	# ressources
-	var prob_bamboo = 0
-	var bamboo_fertility = 0
-	if landscape == "grass" and block == "" and cell_pos != Vector2():
-		if noiseFertility > 0.24 and noiseHumidity > 0.24:
-			prob_bamboo = 90
-			bamboo_fertility = 3
-		elif noiseFertility > 0.18 and noiseHumidity > 0.18:
-			prob_bamboo = 80
-			bamboo_fertility = 2
-		elif noiseFertility > 0.04 and noiseHumidity > 0.04:
-			prob_bamboo = 70
-			bamboo_fertility = 1
-		
-		if randi()%100 < prob_bamboo:
-			blocks[cell_pos] = BlockBamboo.new().initOverload(self, cell_pos3, bamboo_fertility)
+	var mountain_a = (cell_info.height == 0 and cell_info.humidity < -0.15)
+	var mountain_b = (cell_info.height == 1 and cell_info.humidity < -0.35)
+	if block == "" and (mountain_a or mountain_b):
+		block = "mountain"
+	
+	if landscape == "grass" and block == "":
+		if cell_info.humidity > 0.20 and cell_info.humidity > 0.20:
 			block = "bamboo"
 	
-	if block == "" and landscape != "water" and cell_pos != Vector2():
-		var prob_stone = 0
-		var stone_stock = 0
-		if noiseFertility < -0.1 and noiseHumidity < -0.1:
-			prob_stone = 40
-			stone_stock = 3
-		elif noiseFertility < 0.0 and noiseHumidity < 0.0:
-			prob_stone = 35
-			stone_stock = 2
-		elif noiseFertility < 0.2 and noiseHumidity < 0.2:
-			prob_stone = 30
-			stone_stock = 1
-		if landscape == "dirt":
-			prob_stone += 20
-			
-		if stone_stock > 0 and randi()%100 < prob_stone:
-			blocks[cell_pos] = BlockStone.new().initOverload(self, cell_pos3, stone_stock)
+	if block == "" and landscape != "water":
+		var stone_a = (cell_info.height == 3 or block == "dirt") and cell_info.fertility < 0.2 and cell_info.humidity < 0.2
+		var stone_b = cell_info.height == 2 and cell_info.fertility < 0.1 and cell_info.humidity < -0.1
+		var stone_c = cell_info.height == 1 and cell_info.fertility < -0.2 and cell_info.humidity < -0.2
+		
+		if stone_a or stone_b or stone_c:
 			block = "stone"
+			
+	if block != "":
+		set_block_by_descriptor(cell_pos, block)
 	
 	
 func update_tileset_regions():
@@ -228,6 +288,7 @@ func update_tileset_regions():
 			map.tile_set.clear()
 			for id in range(0, tile_cols * tile_rows):
 				map.tile_set.create_tile(id)
+				map.tile_set.tile_set_name(id, "%03d" % id)
 				map.tile_set.tile_set_texture(id, landscapeBlocksOverlayTextures[i])
 			i += 1	
 				#map.tile_set.tile_set_region(id, Rect2(0,0,0,0))
@@ -260,6 +321,7 @@ func update_tileset_regions():
 			var extra_col = Color(c,c,c,1)
 			for tile_id in tile_ids:
 				tile_set.create_tile(next_tile_id)
+				tile_set.tile_set_name(next_tile_id, str(next_tile_id))
 				tile_set.tile_set_texture(next_tile_id, tile_set.tile_get_texture(tile_id))
 				tile_set.tile_set_texture_offset(next_tile_id, tile_set.tile_get_texture_offset(tile_id) + extra_offset)
 				tile_set.tile_set_region(next_tile_id, tile_set.tile_get_region(tile_id))
@@ -268,3 +330,10 @@ func update_tileset_regions():
 					tile_set.tile_set_modulate(next_tile_id, extra_col)
 				next_tile_id += 1
 	
+func reset_tick_time_left():
+	var num_tiles = map_landscape.get_used_cells().size()
+	tick_time_left = avg_tick_time_of_one_tile / float(num_tiles)
+	
+func show_homes():
+	for panda in get_tree().get_nodes_in_group("panda"):
+		map_overlay.set_cellv(panda.home_pos, 0)

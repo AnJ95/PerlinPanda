@@ -1,30 +1,26 @@
 extends "Landscape.gd"
 
-var LandscapeWater
-var LandscapeSand
-var humidity
+
+const TIDE_TIME = 40
 
 func clone(): # enables pseudo-cloning, initOverload must reset everything though
 	return self
 	
-func initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity):
-	.init(map, cell_pos3)
-	self.LandscapeWater = LandscapeWater
-	self.LandscapeSand = LandscapeSand
-	self.humidity = humidity
-	return self
-	
+
 func get_tile_id():
-	return 2 * 6 + randi()%5 # TODO  6 = map.tile_cols
+	return 2 * 6 # TODO  6 = map.tile_cols
+	
+func get_max_var():
+	return 4
 
 func tick():
 	pass
 
 func time_update(time:float):
-	var s = sin(time * 2.0*PI / LandscapeWater.TIDE_TIME)
-	var deep = cell_pos3.z == 3
+	var s = sin(time * 2.0*PI / TIDE_TIME)
+	var deep = cell_info.height == 3
 	
-	var humidity_bonus = 1 * (humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 0.5]
+	var humidity_bonus = 1 * (cell_info.humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 0.5]
 	if deep and s > -0.4 + humidity_bonus:
 		conv()
 		return
@@ -34,7 +30,7 @@ func time_update(time:float):
 	
 
 func conv():
-	map.landscapes[Vector2(cell_pos3.x, cell_pos3.y)] = LandscapeWater.new().initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity) # dirt
+	map.set_landscape_by_descriptor(cell_pos, "water")
 
 func can_spread_grass():
 	return false

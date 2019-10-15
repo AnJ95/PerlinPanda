@@ -2,10 +2,6 @@ extends "Block.gd"
 
 var panda
 
-func initOverload(map, cell_pos3, _Panda):
-	.init(map, cell_pos3)
-	map.generate_next(Vector2(cell_pos3.x, cell_pos3.y), 1)
-	return self
 	
 func get_tile_id():
 	return 16

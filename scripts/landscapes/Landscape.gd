@@ -2,20 +2,46 @@ extends Object
 
 
 var map
-var cell_pos3
+var cell_pos
+var cell_info
+var args
+var nth
 
-
-func init(map, cell_pos3):
+func init(map, cell_pos, cell_info, args, nth):
 	self.map = map
-	self.cell_pos3 = cell_pos3
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-	map.map_landscape.set_cellv(cell_pos, get_tile_id() + map.tile_height_id_dst * cell_pos3.z); # dirt
+	self.cell_pos = cell_pos
+	self.cell_info = cell_info
+	self.args = args
+	self.nth = nth
+	if !args.has("var"):
+		if get_max_var() > 0:
+			args.var = randi() % get_max_var()
+		else:
+			args.var = 0
+	update_tile()
 	return self
+	
+
+	
+func update_tile():
+	var tile_id = get_tile_id()
+	
+	# add variance id offset (always to right)
+	tile_id += args["var"]
+	
+	# add tile id offset for height
+	tile_id += map.tile_height_id_dst * cell_info.height
+	
+	# set tile id
+	map.map_landscape.set_cellv(cell_pos, tile_id);
 
 func time_update(_time:float):
 	pass
 		
 func get_tile_id():
+	return 0
+	
+func get_max_var():
 	return 0
 	
 func panda_in_center(_panda):
@@ -34,16 +60,14 @@ func can_build_on(_map, _cell_pos):
 	return true
 	
 func remove():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
 	map.landscapes.erase(cell_pos)
 
 
 func get_adjacent_spreadable_percent():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
 	var num_spreading = 0
 	var num_non_spreading = 0
-	for y in range(-cell_pos3.y-4, cell_pos3.y+4):
-		for x in range(-cell_pos3.x-4, cell_pos3.x+4):
+	for y in range(-cell_pos.y-4, cell_pos.y+4):
+		for x in range(-cell_pos.x-4, cell_pos.x+4):
 			var pos = Vector2(x, y)
 			if pos == cell_pos:
 				continue

@@ -1,20 +1,18 @@
 extends "Landscape.gd"
 
-var LandscapeGrass
-var LandscapeDirt
 
 var durability = 0
-var fertility
 
 func clone(): # enables pseudo-cloning, initOverload must reset everything though
 	return self
 	
-func initOverload(map, cell_pos3, LandscapeGrass, LandscapeDirt, fertility):
-	durability = min(4, int(((fertility+1.0)/2.0) * 5))
-	self.fertility = fertility
-	.init(map, cell_pos3)
-	self.LandscapeGrass = LandscapeGrass
-	self.LandscapeDirt = LandscapeDirt
+func init(map, cell_pos, cell_info, args, nth):
+	if args.has("durability"):
+		durability = args[durability]
+	else:
+		durability = min(4, int(((cell_info.fertility+1.0)/2.0) * 5))
+	.init(map, cell_pos, cell_info, args, nth)
+	
 	return self
 	
 func get_tile_id():
@@ -24,10 +22,9 @@ func panda_in_center(_panda):
 	durability -= 1
 	if durability <= 0:
 		remove()
-		var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-		map.landscapes[cell_pos] = LandscapeDirt.new().initOverload(map, cell_pos3, LandscapeGrass, LandscapeDirt, fertility) # dirt
+		map.set_landscape_by_descriptor(cell_pos, "grass")
 	else:
-		durability_changed()
+		update_tile()
 
 func tick():
 	var percent = get_adjacent_spreadable_percent()
@@ -37,12 +34,8 @@ func tick():
 		print("... grass durability miss (" + str(percent) + "%)")
 		
 	durability = min(4, durability + 1)
-	durability_changed()
-	
-func durability_changed():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-	map.map_landscape.set_cellv(cell_pos, get_tile_id() + map.tile_height_id_dst * cell_pos3.z);
-	pass
+	update_tile()
+
 
 func can_spread_grass():
 	return true

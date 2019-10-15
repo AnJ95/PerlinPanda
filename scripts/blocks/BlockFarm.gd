@@ -1,12 +1,6 @@
 extends "BlockBamboo.gd"
 
-#onready var BlockBamboo = load("BlockBamboo.gd")
 
-
-func initOverload(map, cell_pos3, _Panda):
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-	return .initOverload(map, cell_pos3, map.blocks[cell_pos].stock)
-	
 func get_tile_id():
 	return 5
 	

@@ -1,13 +1,21 @@
 extends "Block.gd"
 
-
-func initOverload(map, cell_pos3, stock):
-	self.stock = stock
-	is_bamboo = true
-	return .init(map, cell_pos3)
+func init(map, cell_pos, cell_info, args, nth):
+	if !args.has("stock"):
+		if cell_info.fertility > 0.30 and cell_info.humidity > 0.30:
+			stock = 3
+		elif cell_info.fertility > 0.21 and cell_info.humidity > 0.21:
+			stock = 2
+		elif cell_info.fertility > 0.05 and cell_info.humidity > 0.05:
+			stock = 1
+		else:
+			stock = 0		
+			
+			
+	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
-	return randi()%2+0
+	return 0
 	
 func ressource_name_or_null():
 	return "bamboo"
@@ -22,11 +30,10 @@ func get_regrow_factor():
 	return 0.8
 	
 func get_stack_increase_prob():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
 	var num_spreading = 0
 	var num_non_spreading = 0
-	for y in range(-cell_pos3.y-4, cell_pos3.y+4):
-		for x in range(-cell_pos3.x-4, cell_pos3.x+4):
+	for y in range(-cell_pos.y-4, cell_pos.y+4):
+		for x in range(-cell_pos.x-4, cell_pos.x+4):
 			var pos = Vector2(x, y)
 			if pos == cell_pos:
 				continue

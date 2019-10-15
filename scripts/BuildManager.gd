@@ -74,7 +74,7 @@ func buy(map, cell_pos):
 	
 	var clazz = load(selected_building_or_null.building_script_path)
 	
-	var cell_pos3 = Vector3(cell_pos.x, cell_pos.y, map.height_layer[cell_pos])
+	var cell_pos3 = Vector3(cell_pos.x, cell_pos.y, map.cell_infos[cell_pos].height)
 	map.blocks[cell_pos] = BlockWIP.new().initOverload(map, cell_pos3, Panda, clazz)
 	
 	

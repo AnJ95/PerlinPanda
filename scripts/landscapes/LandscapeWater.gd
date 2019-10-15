@@ -1,59 +1,49 @@
 extends "Landscape.gd"
 
 const TIDE_TIME = 40
-
-var LandscapeWater
-var LandscapeSand
-var humidity
+const ANIM_TIME = 0.5
+var anim_time_left = 0.0
+var last_time = 0.0
 
 func clone(): # enables pseudo-cloning, initOverload must reset everything though
 	return self
 	
-func initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity):
-	.init(map, cell_pos3)
-	self.LandscapeWater = LandscapeWater
-	self.LandscapeSand = LandscapeSand
-	self.humidity = humidity
-	
-	return self
-	
 func get_tile_id():
 	return 3 * 6 # TODO  6 = map.tile_cols
-
+func get_max_var():
+	return 4
+	
 func tick():
 	pass
 
-var anim_time = 0.5
-var anim_time_left = 0.0
-var last_time = 0.0
 
-var cur_anim_tile_id = get_tile_id()
-var cur_water_level = 2
+
 func time_update(time:float):
 	
 	anim_time_left -= (time - last_time)
 	if anim_time_left <= 0:
-		anim_time_left = anim_time
+		anim_time_left = ANIM_TIME
 		
-		cur_anim_tile_id += 1
-		if cur_anim_tile_id > 3 * map.tile_cols + 4:
-			cur_anim_tile_id = get_tile_id()
+		args.var += 1
+		if args.var >= get_max_var():
+			args.var = 0
 		
 	last_time = time
 	
 	var s = sin(time * 2.0*PI / TIDE_TIME)
-	var deep = (cell_pos3.z == 3)
+	var deep = (cell_info.height == 3)
 	
-	var humidity_bonus = 1 * (humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 1]
+	var humidity_bonus = 1 * (cell_info.humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 1]
 	
 	if deep: 
 		if s > -1.0 + humidity_bonus:
-			cur_water_level = 3
+			cell_info.height = 3
 		if s > 0.4 + humidity_bonus:
-			cur_water_level = 2
+			cell_info.height = 3
 	
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-	map.map_landscape.set_cellv(cell_pos, cur_anim_tile_id + cur_water_level * map.tile_height_id_dst)
+	update_tile()
+	
+
 		
 	if deep and s < -1.0 + humidity_bonus:
 		conv()
@@ -64,7 +54,7 @@ func time_update(time:float):
 	
 
 func conv():
-	map.landscapes[Vector2(cell_pos3.x, cell_pos3.y)] = LandscapeSand.new().initOverload(map, cell_pos3, LandscapeWater, LandscapeSand, humidity) # dirt
+	map.set_landscape_by_descriptor(cell_pos, "sand")
 
 func can_spread_grass():
 	return true

@@ -116,7 +116,7 @@ func update_preview():
 			if map.map_landscape.get_cellv(that_tile) >= 0 and are_tiles_adjacent(cur_tile, that_tile) and cell_pos_not_already_in_path(that_tile):
 				
 				
-				var dhdx = map.height_layer[cur_tile] - map.height_layer[that_tile]
+				var dhdx = map.cell_infos[cur_tile].height - map.cell_infos[that_tile].height
 				
 				var height_suffix = y(dhdx == 0, "",
 					y(dhdx > 0, "_up_" + str(min(2, dhdx)), "_down_" + str(min(2, -dhdx)))
@@ -131,15 +131,15 @@ func update_preview():
 					tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null() + height_suffix]
 	
 				# set calculated tile id
-				var tile_id_offset = map.height_layer[that_tile] * map.tile_height_id_dst
+				var tile_id_offset = map.cell_infos[that_tile].height * map.tile_height_id_dst
 				map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 				
-	var tile_id_offset = map.height_layer[cur_tile] * map.tile_height_id_dst
+	var tile_id_offset = map.cell_infos[cur_tile].height * map.tile_height_id_dst
 	map.map_overlay.set_cellv(cur_tile, -1);
 	
 	var pts = []
 	for cell in path:
-		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.height_layer[cell] * map.layer_px_dst))
+		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
 	$Line2D.points = PoolVector2Array(pts)
 	$Line2D.show()
 	
@@ -170,9 +170,9 @@ func done_with_path():
 	var pts = Array(panda.line.points)
 	# only at start of path, to prevent popFront too early
 	if pts.size() == 0:
-		pts.push_front(map.map_overlay.map_to_world(path[0]) + Vector2(0, map.height_layer[path[0]] * map.layer_px_dst))
+		pts.push_front(map.map_overlay.map_to_world(path[0]) + Vector2(0, map.cell_infos[path[0]].height * map.layer_px_dst))
 	for cell in path:
-		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.height_layer[cell] * map.layer_px_dst))
+		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
 	
 	panda.line.points = PoolVector2Array(pts)
 	

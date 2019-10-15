@@ -2,28 +2,25 @@ extends Object
 
 
 var map
-var cell_pos3
+var cell_pos
+var cell_info
+var args
+var nth
+
 var stock:int
 
 var is_bamboo = false
 var is_wip = false
 
-func init(map, cell_pos3):
+
+func init(map, cell_pos, cell_info, args, nth):
 	self.map = map
-	self.cell_pos3 = cell_pos3
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
+	self.cell_pos = cell_pos
+	self.cell_info = cell_info
+	self.args = args
+	self.nth = nth
 	
-	var tile_id = get_tile_id()
-	
-	# add tile id offset stock (if this is a ressource)
-	if ressource_name_or_null() != null:
-		tile_id += (get_max_stock() - stock) * map.tile_cols
-	
-	# add tile id offset for height
-	tile_id += map.tile_height_id_dst * (cell_pos3.z)
-	
-	# set tile id
-	map.map_blocks.set_cellv(cell_pos, tile_id); # bamboo
+	update_tile()
 	
 	return self
 
@@ -41,25 +38,34 @@ func get_ressource_amount_after_work_done():
 		return 0
 	
 	# decrease stock by one
-	stock = max(0, stock - 1)
+	stock = max(0, int(stock) - 1)
 	
 	update_tile()
 	
 	return 1
 
 func update_tile():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
-	# update sprite at thresholds
-
-	var current_tile = map.map_blocks.get_cellv(cell_pos)
-	var original_tile = ((current_tile % map.tile_height_id_dst) % map.tile_cols)
-	var new_tile = (get_max_stock()-stock)*map.tile_cols + original_tile
-	new_tile += map.tile_height_id_dst * cell_pos3.z
-	map.map_blocks.set_cellv(cell_pos, new_tile)
+	var tile_id = get_tile_id()
+	
+	# add variance id offset (always to right)
+	if args.has("var"):
+		tile_id += args["var"]
+	
+	# add stock id offset if this is a ressource (always to top with rising stock)
+	if args.has("stock"):
+		stock = args["stock"]
+	if ressource_name_or_null() != null:
+		tile_id += (get_max_stock() - stock) * map.tile_cols
+	
+	# add tile id offset for height
+	tile_id += map.tile_height_id_dst * cell_info.height
+	
+	# set tile id
+	map.map_blocks.set_cellv(cell_pos, tile_id);
 		
 func tick():
 	if ressource_name_or_null() != null and randi()%100 < get_stack_increase_prob():
-		stock = min(get_max_stock(), stock + 1)
+		stock = min(int(get_max_stock()), int(stock) + 1)
 		print("increased stock from " + str(stock-1) + " to " + str(stock))
 		update_tile()
 		print("... increased stock of ressource " + ressource_name_or_null())
@@ -80,10 +86,12 @@ func get_build_time():
 func get_stack_increase_prob():
 	return 0
 	
+func is_passable():
+	return false
+	
 func can_be_build_on(map, cell_pos):
 	return !map.blocks.has(cell_pos)
 	
 func remove():
-	var cell_pos = Vector2(cell_pos3.x, cell_pos3.y)
 	map.blocks.erase(cell_pos)
 	

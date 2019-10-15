@@ -43,10 +43,10 @@ func add_to_inventory(res_name, res_value):
 	else:
 		inventory[res_name] += res_value
 
-func prep(map, home_pos3):
+func prep(map, cell_pos, cell_info):
 	self.map = map
-	self.home_pos3 = home_pos3
-	self.home_pos = Vector2(home_pos3.x, home_pos3.y)
+	self.home_pos3 = Vector3(cell_pos.x, cell_pos.y, cell_info.height)
+	self.home_pos = cell_pos
 	return self
 	
 func _ready():
@@ -112,7 +112,7 @@ func _process(delta: float) -> void:
 	
 	var dhdx = 0
 	if last_target != null:
-		dhdx = map.height_layer[last_target] - map.height_layer[path[curr_path_pos]]
+		dhdx = map.cell_infos[last_target].height - map.cell_infos[path[curr_path_pos]].height
 	for _i in range(0, abs(dhdx)):
 		speed_factor *= SPEED_FACTOR_PER_LAYER_UP
 		

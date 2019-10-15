@@ -1,16 +1,13 @@
 extends "Block.gd"
 
-var actual_block;
 
 
 func init(map, cell_pos, cell_info, args, nth):
 	is_wip = true
-	
 	.init(map, cell_pos, cell_info, args, nth)
 
-
 func inst_actual_block():
-	map.blocks[cell_pos] = nth.actual_class.init(map, cell_pos, cell_info, args, nth) # TODO actual class
+	map.set_block_by_tile_id(cell_pos, args.of)
 	
 func get_tile_id():
 	return 4 + 4 * 6

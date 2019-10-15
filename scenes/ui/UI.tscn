@@ -66,21 +66,21 @@ margin_right = 1024.0
 margin_bottom = 70.0
 
 [node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
+block_tile_id = 4
+costs_bamboo = 6
 costs_stone = 3
-building_script_path = "scripts/blocks/BlockHouse.gd"
 
 [node name="Farm" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
 margin_left = 134.0
 margin_right = 264.0
 focus_mode = 2
-building_animation_frame = 29
-building_script_path = "scripts/blocks/BlockFarm.gd"
+block_tile_id = 29
+costs_bamboo = 6
 
 [node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
 margin_left = 268.0
 margin_right = 398.0
-building_animation_frame = 16
+block_tile_id = 16
 costs_bamboo = 1
 costs_stone = 2
-building_script_path = "scripts/blocks/BlockStreet.gd"
 

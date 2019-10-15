@@ -34,8 +34,9 @@ custom_styles/focus = SubResource( 3 )
 custom_styles/disabled = SubResource( 4 )
 custom_styles/normal = SubResource( 5 )
 script = ExtResource( 1 )
-building_animation_frame = 4
-building_script_path = ""
+block_tile_id = 0
+costs_bamboo = 0
+costs_stone = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 164.0
@@ -53,7 +54,6 @@ scale = Vector2( 0.4, 0.4 )
 texture = ExtResource( 2 )
 vframes = 6
 hframes = 6
-frame = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 64.0
@@ -66,7 +66,7 @@ custom_constants/separation = 0
 margin_right = 100.0
 margin_bottom = 35.0
 rect_min_size = Vector2( 100, 35 )
-value = 6
+value = 0
 texture = ExtResource( 4 )
 do_update = false
 small = true

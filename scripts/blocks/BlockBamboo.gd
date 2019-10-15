@@ -1,6 +1,7 @@
 extends "Block.gd"
 
 func init(map, cell_pos, cell_info, args, nth):
+	is_bamboo = true
 	if !args.has("stock"):
 		if cell_info.fertility > 0.30 and cell_info.humidity > 0.30:
 			stock = 3

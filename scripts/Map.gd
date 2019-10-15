@@ -212,6 +212,10 @@ func set_landscape_by_descriptor(cell_pos:Vector2, descriptor:String):
 	var info = lex.get_info_on_landscape_descriptor(descriptor)
 	landscapes[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
 	pass
+	
+func set_block_by_tile_id(cell_pos:Vector2, tile_id:int):
+	var info = lex.get_info_on_block_tile_id(tile_id)
+	blocks[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
 func set_block_by_descriptor(cell_pos:Vector2, descriptor:String):
 	var info = lex.get_info_on_block_descriptor(descriptor)
 	blocks[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)

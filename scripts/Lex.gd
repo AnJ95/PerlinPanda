@@ -1,12 +1,12 @@
 extends Node
 
 var block_sheet = [
-	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_3", "stone_var_1_stock_3", "home", "farm_stock_4",
-	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_2", "stone_var_1_stock_2", "wip", "farm_stock_2",
+	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_3", "stone_var_1_stock_3", "house", "farm_stock_4",
+	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_2", "stone_var_1_stock_2", "wip_of_4", "farm_stock_2",
 	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_1", "stone_var_1_stock_1", "street", "farm_stock_2",
-	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_0", "stone_var_1_stock_0", "wip", "farm_stock_1",
+	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_0", "stone_var_1_stock_0", "wip_of_16", "farm_stock_1",
 	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_4", "", "farm_stock_0",
-	"", "", "", "", "", "wip",
+	"", "", "", "", "", "wip_of_21",
 ]
 
 var landscape_sheet = [
@@ -24,7 +24,8 @@ var block_scripts = {
 	"house": load("res://scripts/blocks/BlockHouse.gd"),
 	"mountain": load("res://scripts/blocks/BlockMountain.gd"),
 	"farm": load("res://scripts/blocks/BlockFarm.gd"),
-	"wip": load("res://scripts/blocks/BlockWIP.gd"),
+	"street": load("res://scripts/blocks/BlockStreet.gd"),
+	"wip": load("res://scripts/blocks/BlockWIP.gd")
 	#"": "res://scripts/blocks/Block.gd",
 	#"": "res://scripts/blocks/Block.gd",
 	#"": "res://scripts/blocks/Block.gd",
@@ -41,6 +42,13 @@ var landscape_scripts = {
 
 func err(msg):
 	printerr("LEX:   " + str(msg))
+	
+	
+func get_proto_block_by_tile_id(id):
+	var descriptor = block_sheet[id]
+	var info = get_info_on_block_descriptor(descriptor)
+	return block_scripts[info.name].new()
+	
 
 ## SEARCH BY NAME ONLY - NO ARGUMENTS!
 func get_info_on_block_name(block_name):
@@ -48,7 +56,7 @@ func get_info_on_block_name(block_name):
 func get_info_on_landscape_name(landscape_name):
 	return _get_info_on_name(landscape_scripts, landscape_sheet, landscape_name)
 	
-func _get_info_on_name(scripts, sheet, name):
+func _get_info_on_name(scripts, _sheet, name):
 	var info = {}
 	if !scripts.has(name):
 		err("LEX: invalid name '" + name + "', not found in scripts")
@@ -94,8 +102,8 @@ func _get_info_on_tile_id(scripts, sheet, tile_id):
 	# first get descriptor by tile id from sheet
 	#var sheet_x = int(tile_id) % sheet[0].size()
 	#var sheet_y = int(tile_id) / sheet[0].size()
-	if tile_id < 0 or sheet.size() > tile_id:
-		err("invalid tile_id '" + tile_id + "', is not in tilesheet")
+	if tile_id < 0 or tile_id + 1 > sheet.size():
+		err("invalid tile_id '" + str(tile_id) + "', is not in tilesheet")
 		return null
 	var descriptor = sheet[tile_id]
 	

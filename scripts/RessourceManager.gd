@@ -3,8 +3,8 @@ extends Node
 signal ressource_changed(ressource_name, value)
 
 export var ressources = {
-	"bamboo": 20,
-	"stone": 20,
+	"bamboo": 0,
+	"stone": 0,
 	"population": 0
 }
 

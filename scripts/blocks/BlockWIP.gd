@@ -14,7 +14,7 @@ func inst_actual_block():
 	map.set_block_by_tile_id(cell_pos, args.of)
 	
 func get_tile_id():
-	return 4 + 3 * 6
+	return args.of + 6 # todo
 	
 func get_speed_factor():
 	return 1.2

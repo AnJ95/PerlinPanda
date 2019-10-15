@@ -5,6 +5,7 @@ signal generate_next
 
 export var preprocess_tile_sets_in_editor = true
 export var show_case_map_in_editor = true
+export var show_case_size:int = 4
 export var is_preset = false
 
 # Consts
@@ -13,13 +14,13 @@ export var tile_rows:int = 6
 var layer_offset:int = 100
 
 export var region_width:int = 116
-export var region_height:int = 140
+export var region_height:int = 200
 
 export var avg_tick_time_of_one_tile:float = 50
 
 export(Array, Texture) var landscapeBlocksOverlayTextures
 
-var layer_px_dst = 10
+var layer_px_dst = 22
 
 var time = 0
 
@@ -42,8 +43,8 @@ onready var nth = {"Panda":preload("res://scenes/Panda.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 4, "period": 7.0, "persistence": 0.8, "seed": 21},
-	"fertility" : {"octaves": 4, "period": 1.0, "persistence": 0.8, "seed": 22},
+	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": 21},
+	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": 22},
 	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 23}
 }
 var map_gens = {}
@@ -71,7 +72,7 @@ func _ready():
 		
 			
 	if Engine.editor_hint and show_case_map_in_editor:
-		generate_next(Vector2(), 10)
+		generate_next(Vector2(), show_case_size)
 
 	
 
@@ -252,7 +253,7 @@ func generate_tile(var cell_pos:Vector2):
 		block = "mountain"
 	
 	if landscape == "grass" and block == "":
-		if cell_info.humidity > 0.20 and cell_info.humidity > 0.20:
+		if cell_info.fertility > 0.20 and cell_info.humidity > 0.20:
 			block = "bamboo"
 	
 	if block == "" and landscape != "water":

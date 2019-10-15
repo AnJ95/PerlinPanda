@@ -1,6 +1,8 @@
 extends "BlockBamboo.gd"
 
 func init(map, cell_pos, cell_info, args, nth):
+	args["stock"] = 0
+	args["var"] = 0
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
@@ -8,9 +10,6 @@ func get_tile_id():
 
 func ressource_work_time():
 	return 2
-func get_sprite_num():
-	return 5
-	
 func get_speed_factor():
 	return 2.5
 	

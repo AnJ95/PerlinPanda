@@ -81,8 +81,7 @@ func ressource_name_or_null():
 	return null
 func ressource_work_time():
 	return 0
-func get_sprite_num():
-	return 4
+
 func get_speed_factor():
 	return 1.0
 func get_build_time():

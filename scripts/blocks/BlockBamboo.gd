@@ -25,8 +25,7 @@ func ressource_work_time():
 	return 3
 func get_ressource_amount():
 	return 1
-func get_sprite_num():
-	return 4
+
 func get_max_var():
 	return 1
 

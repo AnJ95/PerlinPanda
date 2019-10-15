@@ -71,7 +71,7 @@ func _ready():
 		
 			
 	if Engine.editor_hint and show_case_map_in_editor:
-		generate_next(Vector2(), 5)
+		generate_next(Vector2(), 30)
 
 	
 
@@ -154,36 +154,16 @@ func generate_next(from:Vector2, rd:int):
 				generate_tile(pos)
 				
 	reset_tick_time_left()
-
-
-	
 	
 func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
 	
-	map_landscape.set_cellv(map_pos, landscape_id)
-	map_blocks.set_cellv(map_pos, block_id)
-	
-	var info = lex.get_info_on_landscape_tile_id(map_landscape)
+	var info = lex.get_info_on_landscape_tile_id(landscape_id)
 	landscapes[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 	
-	info = lex.get_info_on_block_tile_id(map_landscape)
-	blocks[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
-	
-	#landscapes[map_pos] = LandscapeDirt.new().initOverload(self, Vector3(map_pos.x, map_pos.y, 3), LandscapeGrass, LandscapeDirt, -0.5)
-	#return
-	
-	# singleton instance
-	#var preset = ensure_cache_singleton(preset_id)
-	
-	#var preset_landscape = preset.landscapes[preset_pos]
-	
-	#var new_cell_pos3 = Vector3(map_pos.x, map_pos.y, preset_landscape.cell_pos3.y)
-	#landscapes[map_pos] = preset_landscape.init(self, new_cell_pos3)
-	
-	#if preset.blocks.has(preset_pos):
-	#	var preset_blocks = preset.blocks[preset_pos]
-	#	blocks[map_pos] = blocks.init(self, preset_landscape.cell_pos3)
+	info = lex.get_info_on_block_tile_id(block_id)
+	if block_id >= 0:
+		blocks[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 
 func create_cell_info(cell_pos:Vector2):
 	# Create this tiles info object

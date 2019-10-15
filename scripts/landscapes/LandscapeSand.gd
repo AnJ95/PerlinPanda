@@ -3,9 +3,8 @@ extends "Landscape.gd"
 
 const TIDE_TIME = 40
 
-func clone(): # enables pseudo-cloning, initOverload must reset everything though
-	return self
-	
+func init(map, cell_pos, cell_info, args, nth):
+	return .init(map, cell_pos, cell_info, args, nth)	
 
 func get_tile_id():
 	return 2 * 6 # TODO  6 = map.tile_cols

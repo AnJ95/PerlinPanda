@@ -185,7 +185,7 @@ func set_path(path):
 func start_building(BlockWIP):
 	building = true
 	job_on = BlockWIP
-	job_time_left = BlockWIP.actual_block.get_build_time()
+	job_time_left = BlockWIP.get_build_time()
 	
 	$Particles_bamboo.emitting = true
 	$Particles_stone.emitting = true

@@ -5,8 +5,8 @@ const ANIM_TIME = 0.5
 var anim_time_left = 0.0
 var last_time = 0.0
 
-func clone(): # enables pseudo-cloning, initOverload must reset everything though
-	return self
+func init(map, cell_pos, cell_info, args, nth):
+	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
 	return 3 * 6 # TODO  6 = map.tile_cols
@@ -15,8 +15,6 @@ func get_max_var():
 	
 func tick():
 	pass
-
-
 
 func time_update(time:float):
 	

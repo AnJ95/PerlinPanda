@@ -4,13 +4,17 @@ extends "Block.gd"
 
 func init(map, cell_pos, cell_info, args, nth):
 	is_wip = true
-	.init(map, cell_pos, cell_info, args, nth)
+	return .init(map, cell_pos, cell_info, args, nth)
 
+func get_build_time():
+	var proto = map.lex.get_proto_block_by_tile_id(args.of)
+	return proto.get_build_time()
+	
 func inst_actual_block():
 	map.set_block_by_tile_id(cell_pos, args.of)
 	
 func get_tile_id():
-	return 4 + 4 * 6
+	return 4 + 3 * 6
 	
 func get_speed_factor():
 	return 1.2

@@ -11,8 +11,7 @@ func init(map, cell_pos, cell_info, args, nth):
 			stock = 1
 		else:
 			stock = 0		
-			
-			
+				
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():

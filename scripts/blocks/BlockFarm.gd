@@ -1,9 +1,10 @@
 extends "BlockBamboo.gd"
 
-
+func init(map, cell_pos, cell_info, args, nth):
+	return .init(map, cell_pos, cell_info, args, nth)
+	
 func get_tile_id():
 	return 5
-	
 
 func ressource_work_time():
 	return 2

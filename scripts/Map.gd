@@ -10,7 +10,7 @@ export var is_preset = false
 # Consts
 export var tile_cols:int = 5
 export var tile_rows:int = 5
-export var tile_height_id_dst:int = 100
+export var layer_offset:int = 100
 
 export var region_width:int = 116
 export var region_height:int = 140
@@ -71,7 +71,7 @@ func _ready():
 		
 			
 	if Engine.editor_hint and show_case_map_in_editor:
-		generate_next(Vector2(), 30)
+		generate_next(Vector2(), 10)
 
 	
 
@@ -158,15 +158,15 @@ func generate_next(from:Vector2, rd:int):
 func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
 	
-	cell_infos[map_pos].height = landscape_id / tile_height_id_dst
-	landscape_id %= tile_height_id_dst
-	block_id %= tile_height_id_dst
+	cell_infos[map_pos].height = landscape_id / layer_offset
+	landscape_id %= layer_offset
+	block_id %= layer_offset
 	
 	var info = lex.get_info_on_landscape_tile_id(landscape_id)
 	landscapes[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 	
-	info = lex.get_info_on_block_tile_id(block_id)
 	if block_id >= 0:
+		info = lex.get_info_on_block_tile_id(block_id)
 		blocks[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 
 func create_cell_info(cell_pos:Vector2):
@@ -256,12 +256,13 @@ func generate_tile(var cell_pos:Vector2):
 			block = "bamboo"
 	
 	if block == "" and landscape != "water":
-		var stone_a = (cell_info.height == 3 or block == "dirt") and cell_info.fertility < 0.2 and cell_info.humidity < 0.2
-		var stone_b = cell_info.height == 2 and cell_info.fertility < 0.1 and cell_info.humidity < -0.1
-		var stone_c = cell_info.height == 1 and cell_info.fertility < -0.2 and cell_info.humidity < -0.2
-		
-		if stone_a or stone_b or stone_c:
-			block = "stone"
+		if cell_info.fertility < 0:
+			var stone_a = (cell_info.height == 0 or block == "dirt") 	and cell_info.humidity < 0.05
+			var stone_b = cell_info.height == 1 						and cell_info.humidity < -0.05
+			var stone_c = cell_info.height == 2 						and cell_info.humidity < -0.10
+			
+			if stone_a or stone_b or stone_c:
+				block = "stone"
 			
 	if block != "":
 		set_block_by_descriptor(cell_pos, block)
@@ -298,12 +299,12 @@ func update_tileset_regions():
 		
 		# clear first
 		for tile_id in tile_ids:
-			if tile_id >= tile_height_id_dst:
+			if tile_id >= layer_offset:
 				tile_set.remove_tile(tile_id)
 		
 		# then create all layers
 		for z in range(0, 3):
-			var next_tile_id = (z+1) * tile_height_id_dst
+			var next_tile_id = (z+1) * layer_offset
 			var extra_offset = Vector2(0, (z+1) * layer_px_dst)
 			var c = 1.0 - 0.05 * (z+1)
 			var extra_col = Color(c,c,c,1)
@@ -324,4 +325,4 @@ func reset_tick_time_left():
 	
 func show_homes():
 	for panda in get_tree().get_nodes_in_group("panda"):
-		map_overlay.set_cellv(panda.home_pos, 0)
+		map_overlay.set_cellv(panda.home_pos, 0 + layer_offset * cell_infos[panda.home_pos].height)

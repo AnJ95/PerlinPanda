@@ -55,7 +55,7 @@ func show_possible_build_sites():
 
 	for pos in map.landscapes:
 		if map.landscapes[pos].can_build_on(map, pos) and proto.can_be_build_on(map, pos):
-			map.map_overlay.set_cellv(pos, 13 + map.cell_infos[pos].height * map.tile_height_id_dst);
+			map.map_overlay.set_cellv(pos, 13 + map.cell_infos[pos].height * map.layer_offset);
 			
 func hide_possible_build_sites():
 	for pos in map.map_overlay.get_used_cells():

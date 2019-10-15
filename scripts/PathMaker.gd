@@ -9,7 +9,7 @@ var path = []
 
 onready var tile_ids = {
 	"home_start" : 			0,
-	"home_end" : 			0 + map.tile_cols,
+	"home_end" : 			0 + 1*map.tile_cols,
 	"path" : 				0 + 2*map.tile_cols,
 	"walk" : 				1,
 	"bamboo" : 				2,
@@ -96,7 +96,7 @@ func update_preview():
 		return
 		
 	for cur_tile in path:
-		var tile_id_offset = map.cell_infos[cur_tile].height * map.tile_height_id_dst
+		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
 		map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
 			
 	
@@ -121,10 +121,10 @@ func update_preview():
 						tile_id = tile_ids.build
 	
 				# set calculated tile id
-				var tile_id_offset = map.cell_infos[that_tile].height * map.tile_height_id_dst
+				var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
 				map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 				
-	var tile_id_offset = map.cell_infos[cur_tile].height * map.tile_height_id_dst
+	var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
 	map.map_overlay.set_cellv(cur_tile, -1);
 	
 	var pts = []

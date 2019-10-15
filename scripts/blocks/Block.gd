@@ -63,7 +63,7 @@ func update_tile():
 		tile_id += (get_max_stock() - stock) * map.tile_cols
 	
 	# add tile id offset for height
-	tile_id += int(map.tile_height_id_dst * cell_info.height)
+	tile_id += int(map.layer_offset * cell_info.height)
 	
 	# set tile id
 	map.map_blocks.set_cellv(cell_pos, tile_id);

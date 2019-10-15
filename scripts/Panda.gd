@@ -89,7 +89,7 @@ func _process(delta: float) -> void:
 				var ressource_name = job_on.ressource_name_or_null()
 				var ressource_value = job_on.get_ressource_amount_after_work_done()
 				add_to_inventory(ressource_name, ressource_value)
-				print("Got " + str(ressource_value) + " " + ressource_name)
+				print("Got " + str(ressource_value) + " " + ressource_name + ", " + str(job_on.stock) + " stock left ")
 		#### NOT DONE
 		else:
 			var angle = 15*sin(5 * (job_on.ressource_work_time() - job_time_left) * (2*PI))

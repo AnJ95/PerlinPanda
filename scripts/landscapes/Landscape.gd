@@ -15,7 +15,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	self.nth = nth
 	if !args.has("var"):
 		if get_max_var() > 0:
-			args.var = randi() % get_max_var()
+			args.var = randi() % (get_max_var() + 1)
 		else:
 			args.var = 0
 	update_tile()

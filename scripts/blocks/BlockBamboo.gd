@@ -17,6 +17,8 @@ func init(map, cell_pos, cell_info, args, nth):
 func get_tile_id():
 	return 0
 	
+
+	
 func ressource_name_or_null():
 	return "bamboo"
 func ressource_work_time():
@@ -25,6 +27,9 @@ func get_ressource_amount():
 	return 1
 func get_sprite_num():
 	return 4
+func get_max_var():
+	return 1
+
 
 func get_regrow_factor():
 	return 0.8

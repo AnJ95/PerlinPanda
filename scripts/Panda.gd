@@ -69,10 +69,12 @@ func _process(delta: float) -> void:
 	if path == null or path.size() == 0:
 		return
 	
+	# Calc Speed factor
+	var speed_factor = calc_speed_factor()
 	
 	#### IS DOING A JOB
 	if building or working_on_ressource:
-		job_time_left -= delta
+		job_time_left -= delta * speed_factor
 		#### DONE
 		if job_time_left <= 0:
 			#### DONE BUILDING
@@ -95,31 +97,6 @@ func _process(delta: float) -> void:
 			return # prevent path walking
 
 	var target_pos = map.map_landscape.map_to_world(path[curr_path_pos])
-	
-	var speed_factor = 1.0
-	var standing_on = map.map_landscape.world_to_map(position + map.map_landscape.cell_size / 2.0)
-	var landscape_standing_on = map.landscapes[standing_on]
-	speed_factor *= landscape_standing_on.get_speed_factor()
-	
-	for panda in get_tree().get_nodes_in_group("panda"):
-		if panda != self:
-			var a:Vector2 = panda.position
-			var b:Vector2 = self.position
-			if a.distance_squared_to(b) < 80*80 and a.distance_to(b) < 80:
-				speed_factor *= 0.75
-			if a.distance_squared_to(b) < 40*40 and a.distance_to(b) < 40:
-				speed_factor *= 0.5
-	
-	var dhdx = 0
-	if last_target != null:
-		dhdx = map.cell_infos[last_target].height - map.cell_infos[path[curr_path_pos]].height
-	for _i in range(0, abs(dhdx)):
-		speed_factor *= SPEED_FACTOR_PER_LAYER_UP
-		
-	
-	if map.blocks.has(standing_on):
-		var block_standing_on = map.blocks[standing_on]
-		speed_factor *= block_standing_on.get_speed_factor()
 	
 	# Check if current target in vicinity
 	var d:float = position.distance_to(target_pos)
@@ -161,7 +138,34 @@ func _process(delta: float) -> void:
 				$Particles_sleeping.emitting = true
 				update_sprite(Vector2(1,1))
 
-
+func calc_speed_factor():
+	var speed_factor = 1.0
+	var standing_on = map.map_landscape.world_to_map(position + map.map_landscape.cell_size / 2.0)
+	var landscape_standing_on = map.landscapes[standing_on]
+	speed_factor *= landscape_standing_on.get_speed_factor()
+	
+	for panda in get_tree().get_nodes_in_group("panda"):
+		if panda != self:
+			var a:Vector2 = panda.position
+			var b:Vector2 = self.position
+			if a.distance_squared_to(b) < 80*80 and a.distance_to(b) < 80:
+				speed_factor *= 0.75
+			if a.distance_squared_to(b) < 40*40 and a.distance_to(b) < 40:
+				speed_factor *= 0.5
+	
+	var dhdx = 0
+	if last_target != null:
+		dhdx = map.cell_infos[last_target].height - map.cell_infos[path[curr_path_pos]].height
+	for _i in range(0, abs(dhdx)):
+		speed_factor *= SPEED_FACTOR_PER_LAYER_UP
+		
+	
+	if map.blocks.has(standing_on):
+		var block_standing_on = map.blocks[standing_on]
+		speed_factor *= block_standing_on.get_speed_factor()
+	
+	return speed_factor
+		
 func update_sprite(n):
 	if n.x > 0:
 		$Sprite.flip_h = false

@@ -57,7 +57,7 @@ func get_next_target():
 			valid.append(adjacent)
 		if map.blocks.has(adjacent) and map.blocks[adjacent] == hill:
 			home = adjacent
-		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo":
+		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo" and map.blocks[adjacent].stock > 0:
 			bamboo.append(adjacent)
 	
 	var target

@@ -256,7 +256,7 @@ func generate_tile(var cell_pos:Vector2):
 		block = "house"
 		
 	if landscape == "dirt":
-		if int(cell_info.humidity * 100) % 2 == 0:
+		if int(cell_info.humidity * 100) % 3 == 0:
 			block = "bughill"
 	
 	var mountain_a = (cell_info.height == 0 and cell_info.humidity < -0.15)

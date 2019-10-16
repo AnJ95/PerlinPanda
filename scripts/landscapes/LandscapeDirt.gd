@@ -12,7 +12,7 @@ func get_max_var():
 	
 func tick():
 	# Spawn bug hill
-	if !map.blocks.has(cell_pos) and 30 > randi()%100: 
+	if !map.blocks.has(cell_pos) and randi()%100 < 18: 
 		map.set_block_by_descriptor(cell_pos, "bughill")
 	
 	# Transform to grass

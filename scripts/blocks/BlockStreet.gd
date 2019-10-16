@@ -7,7 +7,7 @@ func get_tile_id():
 	return 16
 
 func get_speed_factor():
-	return 2.5
+	return 2.6
 	
 func get_build_time():
 	return 5.0

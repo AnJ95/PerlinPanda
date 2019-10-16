@@ -4,7 +4,7 @@ var home_pos
 var home_pos3
 var map
 
-const SPEED = 30
+const SPEED = 35
 const SPEED_FACTOR_PER_LAYER_UP = 0.8
 
 # for path iteration
@@ -30,6 +30,30 @@ var timer = 0
 var ressourceManager
 
 var inventory = {}
+
+var show_start_anim
+var start_anim_target
+
+	
+func _ready():
+	position = map.calc_px_pos_on_tile(home_pos)
+	
+	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
+	if ressourceManager.size() > 0:
+		ressourceManager = ressourceManager[0]
+		ressourceManager.add_ressource("population", 1)
+	else:
+		ressourceManager = null
+		
+	map.show_homes()
+	inventory_changed()
+	
+	if get_tree().get_nodes_in_group("panda").size() > 1:
+		$Particles_love.emitting = true
+		show_start_anim = true
+		start_anim_target = position
+		position = Vector2(800, 0).rotated(randi()%360)
+
 
 func move_inventory():
 	for res_name in inventory.keys():
@@ -76,23 +100,21 @@ func prep(map, cell_pos, cell_info):
 	self.home_pos = cell_pos
 	return self
 	
-func _ready():
-	position = map.calc_px_pos_on_tile(home_pos)
-	
-	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
-	if ressourceManager.size() > 0:
-		ressourceManager = ressourceManager[0]
-		ressourceManager.add_ressource("population", 1)
-	else:
-		ressourceManager = null
-		
-	map.show_homes()
-	inventory_changed()
-	$Particles_sleeping.emitting = true
-		
-	
 func _process(delta: float) -> void:
 	timer += delta
+	
+	# start animation
+	if show_start_anim:
+		var d:float = position.distance_to(start_anim_target)
+		if d > 10:
+			$Sprite.rotation_degrees = 8 * sin(1 * timer * (2*PI))
+			position = position.linear_interpolate(start_anim_target, (12*SPEED * delta)/d)
+			return
+		else:
+			show_start_anim = false
+			$Particles_sleeping.emitting = true
+	
+	
 	# wait idly if no path defined yet
 	if path == null or path.size() == 0:
 		return

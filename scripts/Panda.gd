@@ -35,14 +35,41 @@ func move_inventory():
 	for res_name in inventory.keys():
 		ressourceManager.add_ressource(res_name, inventory[res_name])
 		inventory.erase(res_name)
-		
+	inventory_changed()
+
 		
 func add_to_inventory(res_name, res_value):
 	if !inventory.has(res_name):
 		inventory[res_name] = res_value
 	else:
 		inventory[res_name] += res_value
+	inventory_changed()
 
+func inventory_changed():
+	var num_visible = 0
+	for res in ["bamboo", "stone"]:
+		var val = 0
+		if inventory.has(res):
+			val = inventory[res]
+			if val > 0:
+				num_visible += 1
+		
+		var node = get_node("Inventory_" + res)
+		if val == 0:
+			node.hide()
+		else:
+			node.show()
+		node.value = val
+		node.update()
+		
+	
+	if num_visible == 2:
+		$Inventory_stone.rect_position.y = -135
+	else:
+		$Inventory_stone.rect_position.y = -103
+		
+			
+	
 func prep(map, cell_pos, cell_info):
 	self.map = map
 	self.home_pos3 = Vector3(cell_pos.x, cell_pos.y, cell_info.height)
@@ -60,6 +87,7 @@ func _ready():
 		ressourceManager = null
 		
 	map.show_homes()
+	inventory_changed()
 	$Particles_sleeping.emitting = true
 		
 	
@@ -141,7 +169,8 @@ func _process(delta: float) -> void:
 func calc_speed_factor():
 	var speed_factor = 1.0
 	
-	var standing_on = map.calc_closest_tile_from(position + map.map_landscape.cell_size / 2.0)
+	var standing_on = map.calc_closest_tile_from(position)
+	
 	var landscape_standing_on = map.landscapes[standing_on]
 	speed_factor *= landscape_standing_on.get_speed_factor()
 	

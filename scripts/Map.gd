@@ -337,24 +337,20 @@ func calc_px_pos_on_tile(tile_pos):
 	
 func calc_closest_tile_from(tile_pos):
 	var center_pos = map_overlay.world_to_map(tile_pos + map_overlay.cell_size / 2.0)
-	var best_pos = center_pos
-	var best_dst = 0
-	if landscapes.has(best_pos):
-		best_dst = tile_pos.distance_to(calc_px_pos_on_tile(best_pos))
+	var best_pos = null
+	var best_dst = 10000
 	
 	# select best fitting
 	for x in range(center_pos.x - 2, center_pos.x + 3):
 		for y in range(center_pos.y - 2, center_pos.y + 3):
 			var pos = Vector2(x, y)
 			
-			var px_pos = map_overlay.map_to_world(pos)
 			if landscapes.has(pos):
-				px_pos = calc_px_pos_on_tile(pos)
-				
-			var dst = tile_pos.distance_to(px_pos)
-			if dst < best_dst:
-				best_dst = dst
-				best_pos = pos
+				var px_pos = calc_px_pos_on_tile(pos)
+				var dst = tile_pos.distance_to(px_pos)
+				if dst < best_dst:
+					best_dst = dst
+					best_pos = pos
 	return best_pos
 	
 func reset_tick_time_left():

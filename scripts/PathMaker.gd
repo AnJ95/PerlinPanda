@@ -98,9 +98,7 @@ func update_preview():
 		map.show_homes()
 		return
 		
-	for cur_tile in path:
-		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
-		map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
+	
 			
 	
 	var cur_tile = path[path.size()-1]
@@ -127,8 +125,9 @@ func update_preview():
 				var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
 				map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 				
-	var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
-	map.map_overlay.set_cellv(cur_tile, -1);
+	for cur_tile in path:
+		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
+		map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
 	
 	var pts = []
 	for cell in path:

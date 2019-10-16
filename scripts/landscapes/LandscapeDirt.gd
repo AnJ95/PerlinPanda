@@ -10,6 +10,9 @@ func get_tile_id():
 func get_max_var():
 	return 4
 	
+func got_welled():
+	map.set_landscape_by_descriptor(cell_pos, "grass")
+	
 func tick():
 	# Spawn bug hill
 	if !map.blocks.has(cell_pos) and randi()%100 < 18: 

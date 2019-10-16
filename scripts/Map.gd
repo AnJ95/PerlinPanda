@@ -134,6 +134,8 @@ func _process(delta:float):
 			
 	for landscape in landscapes:
 		landscapes[landscape].time_update(time)
+	for block in blocks:
+		blocks[block].time_update(time)
 		
 
 func init_map_gens():
@@ -142,8 +144,8 @@ func init_map_gens():
 		for property_name in map_gens_lex[name]:
 			gen[property_name] = map_gens_lex[name][property_name]
 		map_gens[name] = gen
-	
-func generate_next(from:Vector2, rd:int):
+
+func generate_next(from:Vector2, rd:float):
 	cur_gen += 1
 		
 	for y in range(-rd-1, rd+2):
@@ -383,6 +385,11 @@ func get_adjacent_tiles(a:Vector2):
 			if are_tiles_adjacent(a, b):
 				tiles.append(b)
 	return tiles
+	
+func spawn_drops_at(cell_pos):
+	$Navigation2D/Particles_drops.emitting = false
+	$Navigation2D/Particles_drops.position = calc_px_pos_on_tile(cell_pos)
+	$Navigation2D/Particles_drops.emitting = true
 	
 func reset_tick_time_left():
 	var num_tiles = map_landscape.get_used_cells().size()

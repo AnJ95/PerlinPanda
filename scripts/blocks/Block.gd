@@ -47,10 +47,17 @@ func get_ressource_amount_after_work_done():
 		return 0
 	
 	# decrease stock by one
-	stock = max(0, int(stock) - 1)
-	update_tile()
+	decrease_stock()
 	
 	return 1
+	
+func increase_stock():
+	stock = min(int(get_max_stock()), int(stock) + 1)
+	update_tile()
+	
+func decrease_stock():
+	stock = max(0, int(stock) - 1)
+	update_tile()
 
 func update_tile():
 	var tile_id = get_tile_id()
@@ -71,17 +78,17 @@ func update_tile():
 func tick():
 	if ressource_name_or_null() != null and randi()%100 < get_stack_increase_prob():
 		var stock_before = stock
-		stock = min(int(get_max_stock()), int(stock) + 1)
-		update_tile()
+		increase_stock()
 		print("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
 	
 func get_max_stock():
-	return 3
+	return 0
 func ressource_name_or_null():
 	return null
 func ressource_work_time():
 	return 0
-
+func time_update(time:float):
+	pass
 func get_speed_factor():
 	return 1.0
 func get_build_time():
@@ -92,6 +99,10 @@ func get_stack_increase_prob():
 	return 0
 func prevents_landscape_tick():
 	return false
+	
+func got_welled():
+	if ressource_name_or_null() != null:
+		increase_stock()
 	
 func is_passable():
 	return true

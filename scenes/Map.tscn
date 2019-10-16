@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://scripts/Map.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilesLandscape.png" type="Texture" id=2]
 [ext_resource path="res://assets/tilesBlocks.png" type="Texture" id=3]
 [ext_resource path="res://assets/tilesOverlay.png" type="Texture" id=4]
+[ext_resource path="res://assets/drop.png" type="Texture" id=5]
 
 [sub_resource type="TileSet" id=1]
 
@@ -6731,6 +6732,30 @@
 647/shapes = [  ]
 647/z_index = 0
 
+[sub_resource type="Gradient" id=5]
+
+colors = PoolColorArray( 1, 1, 1, 0.784314, 0.396078, 0.423529, 0.482353, 0.00254902 )
+
+[sub_resource type="GradientTexture" id=6]
+
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+
+emission_shape = 1
+emission_sphere_radius = 50.0
+flag_disable_z = true
+spread = 34.94
+gravity = Vector3( -980, 0, 0 )
+initial_velocity = 366.46
+angular_velocity = 20.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 90.0
+angle_random = 0.3
+color_ramp = SubResource( 6 )
+
 [sub_resource type="TileSet" id=3]
 
 0/name = "000"
@@ -10112,7 +10137,7 @@ cell_size = Vector2( 86, 100 )
 cell_half_offset = 1
 cell_y_sort = true
 format = 1
-tile_data = PoolIntArray( -196609, 208, 0, -262144, 103, 0, -262143, 3, 0, -131075, 202, 0, -131074, 202, 0, -131073, 202, 0, -196608, 202, 0, -196607, 102, 0, -196606, 102, 0, -196605, 2, 0, -65540, 302, 0, -65539, 302, 0, -65538, 203, 0, -65537, 203, 0, -131072, 109, 0, -131071, 302, 0, -131070, 102, 0, -131069, 102, 0, -131068, 103, 0, -4, 519, 0, -3, 416, 0, -2, 415, 0, -1, 518, 0, -65536, 202, 0, -65535, 102, 0, -65534, 10, 0, -65533, 2, 0, -65532, 2, 0, 65532, 519, 0, 65533, 520, 0, 65534, 412, 0, 65535, 202, 0, 0, 203, 0, 1, 203, 0, 2, 2, 0, 3, 2, 0, 4, 2, 0, 131068, 302, 0, 131069, 413, 0, 131070, 518, 0, 131071, 518, 0, 65536, 202, 0, 65537, 102, 0, 65538, 2, 0, 65539, 2, 0, 65540, 2, 0, 196604, 203, 0, 196605, 414, 0, 196606, 302, 0, 196607, 415, 0, 131072, 202, 0, 131073, 102, 0, 131074, 102, 0, 131075, 2, 0, 131076, 2, 0, 262142, 522, 0, 262143, 302, 0, 196608, 102, 0, 196609, 102, 0, 196610, 103, 0, 262144, 306, 0 )
+tile_data = PoolIntArray( -196609, 209, 0, -262144, 103, 0, -262143, 3, 0, -131075, 202, 0, -131074, 202, 0, -131073, 202, 0, -196608, 202, 0, -196607, 102, 0, -196606, 102, 0, -196605, 2, 0, -65540, 302, 0, -65539, 302, 0, -65538, 203, 0, -65537, 203, 0, -131072, 107, 0, -131071, 302, 0, -131070, 102, 0, -131069, 102, 0, -131068, 103, 0, -4, 520, 0, -3, 416, 0, -2, 413, 0, -1, 522, 0, -65536, 202, 0, -65535, 102, 0, -65534, 6, 0, -65533, 2, 0, -65532, 103, 0, 65532, 520, 0, 65533, 519, 0, 65534, 416, 0, 65535, 202, 0, 0, 203, 0, 1, 203, 0, 2, 2, 0, 3, 2, 0, 4, 2, 0, 131068, 302, 0, 131069, 413, 0, 131070, 520, 0, 131071, 522, 0, 65536, 202, 0, 65537, 102, 0, 65538, 2, 0, 65539, 2, 0, 65540, 2, 0, 196604, 203, 0, 196605, 415, 0, 196606, 302, 0, 196607, 413, 0, 131072, 202, 0, 131073, 102, 0, 131074, 102, 0, 131075, 2, 0, 131076, 2, 0, 262142, 521, 0, 262143, 302, 0, 196608, 102, 0, 196609, 102, 0, 196610, 103, 0, 262144, 306, 0 )
 
 [node name="MapBlocks" type="TileMap" parent="Navigation2D"]
 tile_set = SubResource( 2 )
@@ -10120,7 +10145,18 @@ cell_size = Vector2( 86, 100 )
 cell_half_offset = 1
 cell_y_sort = true
 format = 1
-tile_data = PoolIntArray( -262143, 6, 0, -65538, 206, 0, -65534, 8, 0, -65532, 20, 0, 65535, 214, 0, 0, 204, 0, 1, 207, 0, 3, 14, 0, 4, 21, 0 )
+tile_data = PoolIntArray( -262144, 139, 0, -262143, -5, 0, -131073, 238, 0, -65538, 194, 0, -65537, 236, 0, -131068, 139, 0, -65534, 9, 0, -65533, 39, 0, -65532, 102, 0, 65535, 215, 0, 0, 204, 0, 1, 195, 0, 3, 14, 0, 4, 20, 0, 131068, 338, 0, 65537, 137, 0, 196604, 239, 0, 131076, 38, 0 )
+
+[node name="Particles_drops" type="Particles2D" parent="Navigation2D"]
+rotation = -1.5708
+emitting = false
+amount = 35
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.4
+visibility_rect = Rect2( -200, -200, 300, 300 )
+process_material = SubResource( 4 )
+texture = ExtResource( 5 )
 
 [node name="PathHolder" type="Node2D" parent="Navigation2D"]
 

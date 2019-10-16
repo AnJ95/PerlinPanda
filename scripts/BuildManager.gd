@@ -67,6 +67,7 @@ func buy(map, cell_pos):
 	
 	ressourceManager.add_ressource("bamboo", -selected_building_or_null.costs_bamboo)
 	ressourceManager.add_ressource("stone", -selected_building_or_null.costs_stone)
+	ressourceManager.add_ressource("leaves", -selected_building_or_null.costs_leaves)
 	
 	# WIP is always under image
 	map.set_block_by_tile_id(cell_pos, selected_building_or_null.block_tile_id + map.tile_cols)

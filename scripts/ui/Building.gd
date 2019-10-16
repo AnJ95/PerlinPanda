@@ -47,7 +47,7 @@ func _ready():
 func ressource_changed(_ressource_name, _value):
 	#print(str(rand) + " unfocus")
 	if !Engine.editor_hint:
-		if ressourceManager.has_ressource("bamboo", costs_bamboo) and ressourceManager.has_ressource("stone", costs_stone):
+		if ressourceManager.has_ressource("bamboo", costs_bamboo) and ressourceManager.has_ressource("stone", costs_stone) and ressourceManager.has_ressource("leaves", costs_leaves):
 			set_all_colors_to(col_yes)
 			self.disabled = false
 		else:

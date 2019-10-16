@@ -20,7 +20,8 @@ func init(map, cell_pos, cell_info, args, nth):
 			args.var = 0
 	update_tile()
 	return self
-	
+
+
 
 	
 func update_tile():
@@ -62,24 +63,21 @@ func can_build_on(_map, _cell_pos):
 func remove():
 	map.landscapes.erase(cell_pos)
 
+func got_welled():
+	pass
 
 func get_adjacent_spreadable_percent():
 	var num_spreading = 0
 	var num_non_spreading = 0
-	for y in range(-cell_pos.y-4, cell_pos.y+4):
-		for x in range(-cell_pos.x-4, cell_pos.x+4):
-			var pos = Vector2(x, y)
-			if pos == cell_pos:
-				continue
-
-			var a = map.map_landscape.map_to_world(cell_pos, false)
-			var b = map.map_landscape.map_to_world(pos, false)
-			if map.landscapes.has(pos) and map.landscapes[pos] != null:
-				if a.distance_to(b) <= 105:
-					if map.landscapes[pos].can_spread_grass():
-						num_spreading += 1
-					else:
-						num_non_spreading += 1
+	for pos in map.get_adjacent_tiles(cell_pos):
+		var a = map.map_landscape.map_to_world(cell_pos, false)
+		var b = map.map_landscape.map_to_world(pos, false)
+		if map.landscapes.has(pos) and map.landscapes[pos] != null:
+			if a.distance_to(b) <= 105:
+				if map.landscapes[pos].can_spread_grass():
+					num_spreading += 1
+				else:
+					num_non_spreading += 1
 	if num_spreading == 0:
 		return 0
 	else:

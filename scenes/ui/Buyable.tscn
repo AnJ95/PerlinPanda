@@ -25,9 +25,10 @@ bg_color = Color( 0.321563, 0, 0, 0.235294 )
 bg_color = Color( 0, 0, 0, 0.117647 )
 
 [node name="Buyable" type="Button"]
-margin_right = 173.0
+margin_right = 162.0
 margin_bottom = 70.0
-rect_min_size = Vector2( 173, 70 )
+rect_min_size = Vector2( 162, 70 )
+rect_pivot_offset = Vector2( 40.9565, 32.0572 )
 focus_mode = 0
 custom_styles/hover = SubResource( 1 )
 custom_styles/pressed = SubResource( 2 )
@@ -41,33 +42,34 @@ costs_stone = 0
 costs_leaves = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 368.0
+margin_right = 152.0
 margin_bottom = 70.0
-rect_min_size = Vector2( 0, 70 )
+rect_min_size = Vector2( 0, 65 )
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
-margin_right = 55.0
+margin_right = 47.0
 margin_bottom = 70.0
-rect_min_size = Vector2( 55, 70 )
+rect_min_size = Vector2( 47, 70 )
 
 [node name="Sprite" type="Sprite" parent="HBoxContainer/TextureRect"]
-position = Vector2( 27, 55 )
-scale = Vector2( 0.49, 0.49 )
+position = Vector2( 25, 49 )
+scale = Vector2( 0.44007, 0.44007 )
 texture = ExtResource( 2 )
 vframes = 8
 hframes = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 59.0
-margin_right = 113.0
+editor/display_folded = true
+margin_left = 51.0
+margin_right = 101.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 50, 50 )
 custom_constants/separation = 0
 
 [node name="CostsBamboo" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
-margin_right = 54.0
+margin_right = 50.0
 margin_bottom = 35.0
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 value = 0
 texture = ExtResource( 4 )
 do_update = false
@@ -75,23 +77,23 @@ small = true
 
 [node name="CostsStone" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 margin_top = 35.0
-margin_right = 54.0
-rect_min_size = Vector2( 54, 35 )
+margin_right = 50.0
+rect_min_size = Vector2( 49, 35 )
 value = 0
 texture = ExtResource( 5 )
 do_update = false
 small = true
 
 [node name="CenterContainer" type="CenterContainer" parent="HBoxContainer"]
-margin_left = 117.0
-margin_right = 171.0
+margin_left = 105.0
+margin_right = 154.0
 margin_bottom = 70.0
 
 [node name="CostsLeaves" parent="HBoxContainer/CenterContainer" instance=ExtResource( 3 )]
 margin_top = 17.0
-margin_right = 54.0
+margin_right = 49.0
 margin_bottom = 52.0
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 value = 0
 ressource_name = "leaves"
 texture = ExtResource( 6 )

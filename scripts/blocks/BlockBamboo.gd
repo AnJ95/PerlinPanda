@@ -23,10 +23,10 @@ func ressource_name_or_null():
 	return "bamboo"
 func ressource_work_time():
 	return 3
-func get_ressource_amount():
-	return 1
 
 func get_max_var():
+	return 1
+func get_max_stock():
 	return 1
 
 

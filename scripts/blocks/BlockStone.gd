@@ -20,8 +20,6 @@ func ressource_name_or_null():
 	return "stone"
 func ressource_work_time():
 	return 7
-func get_ressource_amount():
-	return 1
 func get_max_var():
 	return 1
 func get_max_stock():

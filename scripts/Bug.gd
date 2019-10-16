@@ -1,65 +1,46 @@
-extends Node2D
+extends "Gatherer.gd"
 
-var map
 var hill
 
-const SPEED = 20
+const SPEED = 18
 var frame_time = 0.15
 var time_left = frame_time
-var timer = 0.0
 var angle = 0.0
 var target_pos = null
 
-var working_on_ressource = false
-var job_time_left = 0.0
-var job_on = null
 	
 func prep(map, cell_pos, hill):
-	self.map = map
+	.init(map)
 	self.hill = hill
 	position = map.calc_px_pos_on_tile(cell_pos)
 	print("prep at " + str(position))
 	return self
+	
+func inventory_emptied(res_name, value):
+	pass # TODO IMPROVE HOLE
 
  
 func _process(delta: float) -> void:
-	#### IS DOING A JOB
-	if working_on_ressource:
-		job_time_left -= delta
-		#### DONE
-		if job_time_left <= 0:
-			working_on_ressource = false
-			get_node("Particles_bamboo").emitting = false
-			job_on.get_ressource_amount_after_work_done()
-		#### NOT DONE
-		else:
-			var angle = 15*sin(5 * (job_on.ressource_work_time() - job_time_left) * (2*PI))
-			$Sprite.rotation_degrees = angle
-			return # prevent path walking
-			
-			
-			
 	# Sprite Animation
 	time_left -= delta
 	if time_left <= 0:
 		time_left += frame_time
 		$Sprite.frame = ($Sprite.frame + 1) % $Sprite.vframes
-		
+	
+	# gather and build, prevent walking if so
+	if gather_and_build(delta, 1.0):
+		return
+
 	# Determine next target if none
 	if target_pos == null:
 		target_pos = get_next_target()
-	var target_px_pos = map.calc_px_pos_on_tile(target_pos)
 	
 	# Check if current target in vicinity
-	timer += delta
-	var d:float = position.distance_to(target_px_pos)
-	if d > 10:
-		$Sprite.rotation_degrees = fmod(angle + 5 * sin(2 * timer * (2*PI)), 360)
-		position = position.linear_interpolate(target_px_pos, (SPEED * delta)/d)
-	else:
+	if move_towards_then(target_pos, SPEED, delta):
 		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo":
 			start_working_on_ressource(map.blocks[target_pos])
 		target_pos = null
+		
 		
 func get_next_target():
 	var cell_pos = map.calc_closest_tile_from(position)
@@ -93,7 +74,19 @@ func start_working_on_ressource(ressource):
 	
 	get_node("Particles_" + ressource.ressource_name_or_null()).emitting = true
 	
-func stepped_on():
+func stepped_on(panda):
 	hill.bug_has_died()
+	move_inventory_to_other_gatherer(panda)
 	queue_free()
+
+func get_sprite_angle():
+	return angle
+func get_sprite_wiggle_amp_freq():
+	return [5, 5]
 	
+func can_gather():
+	return true
+func gatherable_ressources():
+	return ["bamboo"]
+func can_build():
+	return false

@@ -90,8 +90,10 @@ func prepare_presets():
 		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
 		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
 
-		var preset_id = randi()%5 + 1 #[1,5]
+		var preset_id = randi()%6 + 1 #[1,6]
 		var preset = ensure_cache_singleton(preset_id)
+		if preset.has_node("Map"):
+			preset = preset.get_node("Map")
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
 		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")
 		# take a Dictionary an fill it with all blocks that are part of any preset

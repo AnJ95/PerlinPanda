@@ -71,7 +71,7 @@ func _input(event: InputEvent):
 				
 func get_panda_in_range(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):
-		if map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
+		if !panda.show_start_anim and map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
 			return panda
 	
 func add_to_current_path(this_tile):

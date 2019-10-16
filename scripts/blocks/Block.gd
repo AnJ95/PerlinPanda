@@ -70,10 +70,10 @@ func update_tile():
 		
 func tick():
 	if ressource_name_or_null() != null and randi()%100 < get_stack_increase_prob():
+		var stock_before = stock
 		stock = min(int(get_max_stock()), int(stock) + 1)
-		print("increased stock from " + str(stock-1) + " to " + str(stock))
 		update_tile()
-		print("... increased stock of ressource " + ressource_name_or_null() + " to " + str(stock))
+		print("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
 	
 func get_max_stock():
 	return 3

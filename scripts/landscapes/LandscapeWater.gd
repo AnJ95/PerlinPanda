@@ -1,12 +1,16 @@
 extends "Landscape.gd"
 
-const TIDE_TIME = 40
+const TIDE_TIME = 30
 const ANIM_TIME = 0.5
 var anim_time_left = 0.0
 var last_time = 0.0
 
+var is_originally_deep = false
+
 func init(map, cell_pos, cell_info, args, nth):
-	return .init(map, cell_pos, cell_info, args, nth)
+	.init(map, cell_pos, cell_info, args, nth)
+	is_originally_deep = (cell_info.height == map.layers - 1)
+	return self
 	
 func get_tile_id():
 	return 3 * 6 # TODO  6 = map.tile_cols
@@ -31,24 +35,22 @@ func time_update(time:float):
 	var s = sin(time * 2.0*PI / TIDE_TIME)
 	var deep = (cell_info.height == map.layers - 1)
 	
-	var humidity_bonus = 1 * (cell_info.humidity + 1) / 2.0 # norm to [0, 1] and then to [0, 1]
+	var humidity_bonus = cell_info.humidity / 2.4
 	
-	if deep: 
-		if s > -1.0 + humidity_bonus:
-			cell_info.height = 3
-		if s > 0.4 + humidity_bonus:
-			cell_info.height = 3
-	
-	update_tile()
-	
-
+	if is_originally_deep:
+		if deep and s < -0.75 + humidity_bonus:
+			cell_info.height = map.layers - 2
+		if !deep and s > -0.75 + humidity_bonus:
+			cell_info.height = map.layers - 1
+			
+	if deep and s > 0.75 + humidity_bonus:
+		conv()
+		return
+	if !deep and s > -0.75 - humidity_bonus:
+		conv()
+		return
 		
-	if deep and s < -1.0 + humidity_bonus:
-		conv()
-		return
-	if !deep and s < 0.4 + humidity_bonus:
-		conv()
-		return
+	update_tile()
 	
 
 func conv():

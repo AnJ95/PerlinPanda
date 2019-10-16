@@ -44,9 +44,9 @@ onready var nth = {"Panda":preload("res://scenes/Panda.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": 21},
-	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": 22},
-	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 23}
+	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": 31},
+	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": 32},
+	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 33}
 }
 var map_gens = {}
 
@@ -90,7 +90,7 @@ func prepare_presets():
 		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
 		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
 
-		var preset_id = randi()%6 + 1 #[1,6]
+		var preset_id = randi()%5 + 1 #[1,5]
 		var preset = ensure_cache_singleton(preset_id)
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
 		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")

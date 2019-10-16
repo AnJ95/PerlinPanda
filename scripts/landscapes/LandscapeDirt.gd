@@ -11,8 +11,13 @@ func get_max_var():
 	return 4
 	
 func tick():
+	# Spawn bug hill
+	if !map.blocks.has(cell_pos) and 30 > randi()%100: 
+		map.set_block_by_descriptor(cell_pos, "bughill")
+	
+	# Transform to grass
 	var percent = get_adjacent_spreadable_percent()
-	if randi()%100 / 4.0 < percent:
+	if randi()%100 < percent / 2.0:
 		print("... spreading hit (" + str(percent) + "%)")
 		remove()
 		map.set_landscape_by_descriptor(cell_pos, "grass")

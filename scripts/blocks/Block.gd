@@ -90,6 +90,8 @@ func get_max_var():
 	return 0
 func get_stack_increase_prob():
 	return 0
+func prevents_landscape_tick():
+	return false
 	
 func is_passable():
 	return true
@@ -99,4 +101,6 @@ func can_be_build_on(map, cell_pos):
 	
 func remove():
 	map.blocks.erase(cell_pos)
+	
+
 	

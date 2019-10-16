@@ -1,39 +1,22 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
-[ext_resource path="res://assets/images/food.png" type="Texture" id=2]
+[ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/images/love.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=4]
 [ext_resource path="res://assets/zzz.png" type="Texture" id=5]
 [ext_resource path="res://assets/panda.png" type="Texture" id=6]
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=7]
+[ext_resource path="res://assets/images/food.png" type="Texture" id=8]
 
 [sub_resource type="Gradient" id=1]
 
-offsets = PoolRealArray( 0, 0.347222, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.0663137, 1, 1, 1, 0 )
+offsets = PoolRealArray( 0, 0.802083, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 0.298039, 0.298039, 0.298039, 1, 1, 1, 1, 0 )
 
 [sub_resource type="GradientTexture" id=2]
 
 gradient = SubResource( 1 )
-
-[sub_resource type="ParticlesMaterial" id=3]
-
-emission_shape = 1
-emission_sphere_radius = 12.86
-flag_disable_z = true
-spread = 44.75
-gravity = Vector3( -200, 0, 0 )
-initial_velocity = 250.0
-initial_velocity_random = 0.2
-angular_velocity = 220.0
-angular_velocity_random = 0.31
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-angle = -90.0
-angle_random = 0.67
-scale = 0.2
-color_ramp = SubResource( 2 )
 
 [sub_resource type="ParticlesMaterial" id=5]
 
@@ -53,7 +36,29 @@ angle_random = 0.67
 scale = 0.2
 color_ramp = SubResource( 2 )
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="ParticlesMaterial" id=3]
+
+emission_shape = 1
+emission_sphere_radius = 12.86
+flag_disable_z = true
+spread = 44.75
+gravity = Vector3( -200, 0, 0 )
+initial_velocity = 250.0
+initial_velocity_random = 0.2
+angular_velocity = 220.0
+angular_velocity_random = 0.31
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = -90.0
+angle_random = 0.67
+scale = 0.2
+color_ramp = SubResource( 2 )
+
+[sub_resource type="GradientTexture" id=6]
+
+gradient = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=7]
 
 emission_shape = 1
 emission_sphere_radius = 5.0
@@ -68,7 +73,7 @@ orbit_velocity_random = 0.0
 angle = -73.7
 angle_random = 0.1
 scale = 0.2
-color_ramp = SubResource( 2 )
+color_ramp = SubResource( 6 )
 
 [node name="Panda" type="Node2D" groups=[
 "panda",
@@ -76,12 +81,7 @@ color_ramp = SubResource( 2 )
 position = Vector2( 0, -20 )
 script = ExtResource( 1 )
 
-[node name="Particles_bamboo" type="Particles2D" parent="."]
-rotation = -1.5708
-emitting = false
-lifetime = 1.5
-process_material = SubResource( 3 )
-texture = ExtResource( 2 )
+[node name="Particles_bamboo" parent="." instance=ExtResource( 2 )]
 
 [node name="Particles_love" type="Particles2D" parent="."]
 rotation = -1.5708
@@ -104,7 +104,7 @@ rotation = -1.13446
 emitting = false
 amount = 3
 lifetime = 4.5
-process_material = SubResource( 4 )
+process_material = SubResource( 7 )
 texture = ExtResource( 5 )
 
 [node name="Sprite" type="Sprite" parent="."]
@@ -120,7 +120,7 @@ margin_bottom = -33.0002
 rect_min_size = Vector2( 100, 35 )
 value = 0
 ressource_name = "bamboo"
-texture = ExtResource( 2 )
+texture = ExtResource( 8 )
 do_update = false
 show_when_0 = false
 small = true

@@ -17,18 +17,19 @@ func panda_in_center(_panda):
 	durability -= 1
 	if durability <= 0:
 		remove()
-		map.set_landscape_by_descriptor(cell_pos, "grass")
+		map.set_landscape_by_descriptor(cell_pos, "dirt")
 	else:
 		update_tile()
 
-func tick():
+func tick():	
 	var percent = get_adjacent_spreadable_percent()
-	if percent / 4.0 > randi()%100:
+	if percent / 2.0 > randi()%100:
 		print("... grass durability hit (" + str(percent) + "%)")
+		durability = min(4, durability + 1)
 	else:
 		print("... grass durability miss (" + str(percent) + "%)")
 		
-	durability = min(4, durability + 1)
+	
 	update_tile()
 
 

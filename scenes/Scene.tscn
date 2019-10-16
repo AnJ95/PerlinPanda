@@ -25,6 +25,8 @@ margin_right = 1053.0
 margin_bottom = 987.0
 
 [node name="Map" parent="." instance=ExtResource( 3 )]
+show_case_size = 6
+avg_tick_time_of_one_tile = 10.0
 
 [node name="ParallaxBackground" parent="." instance=ExtResource( 4 )]
 layer = -1

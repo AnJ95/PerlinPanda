@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/images/food.png" type="Texture" id=1]
+
+[sub_resource type="Gradient" id=1]
+
+offsets = PoolRealArray( 0, 0.347222, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.0663137, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+
+gradient = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+
+emission_shape = 1
+emission_sphere_radius = 12.86
+flag_disable_z = true
+spread = 44.75
+gravity = Vector3( -200, 0, 0 )
+initial_velocity = 250.0
+initial_velocity_random = 0.2
+angular_velocity = 220.0
+angular_velocity_random = 0.31
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = -90.0
+angle_random = 0.67
+scale = 0.2
+color_ramp = SubResource( 2 )
+
+[node name="Particles_bamboo" type="Particles2D"]
+rotation = -1.5708
+emitting = false
+lifetime = 1.5
+process_material = SubResource( 3 )
+texture = ExtResource( 1 )
+

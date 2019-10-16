@@ -89,7 +89,7 @@ func add_to_current_path(this_tile):
 		update_preview()
 
 func is_valid_next(last_tile, this_tile):
-	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile) 
+	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile) 
 
 func update_preview():
 	map.map_overlay.clear()
@@ -103,27 +103,25 @@ func update_preview():
 	
 	var cur_tile = path[path.size()-1]
 	
-	for y in range(cur_tile.y - 1, cur_tile.y + 2):
-		for x in range(cur_tile.x - 1, cur_tile.x + 2):
-			var that_tile = Vector2(x, y)
-			# if valid adjacent tile
-			if is_valid_next(cur_tile, that_tile):
-				
-				var tile_id = tile_ids.walk
-				
-				# if home pos = goal pos
-				if that_tile == panda.home_pos:
-					tile_id = tile_ids.home_end
-				# check for ressources
-				if map.blocks.has(that_tile):
-					if map.blocks[that_tile].ressource_name_or_null() != null:
-						tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null()]
-					if map.blocks[that_tile].is_wip:
-						tile_id = tile_ids.build
-	
-				# set calculated tile id
-				var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
-				map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
+	for that_tile in map.get_adjacent_tiles(cur_tile):
+		# if valid adjacent tile
+		if is_valid_next(cur_tile, that_tile):
+			
+			var tile_id = tile_ids.walk
+			
+			# if home pos = goal pos
+			if that_tile == panda.home_pos:
+				tile_id = tile_ids.home_end
+			# check for ressources
+			if map.blocks.has(that_tile):
+				if map.blocks[that_tile].ressource_name_or_null() != null:
+					tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null()]
+				if map.blocks[that_tile].is_wip:
+					tile_id = tile_ids.build
+
+			# set calculated tile id
+			var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
+			map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 				
 	for cur_tile in path:
 		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
@@ -138,14 +136,6 @@ func update_preview():
 
 func cell_pos_not_already_in_path(cell_pos):
 	return !path.has(cell_pos) or cell_pos == path[0]
-
-func are_tiles_adjacent(a:Vector2, b:Vector2):
-	
-	var c1 = a.x == b.x and abs(a.y - b.y) == 1
-	var c2 = abs(a.x - b.x) == 1 and a.y == b.y
-	var c3 = int(round(abs(a.x))) % 2 == 0 and abs(a.x - b.x) == 1 and a.y-1 == b.y
-	var c4 = int(round(abs(a.x))) % 2 == 1 and abs(a.x - b.x) == 1 and a.y+1 == b.y
-	return c1 or c2 or c3 or c4
 
 func done_with_path():
 	if !active or !panda or path.size() < 3:

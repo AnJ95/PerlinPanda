@@ -187,6 +187,11 @@ func _process(delta: float) -> void:
 				path = null
 				$Particles_sleeping.emitting = true
 				update_sprite(Vector2(1,1))
+				
+	# Check for stepping on bug
+	for bug in get_tree().get_nodes_in_group("bug"):
+		if position.distance_squared_to(bug.position) < 1600 and position.distance_to(bug.position) < 40:
+			bug.stepped_on()
 	
 func calc_speed_factor():
 	var speed_factor = 1.0

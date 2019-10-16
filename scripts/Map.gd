@@ -40,7 +40,7 @@ onready var all_maps = [map_landscape, map_blocks, map_overlay]
 
 onready var lex = preload("res://scripts/Lex.gd").new()
 
-onready var nth = {"Panda":preload("res://scenes/Panda.tscn")}
+onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res://scenes/Bug.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
@@ -127,7 +127,8 @@ func _process(delta:float):
 		var cell = cells[cell_id]
 		
 		#print("ticking " + str(cell) + "...")
-		landscapes[cell].tick()
+		if !blocks.has(cell) or !blocks[cell].prevents_landscape_tick():
+			landscapes[cell].tick()
 		if blocks.has(cell) and blocks[cell] != null:
 			blocks[cell].tick()
 			
@@ -253,6 +254,10 @@ func generate_tile(var cell_pos:Vector2):
 	#### BLOCKS
 	if cell_pos == Vector2():
 		block = "house"
+		
+	if landscape == "dirt":
+		#if int(cell_info.humidity * 100) % 2 == 0:
+		block = "bughill"
 	
 	var mountain_a = (cell_info.height == 0 and cell_info.humidity < -0.15)
 	var mountain_b = (cell_info.height == 1 and cell_info.humidity < -0.35)
@@ -354,6 +359,22 @@ func calc_closest_tile_from(tile_pos):
 					best_dst = dst
 					best_pos = pos
 	return best_pos
+	
+func are_tiles_adjacent(a:Vector2, b:Vector2):
+	var c1 = a.x == b.x and abs(a.y - b.y) == 1
+	var c2 = abs(a.x - b.x) == 1 and a.y == b.y
+	var c3 = int(round(abs(a.x))) % 2 == 0 and abs(a.x - b.x) == 1 and a.y-1 == b.y
+	var c4 = int(round(abs(a.x))) % 2 == 1 and abs(a.x - b.x) == 1 and a.y+1 == b.y
+	return c1 or c2 or c3 or c4
+	
+func get_adjacent_tiles(a:Vector2):
+	var tiles = []
+	for y in range(a.y - 1, a.y + 2):
+		for x in range(a.x - 1, a.x + 2):
+			var b = Vector2(x, y)
+			if are_tiles_adjacent(a, b):
+				tiles.append(b)
+	return tiles
 	
 func reset_tick_time_left():
 	var num_tiles = map_landscape.get_used_cells().size()

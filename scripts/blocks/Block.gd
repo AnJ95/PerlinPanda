@@ -101,6 +101,5 @@ func can_be_build_on(map, cell_pos):
 	
 func remove():
 	map.blocks.erase(cell_pos)
-	
-
+	map.map_blocks.set_cellv(cell_pos, -1)
 	

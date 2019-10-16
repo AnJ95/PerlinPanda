@@ -49,8 +49,8 @@ margin_bottom = 74.0
 rect_min_size = Vector2( 60, 70 )
 
 [node name="Sprite" type="Sprite" parent="HBoxContainer/TextureRect"]
-position = Vector2( 32, 35 )
-scale = Vector2( 0.4, 0.4 )
+position = Vector2( 32, 55 )
+scale = Vector2( 0.49, 0.49 )
 texture = ExtResource( 2 )
 vframes = 6
 hframes = 6
@@ -69,6 +69,7 @@ rect_min_size = Vector2( 100, 35 )
 value = 0
 texture = ExtResource( 4 )
 do_update = false
+show_when_0 = true
 small = true
 
 [node name="CostsStone" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
@@ -78,6 +79,7 @@ rect_min_size = Vector2( 100, 35 )
 value = 0
 texture = ExtResource( 5 )
 do_update = false
+show_when_0 = true
 small = true
 
 [connection signal="pressed" from="." to="." method="_on_pressed"]

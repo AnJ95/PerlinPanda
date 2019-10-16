@@ -31,8 +31,8 @@ func _ready():
 	if get_tree().get_nodes_in_group("panda").size() > 1:
 		$Particles_love.emitting = true
 		show_start_anim = true
-		start_anim_target = position
-		position = Vector2(800, 0).rotated(randi()%360)
+		start_anim_target = home_pos
+		position = (home_pos +Vector2(800, 0)).rotated(randi()%360)
 
 
 
@@ -100,7 +100,7 @@ func reached_cell():
 
 func reached_house():
 	# move pandas inventory to global ressources
-	move_inventory()
+	move_inventory_to_target()
 	
 	curr_path_pos = 0
 	# when he is scheduled to change path

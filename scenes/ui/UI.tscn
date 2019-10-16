@@ -28,6 +28,7 @@ margin_bottom = 601.0
 margin_right = 1024.0
 ressource_name = "bamboo"
 texture = ExtResource( 2 )
+show_when_0 = true
 
 [node name="RessourceStone" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 74.0
@@ -35,6 +36,7 @@ margin_right = 1024.0
 margin_bottom = 144.0
 ressource_name = "stone"
 texture = ExtResource( 3 )
+show_when_0 = true
 
 [node name="RessourcePopulation" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 148.0
@@ -43,6 +45,7 @@ margin_bottom = 218.0
 ressource_name = "population"
 max_ressource_name = "population_max"
 texture = ExtResource( 4 )
+show_when_0 = true
 
 [node name="Container" type="Container" parent="VBoxContainer"]
 margin_top = 222.0

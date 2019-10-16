@@ -109,7 +109,7 @@ func get_sprite_wiggle_amp_freq():
 ####################################
 ## INVENTORY
 
-func move_inventory():
+func move_inventory_to_target():
 	for res_name in inventory.keys():
 		inventory_emptied(res_name, inventory[res_name])
 		inventory.erase(res_name)

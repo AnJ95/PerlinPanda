@@ -17,7 +17,9 @@ func prep(map, cell_pos, hill):
 	return self
 	
 func inventory_emptied(res_name, value):
-	pass # TODO IMPROVE HOLE
+	for i in range(0, value):
+		hill.upgrade()
+	pass
 
  
 func _process(delta: float) -> void:
@@ -39,6 +41,8 @@ func _process(delta: float) -> void:
 	if move_towards_then(target_pos, SPEED, delta):
 		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo":
 			start_working_on_ressource(map.blocks[target_pos])
+		if map.blocks.has(target_pos) and map.blocks[target_pos] == hill:
+			move_inventory_to_target()
 		target_pos = null
 		
 		
@@ -46,21 +50,27 @@ func get_next_target():
 	var cell_pos = map.calc_closest_tile_from(position)
 	var valid = []
 	var bamboo = []
+	var home = null
 	
 	for adjacent in map.get_adjacent_tiles(cell_pos):
 		if map.landscapes.has(adjacent) and (!map.blocks.has(adjacent) or map.blocks[adjacent].is_passable()):
 			valid.append(adjacent)
+		if map.blocks.has(adjacent) and map.blocks[adjacent] == hill:
+			home = adjacent
 		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo":
 			bamboo.append(adjacent)
 	
 	var target
-	if bamboo.size() > 0:
-		target = bamboo[randi()%bamboo.size()]
+	if home != null and inventory.has("bamboo") and inventory.bamboo > 0:
+		target = home
 	else:
-		if valid.size() > 0:
-			target = valid[randi()%valid.size()]
+		if bamboo.size() > 0 and (!inventory.has("bamboo") or inventory.bamboo == 0):
+			target = bamboo[randi()%bamboo.size()]
 		else:
-			target = cell_pos
+			if valid.size() > 0:
+				target = valid[randi()%valid.size()]
+			else:
+				target = cell_pos
 	
 	var dir = map.calc_px_pos_on_tile(target) - position
 	angle = (360) * dir.angle() / (2*PI) + 90

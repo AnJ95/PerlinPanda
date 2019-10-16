@@ -11,7 +11,7 @@ var stock:int
 
 var is_bamboo = false
 var is_wip = false
-
+var is_bug_hill = false
 
 func init(map, cell_pos, cell_info, args, nth):
 	self.map = map

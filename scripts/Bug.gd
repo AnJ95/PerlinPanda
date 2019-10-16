@@ -41,7 +41,7 @@ func _process(delta: float) -> void:
 	if move_towards_then(target_pos, SPEED, delta):
 		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo":
 			start_working_on_ressource(map.blocks[target_pos])
-		if map.blocks.has(target_pos) and map.blocks[target_pos] == hill:
+		if map.blocks.has(target_pos) and map.blocks[target_pos].is_bug_hill:
 			move_inventory_to_target()
 		target_pos = null
 		
@@ -55,7 +55,7 @@ func get_next_target():
 	for adjacent in map.get_adjacent_tiles(cell_pos):
 		if map.landscapes.has(adjacent) and (!map.blocks.has(adjacent) or map.blocks[adjacent].is_passable()):
 			valid.append(adjacent)
-		if map.blocks.has(adjacent) and map.blocks[adjacent] == hill:
+		if map.blocks.has(adjacent) and map.blocks[adjacent].is_bug_hill:
 			home = adjacent
 		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo" and map.blocks[adjacent].stock > 0:
 			bamboo.append(adjacent)

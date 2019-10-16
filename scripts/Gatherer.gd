@@ -22,7 +22,6 @@ func _ready():
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
 	if ressourceManager.size() > 0:
 		ressourceManager = ressourceManager[0]
-		ressourceManager.add_ressource("population", 1)
 	else:
 		ressourceManager = null
 	update_inventory_view()

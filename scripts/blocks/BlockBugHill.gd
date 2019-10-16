@@ -4,6 +4,7 @@ extends "Block.gd"
 var spawn_num = 0
 
 func init(map, cell_pos, cell_info, args, nth):
+	is_bug_hill = true
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func spawn():

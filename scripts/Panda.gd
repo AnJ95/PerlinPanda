@@ -26,6 +26,7 @@ func prep(map, cell_pos, cell_info):
 	
 func _ready():
 	._ready()
+	ressourceManager.add_ressource("population", 1)
 	position = map.calc_px_pos_on_tile(home_pos)
 	map.show_homes()
 	if get_tree().get_nodes_in_group("panda").size() > 1:

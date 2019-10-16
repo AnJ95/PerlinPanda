@@ -85,6 +85,7 @@ func start_working_on_ressource(ressource):
 func stop_particles():
 	$Particles_bamboo.emitting = false
 	$Particles_stone.emitting = false
+	$Particles_leaves.emitting = false
 ####################################
 ## MOVEMENT
 func move_towards_then(target_cell, speed, delta):
@@ -118,7 +119,7 @@ func move_inventory_to_other_gatherer(other):
 	for res_name in inventory.keys():
 		other.add_to_inventory(res_name, inventory[res_name])
 
-func inventory_emptied(res_name, value):
+func inventory_emptied(_res_name, _value):
 	pass
 	
 		
@@ -131,7 +132,7 @@ func add_to_inventory(res_name, res_value):
 
 func update_inventory_view():
 	var num_visible = 0
-	for res in ["bamboo", "stone"]:
+	for res in ["bamboo", "stone", "leaves"]:
 		var val = 0
 		if inventory.has(res):
 			val = inventory[res]
@@ -143,13 +144,9 @@ func update_inventory_view():
 			node.hide()
 		else:
 			node.show()
+			node.rect_position.y = -90 - (num_visible-1)*30
 		node.value = val
 		node.update()
 		
-	
-	if num_visible == 2:
-		$Inventory_stone.rect_position.y = -135
-	else:
-		$Inventory_stone.rect_position.y = -103
 		
 	

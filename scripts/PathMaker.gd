@@ -14,6 +14,7 @@ onready var tile_ids = {
 	"walk" : 				1,
 	"bamboo" : 				2,
 	"stone" : 				3,
+	"leaves" : 				2,
 	"build" : 				4
 	}
 

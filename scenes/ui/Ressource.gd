@@ -53,13 +53,16 @@ func switch_small():
 	$TextureRect.rect_min_size.y = 35 * factor
 	$TextureRect.rect_size.y = $TextureRect.rect_min_size.y
 	
+	$Label.rect_min_size.x = 10 * factor
+	$Label.rect_size.x = 10 * factor
+	
 	$Label.rect_min_size.y = 35 * factor
 	$Label.rect_size.y = $Label.rect_min_size.y 
 	$Label.rect_position.y = 0
 	
 	$Label.get_font("font").set("size", int(16 * factor))
 	
-	self.rect_min_size.x = 100 * factor
+	self.rect_min_size.x = 54 * factor
 	self.rect_min_size.y = 35 * factor
 	self.rect_size.x = self.rect_min_size.x
 	self.rect_size.y = self.rect_size.y

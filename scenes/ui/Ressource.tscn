@@ -5,6 +5,7 @@
 
 [sub_resource type="DynamicFont" id=1]
 
+size = 32
 font_data = ExtResource( 2 )
 
 [node name="Ressource" type="HBoxContainer"]
@@ -29,9 +30,9 @@ stretch_mode = 6
 
 [node name="Label" type="Label" parent="."]
 margin_left = 64.0
-margin_right = 70.0
+margin_right = 84.0
 margin_bottom = 70.0
-rect_min_size = Vector2( 0, 70 )
+rect_min_size = Vector2( 20, 70 )
 custom_fonts/font = SubResource( 1 )
 text = "1"
 align = 2

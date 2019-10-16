@@ -1,13 +1,14 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/images/love.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=4]
-[ext_resource path="res://assets/zzz.png" type="Texture" id=5]
-[ext_resource path="res://assets/panda.png" type="Texture" id=6]
-[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=7]
-[ext_resource path="res://assets/images/food.png" type="Texture" id=8]
+[ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
+[ext_resource path="res://assets/zzz.png" type="Texture" id=6]
+[ext_resource path="res://assets/panda.png" type="Texture" id=7]
+[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=8]
+[ext_resource path="res://assets/images/food.png" type="Texture" id=9]
 
 [sub_resource type="Gradient" id=1]
 
@@ -104,42 +105,59 @@ lifetime = 1.5
 process_material = SubResource( 3 )
 texture = ExtResource( 4 )
 
+[node name="Particles_leaves" type="Particles2D" parent="."]
+rotation = -1.5708
+emitting = false
+lifetime = 1.5
+process_material = SubResource( 3 )
+texture = ExtResource( 5 )
+
 [node name="Particles_sleeping" type="Particles2D" parent="."]
 rotation = -1.13446
 emitting = false
 amount = 3
 lifetime = 4.5
 process_material = SubResource( 7 )
-texture = ExtResource( 5 )
+texture = ExtResource( 6 )
 
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 0, -10 )
-texture = ExtResource( 6 )
+texture = ExtResource( 7 )
 hframes = 2
 
-[node name="Inventory_bamboo" parent="." instance=ExtResource( 7 )]
+[node name="Inventory_bamboo" parent="." instance=ExtResource( 8 )]
 margin_left = -18.0
 margin_top = -103.0
-margin_right = 82.0
+margin_right = 36.0
 margin_bottom = -33.0002
-rect_min_size = Vector2( 100, 35 )
+rect_min_size = Vector2( 54, 35 )
 value = 0
 ressource_name = "bamboo"
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 do_update = false
-show_when_0 = false
 small = true
 
-[node name="Inventory_stone" parent="." instance=ExtResource( 7 )]
+[node name="Inventory_stone" parent="." instance=ExtResource( 8 )]
 margin_left = -19.2542
 margin_top = -135.0
-margin_right = 80.7458
+margin_right = 34.7458
 margin_bottom = -65.1426
-rect_min_size = Vector2( 100, 35 )
+rect_min_size = Vector2( 54, 35 )
 value = 0
 ressource_name = "stone"
 texture = ExtResource( 4 )
 do_update = false
-show_when_0 = false
+small = true
+
+[node name="Inventory_leaves" parent="." instance=ExtResource( 8 )]
+margin_left = -19.254
+margin_top = -167.0
+margin_right = 34.746
+margin_bottom = -97.1426
+rect_min_size = Vector2( 54, 35 )
+value = 0
+ressource_name = "stone"
+texture = ExtResource( 5 )
+do_update = false
 small = true
 

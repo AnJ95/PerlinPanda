@@ -5,6 +5,7 @@ signal ressource_changed(ressource_name, value)
 export var ressources = {
 	"bamboo": 20,
 	"stone": 20,
+	"leaves": 20,
 	"population": 0
 }
 

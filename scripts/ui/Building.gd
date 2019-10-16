@@ -4,6 +4,7 @@ extends Button
 export var block_tile_id:int setget set_block_tile_id
 export var costs_bamboo:int setget set_costs_bamboo
 export var costs_stone:int setget set_costs_stone
+export var costs_leaves:int setget set_costs_leaves
 
 const col_yes:Color = Color(0.4,1,0.4, 40.0/255.0)
 const col_no:Color = Color(0.6,0,0, 40.0/255.0)
@@ -16,11 +17,13 @@ var buildManager
 onready var sprite = $HBoxContainer/TextureRect/Sprite
 onready var costsBamboo = $HBoxContainer/VBoxContainer/CostsBamboo
 onready var costsStone = $HBoxContainer/VBoxContainer/CostsStone
+onready var costsLeaves = $HBoxContainer/CenterContainer/CostsLeaves
 
 func _ready():
 	sprite.frame = block_tile_id
 	costsBamboo.value = costs_bamboo
 	costsStone.value = costs_stone
+	costsLeaves.value = costs_leaves
 	
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
 	if ressourceManager.size() > 0:
@@ -32,6 +35,7 @@ func _ready():
 		
 	$HBoxContainer/VBoxContainer/CostsBamboo.update()
 	$HBoxContainer/VBoxContainer/CostsStone.update()
+	$HBoxContainer/CenterContainer/CostsLeaves.update()
 		
 		
 	buildManager = get_tree().get_nodes_in_group("build_manager")
@@ -83,4 +87,10 @@ func set_costs_stone(val):
 	if costsStone != null:
 		costsStone.value = val
 		costsStone.update()
+
+func set_costs_leaves(val):
+	costs_leaves = val
+	if costsLeaves != null:
+		costsLeaves.value = val
+		costsLeaves.update()
 		

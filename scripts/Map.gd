@@ -9,8 +9,8 @@ export var show_case_size:int = 4
 export var is_preset = false
 
 # Consts
-export var tile_cols:int = 5
-export var tile_rows:int = 6
+export var tile_cols:int = 6
+export var tile_rows:int = 8
 var layer_offset:int = 100
 
 export var region_width:int = 116
@@ -280,7 +280,15 @@ func generate_tile(var cell_pos:Vector2):
 			
 			if stone_a or stone_b or stone_c or stone_d or stone_e:
 				block = "stone"
-			
+	
+	if block == "" and landscape == "grass":
+		var r = randi()%100
+		var vegetation_a = cell_info.fertility > 0.3 and r < 80
+		var vegetation_b = cell_info.fertility > 0.1 and r < 60
+		var vegetation_c = cell_info.fertility > -0.1 and r < 30
+		if vegetation_a or vegetation_b or vegetation_c:
+			block = "vegetation"
+		
 	if block != "":
 		set_block_by_descriptor(cell_pos, block)
 	

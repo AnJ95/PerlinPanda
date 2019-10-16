@@ -26,6 +26,9 @@ func tick():
 	if percent / 2.0 > randi()%100:
 		print("... grass durability hit (" + str(percent) + "%)")
 		durability = min(4, durability + 1)
+		if !map.block.has(cell_pos ) and durability >= 4 and (percent / 2.0 > randi()%100):
+			map.set_block_by_descriptor(cell_pos, "vegetation")
+			
 	else:
 		print("... grass durability miss (" + str(percent) + "%)")
 		

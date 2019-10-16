@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/food.png" type="Texture" id=2]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=3]
-[ext_resource path="res://assets/images/population.png" type="Texture" id=4]
-[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/images/leaves.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/population.png" type="Texture" id=5]
+[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=6]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -22,41 +23,49 @@ margin_bottom = 300.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 601.0
+margin_bottom = 605.0
 
 [node name="RessourceBamboo" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_right = 1024.0
+rect_min_size = Vector2( 108, 70 )
 ressource_name = "bamboo"
 texture = ExtResource( 2 )
-show_when_0 = true
 
 [node name="RessourceStone" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 74.0
 margin_right = 1024.0
 margin_bottom = 144.0
+rect_min_size = Vector2( 108, 70 )
 ressource_name = "stone"
 texture = ExtResource( 3 )
-show_when_0 = true
 
-[node name="RessourcePopulation" parent="VBoxContainer" instance=ExtResource( 1 )]
+[node name="RessourceLeaves" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 148.0
 margin_right = 1024.0
 margin_bottom = 218.0
-ressource_name = "population"
-max_ressource_name = "population_max"
+rect_min_size = Vector2( 108, 70 )
+ressource_name = "leaves"
 texture = ExtResource( 4 )
-show_when_0 = true
 
-[node name="Container" type="Container" parent="VBoxContainer"]
+[node name="RessourcePopulation" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 222.0
 margin_right = 1024.0
-margin_bottom = 527.0
-rect_min_size = Vector2( 0, 305 )
+margin_bottom = 292.0
+rect_min_size = Vector2( 108, 70 )
+ressource_name = "population"
+max_ressource_name = "population_max"
+texture = ExtResource( 5 )
+
+[node name="Container" type="Container" parent="VBoxContainer"]
+margin_top = 296.0
+margin_right = 1024.0
+margin_bottom = 531.0
+rect_min_size = Vector2( 0, 235 )
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 531.0
+margin_top = 535.0
 margin_right = 1024.0
-margin_bottom = 601.0
+margin_bottom = 605.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="Border" type="PanelContainer" parent="VBoxContainer/PanelContainer"]
@@ -68,21 +77,22 @@ custom_styles/panel = SubResource( 2 )
 margin_right = 1024.0
 margin_bottom = 70.0
 
-[node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
+[node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
 block_tile_id = 4
-costs_bamboo = 6
-costs_stone = 3
+costs_bamboo = 4
+costs_stone = 2
+costs_leaves = 4
 
-[node name="Farm" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
-margin_left = 134.0
-margin_right = 264.0
+[node name="Farm" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 177.0
+margin_right = 350.0
 focus_mode = 2
 block_tile_id = 29
 costs_bamboo = 6
 
-[node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 5 )]
-margin_left = 268.0
-margin_right = 398.0
+[node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+margin_left = 354.0
+margin_right = 527.0
 block_tile_id = 16
 costs_bamboo = 1
 costs_stone = 2

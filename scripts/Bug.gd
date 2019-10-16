@@ -17,7 +17,7 @@ func prep(map, cell_pos, hill):
 	return self
 	
 func inventory_emptied(res_name, value):
-	for i in range(0, value):
+	for _i in range(0, value):
 		hill.upgrade()
 	pass
 

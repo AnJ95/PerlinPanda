@@ -1,11 +1,12 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/Bug.gd" type="Script" id=1]
 [ext_resource path="res://assets/bug.png" type="Texture" id=2]
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/images/food.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=5]
-[ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/leaves.png" type="Texture" id=6]
+[ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=7]
 
 [node name="Bug" type="Node2D" groups=[
 "bug",
@@ -20,27 +21,39 @@ vframes = 4
 [node name="Inventory_bamboo" parent="." instance=ExtResource( 3 )]
 margin_left = -18.0
 margin_top = -75.0
-margin_right = 82.0
+margin_right = 36.0
 margin_bottom = -5.0
-rect_min_size = Vector2( 100, 35 )
+rect_min_size = Vector2( 54, 35 )
 texture = ExtResource( 4 )
 do_update = false
-show_when_0 = false
 small = true
 
 [node name="Inventory_stone" parent="." instance=ExtResource( 3 )]
 margin_left = -18.0
-margin_top = -120.0
-margin_right = 82.0
-margin_bottom = -50.0
-rect_min_size = Vector2( 100, 35 )
+margin_top = -112.0
+margin_right = 36.0
+margin_bottom = -42.0
+rect_min_size = Vector2( 54, 35 )
 texture = ExtResource( 5 )
 do_update = false
-show_when_0 = true
 small = true
 
-[node name="Particles_bamboo" parent="." instance=ExtResource( 6 )]
+[node name="Inventory_leaves" parent="." instance=ExtResource( 3 )]
+margin_left = -18.0
+margin_top = -152.0
+margin_right = 36.0
+margin_bottom = -82.0
+rect_min_size = Vector2( 54, 35 )
+rect_pivot_offset = Vector2( -453.035, -9.987 )
+texture = ExtResource( 6 )
+do_update = false
+small = true
 
-[node name="Particles_stone" parent="." instance=ExtResource( 6 )]
+[node name="Particles_bamboo" parent="." instance=ExtResource( 7 )]
+
+[node name="Particles_stone" parent="." instance=ExtResource( 7 )]
 texture = ExtResource( 5 )
+
+[node name="Particles_leaves" parent="." instance=ExtResource( 7 )]
+texture = ExtResource( 6 )
 

@@ -38,7 +38,7 @@ func _ready():
 
 
 func inventory_emptied(res_name, value):
-	ressourceManager.add_ressource(res_name, inventory[res_name])
+	ressourceManager.add_ressource(res_name, value)
 
 
 func _process(delta: float) -> void:
@@ -166,7 +166,7 @@ func set_path(path):
 func can_gather():
 	return true
 func gatherable_ressources():
-	return ["bamboo", "stone"]
+	return ["bamboo", "stone", "leaves"]
 func can_build():
 	return true
 	

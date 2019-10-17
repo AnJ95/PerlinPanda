@@ -64,13 +64,14 @@ func _input(event: InputEvent):
 		var clicked_tile = map.calc_closest_tile_from(click_pos)
 		
 		var clicked_panda = get_panda_in_range(click_pos)
+		var just_ended_path = false
 		if active and clicked_tile != null:
 			if clicked_panda == null or panda == clicked_panda:
-				add_to_current_path(clicked_tile)
+				just_ended_path = add_to_current_path(clicked_tile)
 			else:
 				cancel()
 				
-		if clicked_panda != null and (!active or panda != clicked_panda): #start new
+		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda): #start new
 			try_start_path_from(clicked_panda)
 				
 func get_panda_in_range(click_pos):
@@ -86,12 +87,15 @@ func add_to_current_path(this_tile):
 	var last_tile = path[path.size()-1]
 	
 	if is_valid_next(last_tile, this_tile):
+		var just_ended_path = false
 		path.append(this_tile)
-		
+		 
 		if this_tile == path[0]:
 			done_with_path()
-		
+			just_ended_path = true
 		update_preview()
+		
+		return just_ended_path
 
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile) 
@@ -126,7 +130,9 @@ func update_preview():
 				
 	for cur_tile in path:
 		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
-		map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
+		# dont override the "goal" overlay
+		if map.map_overlay.get_cellv(cur_tile) != tile_ids.home_end + tile_id_offset:
+			map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
 	
 	var pts = []
 	for cell in path:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://scripts/ui/Building.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilesBlocks.png" type="Texture" id=2]
@@ -7,46 +7,30 @@
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=5]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=6]
 
-[sub_resource type="StyleBoxFlat" id=1]
-
-bg_color = Color( 0.6, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=2]
-
-bg_color = Color( 0.6, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=3]
-
-bg_color = Color( 0.6, 0, 0, 1 )
-
-[sub_resource type="StyleBoxFlat" id=4]
-
-
-[sub_resource type="StyleBoxFlat" id=5]
-
-bg_color = Color( 0.6, 0, 0, 1 )
-
-[node name="Buyable" type="Button"]
+[node name="Buyable" type="ColorRect"]
 margin_right = 162.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 162, 70 )
-rect_pivot_offset = Vector2( 40.9565, 32.0572 )
-focus_mode = 0
-custom_styles/hover = SubResource( 1 )
-custom_styles/pressed = SubResource( 2 )
-custom_styles/focus = SubResource( 3 )
-custom_styles/disabled = SubResource( 4 )
-custom_styles/normal = SubResource( 5 )
+mouse_default_cursor_shape = 2
+color = Color( 0.407843, 0.407843, 0.407843, 1 )
 script = ExtResource( 1 )
-block_tile_id = 0
-costs_bamboo = 0
-costs_stone = 0
-costs_leaves = 0
+
+[node name="White" type="ColorRect" parent="."]
+margin_right = 162.0
+margin_bottom = 3.0
+color = Color( 1, 1, 1, 0.196078 )
+
+[node name="Black" type="ColorRect" parent="."]
+margin_top = 67.0
+margin_right = 162.0
+margin_bottom = 70.0
+grow_vertical = 0
+color = Color( 0, 0, 0, 0.196078 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
 margin_right = 152.0
 margin_bottom = 70.0
-rect_min_size = Vector2( 0, 65 )
+rect_min_size = Vector2( 162, 65 )
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
 margin_right = 47.0
@@ -61,7 +45,6 @@ vframes = 8
 hframes = 6
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-editor/display_folded = true
 margin_left = 51.0
 margin_right = 101.0
 margin_bottom = 70.0
@@ -90,6 +73,8 @@ small = true
 margin_left = 105.0
 margin_right = 154.0
 margin_bottom = 70.0
+rect_min_size = Vector2( 49, 70 )
+mouse_filter = 2
 
 [node name="CostsLeaves" parent="HBoxContainer/CenterContainer" instance=ExtResource( 3 )]
 margin_top = 17.0
@@ -102,4 +87,4 @@ texture = ExtResource( 6 )
 do_update = false
 small = true
 
-[connection signal="pressed" from="." to="." method="_on_pressed"]
+[connection signal="gui_input" from="." to="." method="on_gui_input"]

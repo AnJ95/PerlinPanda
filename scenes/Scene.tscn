@@ -15,14 +15,12 @@ current = true
 script = ExtResource( 1 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-offset = Vector2( -29, -387 )
-transform = Transform2D( 1, 0, 0, 1, -29, -387 )
 
 [node name="UI" parent="CanvasLayer" instance=ExtResource( 2 )]
-margin_left = 29.0
-margin_top = 386.0
-margin_right = 1053.0
-margin_bottom = 987.0
+margin_left = 0.0
+margin_top = 0.0
+margin_right = 1024.0
+margin_bottom = 601.0
 
 [node name="Map" parent="." instance=ExtResource( 3 )]
 show_case_size = 12
@@ -33,6 +31,7 @@ layer = -1
 [node name="PathMaker" type="Node" parent="." groups=[
 "path_maker",
 ]]
+editor/display_folded = true
 script = ExtResource( 5 )
 map_node_path = "/root/Scene/Map"
 

@@ -46,16 +46,20 @@ func input(event):
 			var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
 			var clicked_tile = map.calc_closest_tile_from(click_pos)
 			
-			var proto = map.lex.get_proto_block_by_tile_id(selected_building_or_null.block_tile_id)
 			if map.landscapes.has(clicked_tile):
-				if map.landscapes[clicked_tile].can_build_on(map, clicked_tile) and proto.can_be_build_on(map, clicked_tile):
-					buy(map, clicked_tile)
-					cancel()
+				var dst = click_pos.distance_to(map.calc_px_pos_on_tile(clicked_tile))
+				if dst <= 70:
+					var proto = map.lex.get_proto_block_by_tile_id(selected_building_or_null.block_tile_id)
+					if map.landscapes[clicked_tile].can_build_on(map, clicked_tile) and proto.can_be_build_on(map, clicked_tile):
+						buy(map, clicked_tile)
+						cancel()
+					else:
+						cancel()
 				else:
 					cancel()
 			else:
 				cancel()
-			return true # THIS?
+			return true
 	
 	return false
 
@@ -76,12 +80,14 @@ func hide_possible_build_sites():
 	map.show_homes()
 
 func buy(map, cell_pos):
+	var selected_building = selected_building_or_null
+	if selected_building != null:
+		ressourceManager.add_ressource("bamboo", -selected_building.costs_bamboo)
+		ressourceManager.add_ressource("stone", -selected_building.costs_stone)
+		ressourceManager.add_ressource("leaves", -selected_building.costs_leaves)
 	
-	ressourceManager.add_ressource("bamboo", -selected_building_or_null.costs_bamboo)
-	ressourceManager.add_ressource("stone", -selected_building_or_null.costs_stone)
-	ressourceManager.add_ressource("leaves", -selected_building_or_null.costs_leaves)
-	
-	# WIP is always under image
-	map.set_block_by_tile_id(cell_pos, selected_building_or_null.block_tile_id + map.tile_cols)
+		# WIP is always under image
+		map.set_block_by_tile_id(cell_pos, selected_building.block_tile_id + map.tile_cols)
+		
 	
 	

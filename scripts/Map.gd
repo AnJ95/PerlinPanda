@@ -133,7 +133,7 @@ func _process(delta:float):
 		if has_block:
 			block = blocks[cell]
 		
-		var print_txt = "ticking "
+		var print_txt = "ticking after " + str(avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())) + "secs "
 		print_txt += str(landscape.get_class()) + " "
 		if has_block:
 			print_txt += block.get_class()+ " "
@@ -172,8 +172,6 @@ func generate_next(from:Vector2, rd:float):
 			
 			if a.distance_to(b) <=  rd * 105:
 				generate_tile(pos)
-				
-	reset_tick_time_left()
 	
 func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
@@ -405,9 +403,7 @@ func spawn_drops_at(cell_pos):
 	$Navigation2D/Particles_drops.emitting = true
 	
 func reset_tick_time_left():
-	var num_tiles = map_landscape.get_used_cells().size()
-	#print(str(num_tiles) + ": " + str(avg_tick_time_of_one_tile / float(num_tiles)))
-	tick_time_left += avg_tick_time_of_one_tile / float(num_tiles)
+	tick_time_left += avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())
 	
 func show_homes():
 	for panda in get_tree().get_nodes_in_group("panda"):

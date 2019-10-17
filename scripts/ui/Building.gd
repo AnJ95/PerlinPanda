@@ -1,14 +1,14 @@
 tool
-extends Button
+extends ColorRect
 
 export var block_tile_id:int setget set_block_tile_id
 export var costs_bamboo:int setget set_costs_bamboo
 export var costs_stone:int setget set_costs_stone
 export var costs_leaves:int setget set_costs_leaves
 
-const col_yes:Color = Color(0.4,0.8,0.4, 255.0/255.0)
-const col_no:Color = Color(0.8,0.5,0.4, 255.0/255.0)
-const col_active:Color = Color(0.4,1,0.4, 255.0/255.0)
+const col_yes:Color = Color(0.6,0.6,0.4, 1.0)
+const col_no:Color = Color(0.65,0.5,0.5, 1.0)
+const col_active:Color = Color(0.4,0.7,0.3, 1.0)
 
 var ressourceManager
 var buildManager
@@ -25,8 +25,11 @@ var has_enough_ressources = false
 func _ready():
 	sprite.frame = block_tile_id
 	costsBamboo.value = costs_bamboo
+	costsBamboo.update()
 	costsStone.value = costs_stone
+	costsStone.update()
 	costsLeaves.value = costs_leaves
+	costsLeaves.update()
 	
 	update_color()
 	
@@ -37,10 +40,7 @@ func _ready():
 		ressource_changed(null, null)
 	else:
 		ressourceManager = null
-		
-	$HBoxContainer/VBoxContainer/CostsBamboo.update()
-	$HBoxContainer/VBoxContainer/CostsStone.update()
-	$HBoxContainer/CenterContainer/CostsLeaves.update()
+	
 		
 	buildManager = get_tree().get_nodes_in_group("build_manager")
 	if buildManager.size() > 0:
@@ -51,37 +51,38 @@ func _ready():
 func ressource_changed(_ressource_name, _value):
 	if !Engine.editor_hint:
 		has_enough_ressources = ressourceManager.has_ressource("bamboo", costs_bamboo) and ressourceManager.has_ressource("stone", costs_stone) and ressourceManager.has_ressource("leaves", costs_leaves)
-		self.disabled = !has_enough_ressources
+		if !has_enough_ressources and is_selected:
+			buildManager.cancel()
 		update_color()
 
 func update_color():
 	if is_selected:
 		set_all_colors_to(col_active)
-		print(col_active)
 	else:
 		if has_enough_ressources:
 			set_all_colors_to(col_yes)
-			print(col_yes)
 		else:
 			set_all_colors_to(col_no)
-			print(col_no)
 		
 
 func set_all_colors_to(c):
-	self.get_stylebox("normal").bg_color = c
-	self.get_stylebox("hover").bg_color = c#Color(c.r, c.g, c.b, 50.0/255.0)
-	self.get_stylebox("pressed").bg_color = c#Color(c.r, c.g, c.b, 70.0/255.0)
-	self.get_stylebox("focus").bg_color = c#c
+	self.color = c
 	
-func _on_pressed():
-	var last_selected = buildManager.selected_building_or_null
 	
-	if buildManager.has_selected_building():
-		buildManager.cancel()
-	
-	if last_selected != self:
-		if ressourceManager.has_ressource("bamboo", costs_bamboo) and ressourceManager.has_ressource("stone", costs_stone):
-			select()
+func on_gui_input(event):
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
+		if !has_enough_ressources:
+			return
+		var was_selected = is_selected
+		
+		if buildManager.has_selected_building():
+			buildManager.cancel()
+		
+		if !was_selected:
+			if ressourceManager.has_ressource("bamboo", costs_bamboo) and ressourceManager.has_ressource("stone", costs_stone):
+				select()
+	get_tree().set_input_as_handled()
+	return true
 			
 func set_block_tile_id(val):
 	block_tile_id = val

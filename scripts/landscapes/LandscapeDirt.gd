@@ -1,5 +1,9 @@
 extends "Landscape.gd"
 
+const PROB_TO_GRASS_CONVERSION_WHEN_SPREADING = 50#%
+const PROB_TO_SPAWN_BUG_HILL = 16#%
+
+func get_class(): return "LandscapeDirt"
 
 func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
@@ -15,19 +19,15 @@ func got_welled():
 	
 func tick():
 	# Spawn bug hill
-	if !map.blocks.has(cell_pos) and randi()%100 < 18: 
-		map.set_block_by_descriptor(cell_pos, "bughill")
+	if !map.blocks.has(cell_pos):
+		if randi()%100 <= PROB_TO_SPAWN_BUG_HILL: 
+			map.set_block_by_descriptor(cell_pos, "bughill")
 	
 	# Transform to grass
-	var percent = get_adjacent_spreadable_percent()
-	if randi()%100 < percent / 2.0:
-		print("... spreading hit (" + str(percent) + "%)")
-		remove()
-		map.set_landscape_by_descriptor(cell_pos, "grass")
-	else:
-		print("... spreading miss (" + str(percent) + "%)")
-				
-	#print("... increased stock of ressource " + ressource_name_or_null()
+	if !map.blocks.has(cell_pos) and randi()%100 <= get_adjacent_spreadable_percent():
+		if randi()%100 <= PROB_TO_GRASS_CONVERSION_WHEN_SPREADING:
+			remove()
+			map.set_landscape_by_descriptor(cell_pos, "grass")
 
 func get_speed_factor():
 	return 1

@@ -13,6 +13,8 @@ var is_bamboo = false
 var is_wip = false
 var is_bug_hill = false
 
+func get_class(): return "Block"
+
 func init(map, cell_pos, cell_info, args, nth):
 	self.map = map
 	self.cell_pos = cell_pos
@@ -76,7 +78,7 @@ func update_tile():
 	map.map_blocks.set_cellv(cell_pos, tile_id);
 		
 func tick():
-	if ressource_name_or_null() != null and randi()%100 < get_stack_increase_prob():
+	if ressource_name_or_null() != null and randi()%100 <= get_stack_increase_prob():
 		var stock_before = stock
 		increase_stock()
 		print("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
@@ -99,10 +101,11 @@ func get_stack_increase_prob():
 	return 0
 func prevents_landscape_tick():
 	return false
+func shields_landscape_durability():
+	return false
 	
 func got_welled():
-	if ressource_name_or_null() != null:
-		increase_stock()
+	pass
 	
 func is_passable():
 	return true

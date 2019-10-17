@@ -1,5 +1,7 @@
 extends "BlockBamboo.gd"
 
+func get_class(): return "BlockFarm"
+
 func init(map, cell_pos, cell_info, args, nth):
 	args["stock"] = 0
 	args["var"] = 0
@@ -18,6 +20,9 @@ func get_max_stock():
 	
 func get_regrow_factor():
 	return 1.4
+	
+func shields_landscape_durability():
+	return true
 	
 func can_be_build_on(map, cell_pos):
 	return map.blocks.has(cell_pos) and map.blocks[cell_pos].is_bamboo

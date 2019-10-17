@@ -1,5 +1,7 @@
 extends "Block.gd"
 
+func get_class(): return "BlockTower"
+
 const max_dst = 3.5
 const dst_speed = 0.8
 var start_time = -1.0

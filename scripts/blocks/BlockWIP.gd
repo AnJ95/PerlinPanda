@@ -1,6 +1,7 @@
 extends "Block.gd"
 
 
+func get_class(): return "BlockWIP"
 
 func init(map, cell_pos, cell_info, args, nth):
 	is_wip = true

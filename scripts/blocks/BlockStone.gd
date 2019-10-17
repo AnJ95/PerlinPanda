@@ -1,5 +1,7 @@
 extends "Block.gd"
 
+func get_class(): return "BlockStone"
+
 func init(map, cell_pos, cell_info, args, nth):
 	if !args.has("stock"):
 		if cell_info.fertility < -0.35:

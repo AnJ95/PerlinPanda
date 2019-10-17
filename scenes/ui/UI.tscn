@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=39 format=2]
 
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/food.png" type="Texture" id=2]
@@ -14,6 +14,120 @@ bg_color = Color( 0.580392, 0.556863, 0.45098, 1 )
 [sub_resource type="StyleBoxFlat" id=2]
 
 bg_color = Color( 0, 0, 0, 0.117647 )
+
+[sub_resource type="StyleBoxFlat" id=3]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=5]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+
+
+[sub_resource type="StyleBoxFlat" id=7]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=8]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=9]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=10]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=11]
+
+
+[sub_resource type="StyleBoxFlat" id=12]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=13]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=14]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=15]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=16]
+
+
+[sub_resource type="StyleBoxFlat" id=17]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=18]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=19]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=20]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=21]
+
+
+[sub_resource type="StyleBoxFlat" id=22]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=23]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=24]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=25]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=26]
+
+
+[sub_resource type="StyleBoxFlat" id=27]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=28]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=29]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=30]
+
+bg_color = Color( 0.6, 0, 0, 1 )
+
+[sub_resource type="StyleBoxFlat" id=31]
+
+
+[sub_resource type="StyleBoxFlat" id=32]
+
+bg_color = Color( 0.6, 0, 0, 1 )
 
 [node name="UI" type="MarginContainer"]
 margin_left = -512.0
@@ -78,6 +192,11 @@ margin_right = 1024.0
 margin_bottom = 70.0
 
 [node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+custom_styles/hover = SubResource( 3 )
+custom_styles/pressed = SubResource( 4 )
+custom_styles/focus = SubResource( 5 )
+custom_styles/disabled = SubResource( 6 )
+custom_styles/normal = SubResource( 7 )
 block_tile_id = 4
 costs_bamboo = 4
 costs_stone = 2
@@ -87,28 +206,48 @@ costs_leaves = 4
 margin_left = 166.0
 margin_right = 328.0
 focus_mode = 2
+custom_styles/hover = SubResource( 8 )
+custom_styles/pressed = SubResource( 9 )
+custom_styles/focus = SubResource( 10 )
+custom_styles/disabled = SubResource( 11 )
+custom_styles/normal = SubResource( 12 )
 block_tile_id = 29
 costs_bamboo = 6
 
 [node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
 margin_left = 332.0
 margin_right = 494.0
+custom_styles/hover = SubResource( 13 )
+custom_styles/pressed = SubResource( 14 )
+custom_styles/focus = SubResource( 15 )
+custom_styles/disabled = SubResource( 16 )
+custom_styles/normal = SubResource( 17 )
 block_tile_id = 16
 costs_bamboo = 1
-costs_stone = 2
+costs_stone = 1
 
 [node name="Tower" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
 margin_left = 498.0
 margin_right = 660.0
 focus_mode = 2
+custom_styles/hover = SubResource( 18 )
+custom_styles/pressed = SubResource( 19 )
+custom_styles/focus = SubResource( 20 )
+custom_styles/disabled = SubResource( 21 )
+custom_styles/normal = SubResource( 22 )
 block_tile_id = 28
-costs_bamboo = 10
-costs_leaves = 2
+costs_bamboo = 8
+costs_leaves = 4
 
 [node name="Well" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
 margin_left = 664.0
 margin_right = 826.0
 focus_mode = 2
+custom_styles/hover = SubResource( 23 )
+custom_styles/pressed = SubResource( 24 )
+custom_styles/focus = SubResource( 25 )
+custom_styles/disabled = SubResource( 26 )
+custom_styles/normal = SubResource( 27 )
 block_tile_id = 40
 costs_bamboo = 2
 costs_stone = 4
@@ -117,6 +256,11 @@ costs_stone = 4
 margin_left = 830.0
 margin_right = 992.0
 focus_mode = 2
+custom_styles/hover = SubResource( 28 )
+custom_styles/pressed = SubResource( 29 )
+custom_styles/focus = SubResource( 30 )
+custom_styles/disabled = SubResource( 31 )
+custom_styles/normal = SubResource( 32 )
 block_tile_id = 41
 costs_bamboo = 2
 costs_stone = 1

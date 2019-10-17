@@ -19,24 +19,6 @@ colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.117647, 1, 1, 1, 0 )
 
 gradient = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=5]
-
-emission_shape = 1
-emission_sphere_radius = 12.86
-flag_disable_z = true
-spread = 44.75
-gravity = Vector3( -200, 0, 0 )
-initial_velocity = 250.0
-initial_velocity_random = 0.2
-angular_velocity = 220.0
-angular_velocity_random = 0.31
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-angle = -90.0
-angle_random = 0.67
-scale = 0.2
-color_ramp = SubResource( 2 )
-
 [sub_resource type="ParticlesMaterial" id=3]
 
 emission_shape = 1
@@ -55,14 +37,32 @@ angle_random = 0.67
 scale = 0.2
 color_ramp = SubResource( 2 )
 
-[sub_resource type="Gradient" id=8]
+[sub_resource type="ParticlesMaterial" id=4]
+
+emission_shape = 1
+emission_sphere_radius = 12.86
+flag_disable_z = true
+spread = 44.75
+gravity = Vector3( -200, 0, 0 )
+initial_velocity = 250.0
+initial_velocity_random = 0.2
+angular_velocity = 220.0
+angular_velocity_random = 0.31
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = -90.0
+angle_random = 0.67
+scale = 0.2
+color_ramp = SubResource( 2 )
+
+[sub_resource type="Gradient" id=5]
 
 offsets = PoolRealArray( 0, 0.753472, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
 
 [sub_resource type="GradientTexture" id=6]
 
-gradient = SubResource( 8 )
+gradient = SubResource( 5 )
 
 [sub_resource type="ParticlesMaterial" id=7]
 
@@ -95,21 +95,21 @@ emitting = false
 amount = 20
 lifetime = 6.9
 one_shot = true
-process_material = SubResource( 5 )
+process_material = SubResource( 3 )
 texture = ExtResource( 3 )
 
 [node name="Particles_stone" type="Particles2D" parent="."]
 rotation = -1.5708
 emitting = false
 lifetime = 1.5
-process_material = SubResource( 3 )
+process_material = SubResource( 4 )
 texture = ExtResource( 4 )
 
 [node name="Particles_leaves" type="Particles2D" parent="."]
 rotation = -1.5708
 emitting = false
 lifetime = 1.5
-process_material = SubResource( 3 )
+process_material = SubResource( 4 )
 texture = ExtResource( 5 )
 
 [node name="Particles_sleeping" type="Particles2D" parent="."]
@@ -128,9 +128,9 @@ hframes = 2
 [node name="Inventory_bamboo" parent="." instance=ExtResource( 8 )]
 margin_left = -18.0
 margin_top = -103.0
-margin_right = 36.0
+margin_right = 31.0
 margin_bottom = -33.0002
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 value = 0
 ressource_name = "bamboo"
 texture = ExtResource( 9 )
@@ -140,9 +140,9 @@ small = true
 [node name="Inventory_stone" parent="." instance=ExtResource( 8 )]
 margin_left = -19.2542
 margin_top = -135.0
-margin_right = 34.7458
+margin_right = 29.7458
 margin_bottom = -65.1426
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 value = 0
 ressource_name = "stone"
 texture = ExtResource( 4 )
@@ -152,9 +152,9 @@ small = true
 [node name="Inventory_leaves" parent="." instance=ExtResource( 8 )]
 margin_left = -19.254
 margin_top = -167.0
-margin_right = 34.746
+margin_right = 29.746
 margin_bottom = -97.1426
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 value = 0
 ressource_name = "stone"
 texture = ExtResource( 5 )

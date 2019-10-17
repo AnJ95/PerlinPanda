@@ -1,5 +1,7 @@
 extends "Block.gd"
 
+func get_class(): return "BlockStreet"
+
 func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	
@@ -11,7 +13,10 @@ func get_speed_factor():
 	
 func get_build_time():
 	return 5.0
-	
+
+func shields_landscape_durability():
+	return true
+
 func ressource_name_or_null():
 	return null
 

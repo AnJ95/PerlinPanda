@@ -7,6 +7,8 @@ var last_time = 0.0
 
 var is_originally_deep = false
 
+func get_class(): return "LandscapeWater"
+
 func init(map, cell_pos, cell_info, args, nth):
 	.init(map, cell_pos, cell_info, args, nth)
 	is_originally_deep = (cell_info.height == map.layers - 1)

@@ -19,10 +19,7 @@ onready var tile_ids = {
 	}
 
 var c:Color = Color(1,1,1,0)
-func _input(event: InputEvent):
-	
-	
-				
+func _input(event: InputEvent):	
 				
 	# Hover effect: show panda path when mouse over house
 	if event is InputEventMouseMotion:
@@ -44,36 +41,43 @@ func _input(event: InputEvent):
 				c.a = 0.8
 				other.line.default_color = c
 	
+	# Scrolling first
+	if get_parent().get_node("Camera2D").input(event):
+		return
 	
 	# build manager first!
 	var buildMgr = get_parent().get_node("BuildManager")
 	if buildMgr.input(event):
-		return
-	
-	
-	
-	# cancel
-	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and event.pressed:
 		if active:
-			active = false
-			update_preview()
-			map.show_homes()	
+			print("CANCEL")
+			cancel()
+		return
+
+	# cancel
+	if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT and !event.pressed:
+		cancel()
 	
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
 		var rect = get_viewport().get_visible_rect().size
 		var cam = get_parent().get_node("Camera2D")
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
 		var clicked_tile = map.calc_closest_tile_from(click_pos)
 		
-		if active:
-			add_to_current_path(clicked_tile)
-		else:
-			try_start_path(click_pos)
+		var clicked_panda = get_panda_in_range(click_pos)
+		if active and clicked_tile != null:
+			if clicked_panda == null or panda == clicked_panda:
+				add_to_current_path(clicked_tile)
+			else:
+				cancel()
+				
+		if clicked_panda != null and (!active or panda != clicked_panda): #start new
+			try_start_path_from(clicked_panda)
 				
 func get_panda_in_range(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):
 		if !panda.show_start_anim and map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
 			return panda
+	return null
 	
 func add_to_current_path(this_tile):
 	if !active or !panda or path.size() == 0:
@@ -98,10 +102,6 @@ func update_preview():
 		$Line2D.hide()
 		map.show_homes()
 		return
-		
-	
-			
-	
 	var cur_tile = path[path.size()-1]
 	
 	for that_tile in map.get_adjacent_tiles(cur_tile):
@@ -160,15 +160,18 @@ func done_with_path():
 	panda.line.points = PoolVector2Array(pts)
 	
 	
-func try_start_path(click_pos):
-		var panda = get_panda_in_range(click_pos)
-		if panda != null:
-			active = true
-			self.panda = panda
-			path = [panda.home_pos]
-			panda.stop_particles()
-			update_preview()
-			return
+func try_start_path_from(panda):
+		active = true
+		self.panda = panda
+		path = [panda.home_pos]
+		panda.stop_particles()
+		update_preview()
+		return
+			
+func cancel():
+	if active:
+		active = false
+		update_preview()
 			
 func y(c, a, b):
 	if c:

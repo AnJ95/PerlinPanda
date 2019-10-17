@@ -1,5 +1,7 @@
 extends "Block.gd"
 
+func get_class(): return "BlockBamboo"
+
 func init(map, cell_pos, cell_info, args, nth):
 	is_bamboo = true
 	if !args.has("stock"):
@@ -27,7 +29,10 @@ func ressource_work_time():
 func get_max_var():
 	return 1
 func get_max_stock():
-	return 1
+	return 3
+	
+func got_welled():
+	increase_stock()
 
 
 func get_regrow_factor():
@@ -36,20 +41,12 @@ func get_regrow_factor():
 func get_stack_increase_prob():
 	var num_spreading = 0
 	var num_non_spreading = 0
-	for y in range(-cell_pos.y-4, cell_pos.y+4):
-		for x in range(-cell_pos.x-4, cell_pos.x+4):
-			var pos = Vector2(x, y)
-			if pos == cell_pos:
-				continue
-
-			var a = map.map_landscape.map_to_world(cell_pos, false)
-			var b = map.map_landscape.map_to_world(pos, false)
-			if map.landscapes.has(pos) and map.landscapes[pos] != null:
-				if a.distance_to(b) <= 105:
-					if map.landscapes[pos].can_spread_grass():
-						num_spreading += 1
-					else:
-						num_non_spreading += 1
+	for adjacent in map.get_adjacent_tiles(cell_pos):
+		if map.landscapes.has(adjacent) and map.landscapes[adjacent] != null:
+			if map.landscapes[adjacent].can_spread_grass():
+				num_spreading += 1
+			else:
+				num_non_spreading += 1
 	if num_spreading > 0:
 		var prob_to_spread = get_regrow_factor() * 100 * (num_spreading / float(num_spreading + num_non_spreading))
 		return prob_to_spread

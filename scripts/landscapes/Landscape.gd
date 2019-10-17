@@ -7,6 +7,8 @@ var cell_info
 var args
 var nth
 
+func get_class(): return "Landscape"
+
 func init(map, cell_pos, cell_info, args, nth):
 	self.map = map
 	self.cell_pos = cell_pos

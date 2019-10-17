@@ -2,6 +2,8 @@ extends "Block.gd"
 
 var panda
 
+func get_class(): return "BlockHouse"
+
 func init(map, cell_pos, cell_info, args, nth):
 	.init(map, cell_pos, cell_info, args, nth)
 	

@@ -10,15 +10,16 @@ var target_pos = null
 
 	
 func prep(map, cell_pos, hill):
-	.init(map)
 	self.hill = hill
 	position = map.calc_px_pos_on_tile(cell_pos)
-	print("prep at " + str(position))
+	.init(map)
 	return self
 	
 func inventory_emptied(res_name, value):
 	for _i in range(0, value):
-		hill.upgrade()
+		var pos = map.calc_closest_tile_from(position)
+		if map.blocks.has(pos) and map.blocks[pos].is_bug_hill:
+			map.blocks[pos].upgrade()
 	pass
 
  
@@ -39,7 +40,7 @@ func _process(delta: float) -> void:
 	
 	# Check if current target in vicinity
 	if move_towards_then(target_pos, SPEED, delta):
-		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo":
+		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
 			start_working_on_ressource(map.blocks[target_pos])
 		if map.blocks.has(target_pos) and map.blocks[target_pos].is_bug_hill:
 			move_inventory_to_target()

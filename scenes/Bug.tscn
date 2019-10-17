@@ -21,9 +21,9 @@ vframes = 4
 [node name="Inventory_bamboo" parent="." instance=ExtResource( 3 )]
 margin_left = -18.0
 margin_top = -75.0
-margin_right = 36.0
+margin_right = 31.0
 margin_bottom = -5.0
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 texture = ExtResource( 4 )
 do_update = false
 small = true
@@ -31,9 +31,9 @@ small = true
 [node name="Inventory_stone" parent="." instance=ExtResource( 3 )]
 margin_left = -18.0
 margin_top = -112.0
-margin_right = 36.0
+margin_right = 31.0
 margin_bottom = -42.0
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 texture = ExtResource( 5 )
 do_update = false
 small = true
@@ -41,9 +41,9 @@ small = true
 [node name="Inventory_leaves" parent="." instance=ExtResource( 3 )]
 margin_left = -18.0
 margin_top = -152.0
-margin_right = 36.0
+margin_right = 31.0
 margin_bottom = -82.0
-rect_min_size = Vector2( 54, 35 )
+rect_min_size = Vector2( 49, 35 )
 rect_pivot_offset = Vector2( -453.035, -9.987 )
 texture = ExtResource( 6 )
 do_update = false

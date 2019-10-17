@@ -3,8 +3,8 @@ extends "Gatherer.gd"
 var home_pos
 var home_pos3
 
-const SPEED = 35
-const SPEED_FACTOR_PER_LAYER_UP = 0.8
+const SPEED = 45
+const SPEED_FACTOR_PER_LAYER_UP = 0.9
 
 # for path iteration
 var path = null

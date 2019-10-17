@@ -16,12 +16,12 @@ var layer_offset:int = 100
 export var region_width:int = 116
 export var region_height:int = 200
 
-export var avg_tick_time_of_one_tile:float = 50
+export var avg_tick_time_of_one_tile:float = 40.0
 
 export(Array, Texture) var landscapeBlocksOverlayTextures
 
 var layers = 6
-var layer_px_dst = 17
+var layer_px_dst = 15
 
 var time = 0
 
@@ -30,7 +30,7 @@ var cur_gen = 0
 var blocks = {}
 var landscapes = {}
 var cell_infos = {}
-var tick_time_left = 1000
+var tick_time_left = 0
 
 # Nodes
 onready var map_landscape:TileMap = $Navigation2D/MapLandscape
@@ -40,13 +40,14 @@ onready var all_maps = [map_landscape, map_blocks, map_overlay]
 
 onready var lex = preload("res://scripts/Lex.gd").new()
 
-onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res://scenes/Bug.tscn")}
+onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res://scenes/Bug.tscn")
+,"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": 31},
-	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": 32},
-	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": 33}
+	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": randi()},
+	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": randi()},
+	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": randi()}
 }
 var map_gens = {}
 
@@ -120,16 +121,28 @@ func _process(delta:float):
 		
 	tick_time_left -= delta
 	time += delta
-	if tick_time_left <= 0:
+	while tick_time_left <= 0:
 		reset_tick_time_left()
 		var cells = map_landscape.get_used_cells()
 		var cell_id = randi()%cells.size()
 		var cell = cells[cell_id]
 		
-		#print("ticking " + str(cell) + "...")
-		if !blocks.has(cell) or !blocks[cell].prevents_landscape_tick():
-			landscapes[cell].tick()
-		if blocks.has(cell) and blocks[cell] != null:
+		var landscape = landscapes[cell]
+		var has_block = blocks.has(cell) and blocks[cell] != null
+		var block = null
+		if has_block:
+			block = blocks[cell]
+		
+		var print_txt = "ticking "
+		print_txt += str(landscape.get_class()) + " "
+		if has_block:
+			print_txt += block.get_class()+ " "
+		print_txt += " @ " + str(cell) + " time " + str(time) + ""
+		print(print_txt)
+		
+		if !has_block or !blocks[cell].prevents_landscape_tick():
+			landscape.tick()
+		if has_block:
 			blocks[cell].tick()
 			
 	for landscape in landscapes:
@@ -267,8 +280,8 @@ func generate_tile(var cell_pos:Vector2):
 		block = "mountain"
 	
 	if (landscape == "grass" or landscape == "sand") and block == "":
-		var bamboo_a = landscape == "grass" and cell_info.fertility > 0.21 and cell_info.humidity > 0.21
-		var bamboo_b = landscape == "sand" and cell_info.fertility > 0.02 and cell_info.humidity > 0.02
+		var bamboo_a = landscape == "grass" and cell_info.fertility > 0.16 and cell_info.humidity > 0.16
+		var bamboo_b = landscape == "sand" and cell_info.fertility > -0.02 and cell_info.humidity > 0.00
 		if bamboo_a or bamboo_b:
 			block = "bamboo"
 	
@@ -393,8 +406,15 @@ func spawn_drops_at(cell_pos):
 	
 func reset_tick_time_left():
 	var num_tiles = map_landscape.get_used_cells().size()
-	tick_time_left = avg_tick_time_of_one_tile / float(num_tiles)
+	#print(str(num_tiles) + ": " + str(avg_tick_time_of_one_tile / float(num_tiles)))
+	tick_time_left += avg_tick_time_of_one_tile / float(num_tiles)
 	
 func show_homes():
 	for panda in get_tree().get_nodes_in_group("panda"):
 		map_overlay.set_cellv(panda.home_pos, 0 + layer_offset * cell_infos[panda.home_pos].height)
+		
+static func y(c, a, b):
+	if c:
+		return a
+	else:
+		return b

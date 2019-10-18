@@ -9,7 +9,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
-		map.get_parent().call_deferred("add_child", panda)
+		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", panda)
 		map.show_homes()
 	
 	map.generate_next(cell_pos, 2)

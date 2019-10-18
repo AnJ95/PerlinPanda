@@ -1,14 +1,8 @@
 extends "Block.gd"
 
-var particle_inst
 
 const percent_each_tile = 65
 func init(map, cell_pos, cell_info, args, nth):
-	particle_inst = nth.ParticlesDrops.instance()
-	particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
-	set_particle_emitting(false)
-	map.add_child(particle_inst)
-	
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
@@ -37,7 +31,7 @@ func tick():
 			if map.blocks.has(adjacent):
 				map.blocks[adjacent].got_welled()
 
-func set_particle_emitting(emit):
-	particle_inst.emitting = emit
+func get_particle_instance_or_null():
+	return nth.ParticlesDrop.instance()
 
 

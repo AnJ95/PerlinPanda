@@ -4,15 +4,9 @@ var is_smoking = false
 var smoking_start_time = 0.0
 const SMOKE_TIME = 60.0
 
-var particle_inst
-
 func get_class(): return "BlockSmoker"
 
 func init(map, cell_pos, cell_info, args, nth):
-	particle_inst = nth.ParticlesSmoke.instance()
-	particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
-	set_particle_emitting(false)
-	map.add_child(particle_inst)
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
@@ -45,7 +39,10 @@ func panda_in_center(panda):
 			is_smoking = true
 			set_particle_emitting(true)
 			smoking_start_time = map.time
-			
+
+func get_particle_instance_or_null():
+	return nth.ParticlesSmoke.instance()
+	
 func set_particle_emitting(emit):
-	particle_inst.emitting = emit
+	.set_particle_emitting(emit)
 	particle_inst.get_node("Particles_inner").emitting = emit

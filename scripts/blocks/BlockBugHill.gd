@@ -12,7 +12,7 @@ func init(map, cell_pos, cell_info, args, nth):
 func spawn():
 	if spawn_num <= args.var:
 		var bug = nth.Bug.instance().prep(map, cell_pos, self)
-		map.get_parent().call_deferred("add_child", bug)
+		map.get_node("Navigation2D/BugHolder").call_deferred("add_child", bug)
 		spawn_num += 1
 	
 func bug_has_died():

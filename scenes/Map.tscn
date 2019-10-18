@@ -10124,10 +10124,16 @@ tile_data = PoolIntArray( -196609, 139, 0, -196607, 418, 0, -65540, 137, 0, -3, 
 
 [node name="PathHolder" type="Node2D" parent="Navigation2D"]
 
+[node name="BugHolder" type="Node2D" parent="Navigation2D"]
+
+[node name="PandaHolder" type="Node2D" parent="Navigation2D"]
+
 [node name="MapOverlay" type="TileMap" parent="Navigation2D"]
 tile_set = SubResource( 3 )
 cell_size = Vector2( 86, 100 )
 cell_half_offset = 1
 cell_y_sort = true
 format = 1
+
+[node name="ParticleHolder" type="Node2D" parent="Navigation2D"]
 

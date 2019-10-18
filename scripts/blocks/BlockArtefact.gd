@@ -2,8 +2,6 @@ extends "Block.gd"
 
 var is_activated = false
 
-var particle_inst
-
 func get_class(): return "BlockArtefact"
 
 func init(map, cell_pos, cell_info, args, nth):
@@ -36,6 +34,9 @@ func panda_in_center(panda):
 		if ressourceManager.size() > 0:
 			ressourceManager[0].add_ressource("artefacts", 1)
 			
+func get_particle_instance_or_null():
+	return nth.ParticlesArtefact.instance()
+	
 func set_particle_emitting(emit):
-	particle_inst.emitting = emit
+	.set_particle_emitting(emit)
 	particle_inst.get_node("Particles_oneshot").emitting = emit

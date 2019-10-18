@@ -12,6 +12,7 @@ var stock:int
 var is_bamboo = false
 var is_wip = false
 var is_bug_hill = false
+var particle_inst
 
 func get_class(): return "Block"
 
@@ -22,12 +23,21 @@ func init(map, cell_pos, cell_info, args, nth):
 	self.args = args
 	self.nth = nth
 	
+	# Particles
+	particle_inst = get_particle_instance_or_null()
+	if particle_inst != null:
+		particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
+		set_particle_emitting(false)
+		map.get_node("Navigation2D/ParticleHolder").add_child(particle_inst)
+		
+	# Randomize variant if not set
 	if !args.has("var"):
 		if get_max_var() > 0:
 			args.var = randi() % (get_max_var()+1)
 		else:
 			args.var = 0
 			
+	# Set stock	
 	if args.has("stock"):
 		stock = args.stock
 			
@@ -111,6 +121,16 @@ func is_passable():
 	
 func can_be_build_on(map, cell_pos):
 	return !map.blocks.has(cell_pos)
+	
+	
+###################################################	
+### PARTICLES
+func get_particle_instance_or_null():
+	return null
+	
+func set_particle_emitting(emit:bool):
+	if particle_inst != null:
+		particle_inst.emitting = emit
 	
 func remove():
 	map.blocks.erase(cell_pos)

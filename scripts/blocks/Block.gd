@@ -98,7 +98,7 @@ func ressource_name_or_null():
 	return null
 func ressource_work_time():
 	return 0
-func time_update(time:float):
+func time_update(_time:float):
 	pass
 func get_speed_factor():
 	return 1.0

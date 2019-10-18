@@ -67,12 +67,13 @@ func _process(delta: float) -> void:
 	# Check if current target in vicinity
 	if move_towards_then(path[curr_path_pos], speed, delta):
 		reached_cell()
+		ressourceManager.steps_taken += 1
 	else:
 		update_sprite((target_pos - position))
 				
 	# Check for stepping on bug
 	for bug in get_tree().get_nodes_in_group("bug"):
-		if position.distance_squared_to(bug.position) < 1600 and position.distance_to(bug.position) < 40:
+		if position.distance_squared_to(bug.position) < 2500 and position.distance_to(bug.position) < 50:
 			bug.stepped_on(self)
 
 

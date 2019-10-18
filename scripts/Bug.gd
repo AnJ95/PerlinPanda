@@ -15,7 +15,7 @@ func prep(map, cell_pos, hill):
 	.init(map)
 	return self
 	
-func inventory_emptied(res_name, value):
+func inventory_emptied(_res_name, value):
 	for _i in range(0, value):
 		var pos = map.calc_closest_tile_from(position)
 		if map.blocks.has(pos) and map.blocks[pos].is_bug_hill:

@@ -30,6 +30,11 @@ func get_max_stock():
 
 func get_ressource_amount_after_work_done():
 	var amount = .get_ressource_amount_after_work_done()
+	
+	var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
+	if ressourceManager.size() > 0:
+		ressourceManager[0].emit_signal("island_restored")
+	
 	if stock == 0:
 		remove()
 	return amount

@@ -5,7 +5,7 @@ signal generate_next
 
 export var preprocess_tile_sets_in_editor = true
 export var show_case_map_in_editor = true
-export var show_case_size:int = 4
+export var show_case_size:int = 30
 export var is_preset = false
 
 # Consts
@@ -26,11 +26,14 @@ var layer_px_dst = 15
 var time = 0
 
 # State
+var level = 1
 var cur_gen = 0
 var blocks = {}
 var landscapes = {}
 var cell_infos = {}
 var tick_time_left = 0
+
+var gfix
 
 # Nodes
 onready var map_landscape:TileMap = $Navigation2D/MapLandscape
@@ -52,16 +55,20 @@ var map_gens_lex = {
 var map_gens = {}
 
 # [pos, rad]
-var map_generation_circles = [[Vector2(0, 0), 8]]
+var map_generation_circles = []
 var start_pos = Vector2()
 
 func _ready():
 	init_map_gens()
 	
-	connect("generate_next", self, "generate_next")
+	var _x = connect("generate_next", self, "generate_next")
 	
 	if Engine.editor_hint and preprocess_tile_sets_in_editor:
 		update_tileset_regions()
+	
+	var g = {"level":1}
+	if !Engine.editor_hint:
+		g = load("res://scripts/NonToolFix.gd").new().g()
 	
 	if !is_preset:
 		# Clear everything
@@ -70,11 +77,45 @@ func _ready():
 		map_overlay.clear()
 		for panda in get_tree().get_nodes_in_group("panda"):
 			panda.queue_free()
+
+		# First set location of first 
+		var first_circle = [Vector2(0, 0), 4 + g.level]
 		
+		# Then calc start pos
 		# set start pos around edge of first circle
-		var circle = map_generation_circles[0]
-		start_pos = circle[0] + Vector2(circle[1]-1, 0).rotated(fmod(randf(), 2*PI))
+		start_pos = first_circle[0] + Vector2(first_circle[1]-1, 0).rotated(fmod(randf(), 2*PI))
 		start_pos = Vector2(int(round(start_pos.x)), int(round(start_pos.y)))
+		
+		# then create rest of circles for island gen:
+		#var grow_direction = (first_circle[0] - start_pos).normalized()
+
+		var next_pos
+		var next_rad
+
+		map_generation_circles = [first_circle]
+		for _i in range(1, g.level):
+			var too_close = true
+			var iterations = 0
+			while too_close and iterations < 10000:
+				var rand_circle = map_generation_circles[randi()%map_generation_circles.size()]
+				var last_rad = rand_circle[1]
+				var last_pos = rand_circle[0]
+				next_rad = last_rad
+				next_pos = last_pos + Vector2(last_rad + next_rad - 2, 0).rotated(fmod(randf(), 2*PI))
+				
+				too_close = false
+				for prev_circle in map_generation_circles:
+					if prev_circle[0].distance_to(next_pos) <= prev_circle[1] + next_rad - 4:
+						too_close = true
+				if start_pos.distance_to(next_pos) <= next_rad:
+					too_close = true
+				iterations += 1
+			if (iterations >= 10000):
+				printerr("Too many iterations in map gen!")
+			# if loop done: result in next_pos & next_rad
+			map_generation_circles.append([next_pos, next_rad])
+			
+			
 		
 		prepare_presets(start_pos)
 		generate_tile(start_pos)
@@ -117,7 +158,7 @@ func prepare_presets(start_pos):
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
 		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")
 		# take a Dictionary an fill it with all blocks that are part of any preset
-		
+		print(cell_pos)
 		for preset_pos in preset_landscape.get_used_cells():
 			var landscape_id = preset_landscape.get_cellv(preset_pos)
 			var block_id = preset_blocks.get_cellv(preset_pos)

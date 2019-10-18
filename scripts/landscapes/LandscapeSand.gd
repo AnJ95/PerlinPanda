@@ -1,7 +1,9 @@
 extends "Landscape.gd"
 
-
-const TIDE_TIME = 30
+# SAME CONSTS IN WATER!
+const WATER_MIN_LEVEL = 5.5
+const WATER_MAX_LEVEL = 4.5
+const TIDE_TIME = 6
 
 func get_class(): return "LandscapeSand"
 
@@ -19,15 +21,10 @@ func tick():
 
 func time_update(time:float):
 	var s = sin(time * 2.0*PI / TIDE_TIME)
-	var deep = cell_info.height == map.layers - 1
-
-	var humidity_bonus = cell_info.humidity / 2.4
-	if deep and s < 0.75 + humidity_bonus:
+	var water_height = WATER_MAX_LEVEL + (WATER_MIN_LEVEL-WATER_MAX_LEVEL) * ((s + 1) / 2.0)
+	if water_height < cell_info.precise_height:
 		conv()
-		return
-	if !deep and s < -0.75 - humidity_bonus:
-		conv()
-		return
+	
 	
 
 func conv():

@@ -45,8 +45,8 @@ onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 4, "period": 9.0, "persistence": 0.8, "seed": randi()},
-	"fertility" : {"octaves": 4, "period": 0.2, "persistence": 0.8, "seed": randi()},
+	"height" : {"octaves": 3, "period": 10.0, "persistence": 0.8, "seed": randi()},
+	"fertility" : {"octaves": 5, "period": 0.2, "persistence": 0.8, "seed": randi()},
 	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": randi()}
 }
 var map_gens = {}
@@ -188,30 +188,28 @@ func generate_preset_tile(map_pos, landscape_id, block_id):
 		blocks[map_pos] = info.class.new().init(self, map_pos, cell_infos[map_pos], info.args, nth)
 
 func create_cell_info(cell_pos:Vector2):
-	# Create this tiles info object
-	var cell_info = {}
 	
+	# calc height
+	var maxHeight = 0.23
 	var rawHeight = map_gens.height.get_noise_2dv(cell_pos)
-	var height = 0
-	if rawHeight < 0.21:
-		height = 1
-	if rawHeight < 0.11:
-		height = 2
-	if rawHeight < -0.00:
-		height = 3
-	if rawHeight < -0.11:
-		height = 4
-	if rawHeight < -0.21:
-		height = 5
-	if cell_pos.distance_to(Vector2()) <= 1.25:
-		height = 2
-		
-	var start_bonus = 0.1 * max(0, 2 - cell_pos.distance_to(Vector2()))
+	# cap [-1, 1] to [-0.21, 0.21]
+	var preciseHeight = min(maxHeight, max(-maxHeight, rawHeight))
+	# linearly scale [-0.21, 0.21] to [-1, 1] and then to [0, 1]
+	preciseHeight = ((preciseHeight / maxHeight) + 1) / 2.0
+	# linearly scale [0, 1] to [1, 0] and then to [6, 0]
+	preciseHeight = (1 - preciseHeight) * layers
 	
-	cell_info.fertility = map_gens.fertility.get_noise_2dv(cell_pos) + start_bonus
-	cell_info.humidity = map_gens.humidity.get_noise_2dv(cell_pos) + start_bonus
-	cell_info.height = height
+	# calc start bonus
+	var dst2start = cell_pos.distance_to(Vector2())
+	var start_bonus = max(0, 3 - dst2start) / 3.0
 	
+	# save values in obj
+	var cell_info = {}
+	cell_info.fertility = map_gens.fertility.get_noise_2dv(cell_pos) + 0.08 * start_bonus
+	cell_info.humidity = map_gens.humidity.get_noise_2dv(cell_pos) + 0.08 * start_bonus
+	cell_info.precise_height = preciseHeight + (2 - preciseHeight) * start_bonus
+	cell_info.height = min(max(floor(cell_info.precise_height), 0), layers-1)
+
 	return cell_info
 
 func set_landscape_by_descriptor(cell_pos:Vector2, descriptor:String):

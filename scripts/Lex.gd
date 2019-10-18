@@ -5,10 +5,10 @@ var block_sheet = [
 	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2",
 	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2",
 	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_16", "farm_stock_1",
-	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_4", "tower", "farm_stock_0",
+	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_3", "tower", "farm_stock_0",
 	"bughill_var_0", "bug_fill_var_1", "bug_fill_var_2", "", "wip_of_28", "wip_of_29",
 	"vegetation_var_0", "vegetation_var_1", "vegetation_var_2", "vegetation_var_3", "well", "smoker",
-	"", "", "", "", "wip_of_40", "wip_of_41"
+	"artefact_var_0", "artefact_var_1", "", "", "wip_of_40", "wip_of_41"
 ]
 
 var landscape_sheet = [
@@ -34,7 +34,8 @@ var block_scripts = {
 	"vegetation": load("res://scripts/blocks/BlockVegetation.gd"),
 	"tower": load("res://scripts/blocks/BlockTower.gd"),
 	"well": load("res://scripts/blocks/BlockWell.gd"),
-	"smoker": load("res://scripts/blocks/BlockSmoker.gd")
+	"smoker": load("res://scripts/blocks/BlockSmoker.gd"),
+	"artefact": load("res://scripts/blocks/BlockArtefact.gd")
 }
 
 var landscape_scripts = {

@@ -41,7 +41,7 @@ onready var all_maps = [map_landscape, map_blocks, map_overlay]
 onready var lex = preload("res://scripts/Lex.gd").new()
 
 onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res://scenes/Bug.tscn")
-,"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn")}
+,"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn"),"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),"ParticlesDrops":preload("res://scenes/Particles_drops.tscn")}
 
 # OpenSimplex
 var map_gens_lex = {
@@ -50,6 +50,10 @@ var map_gens_lex = {
 	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": randi()}
 }
 var map_gens = {}
+
+# [pos, rad]
+var map_generation_circles = [[Vector2(0, 0), 8]]
+var start_pos = Vector2()
 
 func _ready():
 	init_map_gens()
@@ -67,10 +71,21 @@ func _ready():
 		for panda in get_tree().get_nodes_in_group("panda"):
 			panda.queue_free()
 		
-		prepare_presets()
-		generate_tile(Vector2())
+		# set start pos around edge of first circle
+		var circle = map_generation_circles[0]
+		start_pos = circle[0] + Vector2(circle[1]-1, 0).rotated(fmod(randf(), 2*PI))
+		start_pos = Vector2(int(round(start_pos.x)), int(round(start_pos.y)))
+		
+		prepare_presets(start_pos)
+		generate_tile(start_pos)
 		show_homes()
 	
+		if !Engine.editor_hint:
+			get_parent().get_node("Camera2D").offset = map_overlay.map_to_world(start_pos)
+			# set number of artefacts to find 
+			var ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
+			if ressourceManager.size() > 0:
+				ressourceManager[0].add_ressource("artefacts_max", map_generation_circles.size())
 		
 			
 	if Engine.editor_hint and show_case_map_in_editor:
@@ -81,17 +96,21 @@ func _ready():
 var preset_cache = {}
 var preset_poss = {}
 
-func prepare_presets():
+func prepare_presets(start_pos):
 	preset_cache = {}
 	preset_poss = {}
-	for i in range(0, 10):
-		var r = 9 + i * 4
-		var a = i * 360 * 0.618
-		var pos = Vector2(r, 0).rotated(a)
+	for circle in map_generation_circles:
+		var angle_center_start = circle[0].angle_to(start_pos)
+		var angle_center_preset = angle_center_start + PI
+		var dst_center_preset = circle[1] * 0.75
+		
+		var pos = circle[0] + Vector2(dst_center_preset, 0).rotated(angle_center_preset)
+		
 		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
+		#print(str(cell_pos) + " <--> " + str(start_pos))
 		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
 
-		var preset_id = randi()%6 + 1 #[1,6]
+		var preset_id = randi()%1 + 1 #[1,1]
 		var preset = ensure_cache_singleton(preset_id)
 		if preset.has_node("Map"):
 			preset = preset.get_node("Map")
@@ -126,7 +145,7 @@ func _process(delta:float):
 		var cells = map_landscape.get_used_cells()
 		var cell_id = randi()%cells.size()
 		var cell = cells[cell_id]
-		
+
 		var landscape = landscapes[cell]
 		var has_block = blocks.has(cell) and blocks[cell] != null
 		var block = null
@@ -199,8 +218,18 @@ func create_cell_info(cell_pos:Vector2):
 	# linearly scale [0, 1] to [1, 0] and then to [6, 0]
 	preciseHeight = (1 - preciseHeight) * layers
 	
+	var oceanMalus = 6
+	# Shape island for base of circles
+	for circle in map_generation_circles:
+		var dst = cell_pos.distance_to(circle[0])
+		if dst <= circle[1]:
+			oceanMalus = 0
+		else:
+			oceanMalus = min(oceanMalus, 0.96*(dst - circle[1]))
+	preciseHeight = min(preciseHeight + oceanMalus, 6)
+	
 	# calc start bonus
-	var dst2start = cell_pos.distance_to(Vector2())
+	var dst2start = cell_pos.distance_to(start_pos)
 	var start_bonus = max(0, 3 - dst2start) / 3.0
 	
 	# save values in obj
@@ -263,7 +292,7 @@ func generate_tile(var cell_pos:Vector2):
 	
 	########################################
 	#### BLOCKS
-	if cell_pos == Vector2():
+	if cell_pos == start_pos:
 		block = "house"
 		
 	if landscape == "dirt":
@@ -394,11 +423,6 @@ func get_adjacent_tiles(a:Vector2):
 			if are_tiles_adjacent(a, b):
 				tiles.append(b)
 	return tiles
-	
-func spawn_drops_at(cell_pos):
-	$Navigation2D/Particles_drops.emitting = false
-	$Navigation2D/Particles_drops.position = calc_px_pos_on_tile(cell_pos)
-	$Navigation2D/Particles_drops.emitting = true
 	
 func reset_tick_time_left():
 	tick_time_left += avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())

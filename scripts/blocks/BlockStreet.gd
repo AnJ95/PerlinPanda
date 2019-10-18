@@ -17,6 +17,3 @@ func get_build_time():
 func shields_landscape_durability():
 	return true
 
-func ressource_name_or_null():
-	return null
-

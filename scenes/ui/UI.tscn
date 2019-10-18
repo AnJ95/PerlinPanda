@@ -1,11 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/food.png" type="Texture" id=2]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/population.png" type="Texture" id=5]
-[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=6]
+[ext_resource path="res://assets/images/artefact.png" type="Texture" id=6]
+[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=7]
 
 [sub_resource type="StyleBoxFlat" id=1]
 
@@ -19,7 +20,7 @@ margin_bottom = 300.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 margin_right = 1024.0
-margin_bottom = 601.0
+margin_bottom = 605.0
 mouse_filter = 0
 
 [node name="RessourceBamboo" parent="VBoxContainer" instance=ExtResource( 1 )]
@@ -53,31 +54,43 @@ ressource_name = "population"
 max_ressource_name = "population_max"
 texture = ExtResource( 5 )
 
-[node name="Container" type="Container" parent="VBoxContainer"]
+[node name="RessourcArtefact" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_top = 296.0
 margin_right = 1024.0
-margin_bottom = 527.0
-rect_min_size = Vector2( 0, 231 )
+margin_bottom = 366.0
+rect_min_size = Vector2( 98, 70 )
+value = 0
+ressource_name = "artefacts"
+show_max_value = true
+max_ressource_name = "artefacts_max"
+max_value = 0
+texture = ExtResource( 6 )
+
+[node name="Container" type="Container" parent="VBoxContainer"]
+margin_top = 370.0
+margin_right = 1024.0
+margin_bottom = 531.0
+rect_min_size = Vector2( 0, 161 )
 mouse_filter = 2
 
 [node name="PanelContainer" type="PanelContainer" parent="VBoxContainer"]
-margin_top = 531.0
+margin_top = 535.0
 margin_right = 1024.0
-margin_bottom = 601.0
+margin_bottom = 605.0
 custom_styles/panel = SubResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
 margin_right = 1024.0
 margin_bottom = 70.0
 
-[node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="HouseLv1" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 color = Color( 0.65, 0.5, 0.5, 1 )
 block_tile_id = 4
 costs_bamboo = 4
 costs_stone = 2
 costs_leaves = 4
 
-[node name="Farm" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="Farm" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 margin_left = 166.0
 margin_right = 328.0
 focus_mode = 2
@@ -87,7 +100,7 @@ costs_bamboo = 6
 costs_stone = 0
 costs_leaves = 0
 
-[node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 margin_left = 332.0
 margin_right = 494.0
 color = Color( 0.65, 0.5, 0.5, 1 )
@@ -96,17 +109,17 @@ costs_bamboo = 1
 costs_stone = 1
 costs_leaves = 0
 
-[node name="Tower" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="Tower" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 margin_left = 498.0
 margin_right = 660.0
 focus_mode = 2
 color = Color( 0.65, 0.5, 0.5, 1 )
 block_tile_id = 28
-costs_bamboo = 8
+costs_bamboo = 6
 costs_stone = 0
 costs_leaves = 4
 
-[node name="Well" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="Well" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 margin_left = 664.0
 margin_right = 826.0
 focus_mode = 2
@@ -116,7 +129,7 @@ costs_bamboo = 2
 costs_stone = 4
 costs_leaves = 0
 
-[node name="Smoker" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 6 )]
+[node name="Smoker" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 7 )]
 margin_left = 830.0
 margin_right = 992.0
 focus_mode = 2

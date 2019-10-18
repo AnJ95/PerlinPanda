@@ -3,7 +3,7 @@ extends "Landscape.gd"
 # SAME CONSTS IN WATER!
 const WATER_MIN_LEVEL = 5.5
 const WATER_MAX_LEVEL = 4.5
-const TIDE_TIME = 6
+const TIDE_TIME = 60
 
 func get_class(): return "LandscapeSand"
 

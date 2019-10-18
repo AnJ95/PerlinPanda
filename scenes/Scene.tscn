@@ -11,6 +11,7 @@
 [node name="Scene" type="Node2D"]
 
 [node name="Camera2D" type="Camera2D" parent="."]
+offset = Vector2( 602, 150 )
 current = true
 script = ExtResource( 1 )
 
@@ -23,7 +24,7 @@ margin_right = 1024.0
 margin_bottom = 601.0
 
 [node name="Map" parent="." instance=ExtResource( 3 )]
-show_case_size = 12
+show_case_size = 5
 
 [node name="ParallaxBackground" parent="." instance=ExtResource( 4 )]
 layer = -1

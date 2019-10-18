@@ -3,7 +3,7 @@ extends "Landscape.gd"
 # SAME CONSTS IN SAND!
 const WATER_MIN_LEVEL = 5.5
 const WATER_MAX_LEVEL = 4.5
-const TIDE_TIME = 6
+const TIDE_TIME = 60
 
 const ANIM_TIME = 0.5
 var anim_time_left = 0.0

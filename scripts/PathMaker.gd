@@ -15,7 +15,8 @@ onready var tile_ids = {
 	"bamboo" : 				2,
 	"stone" : 				3,
 	"leaves" : 				2,
-	"build" : 				4
+	"build" : 				4,
+	"artefact" : 			1 + 1*map.tile_cols,
 	}
 
 var c:Color = Color(1,1,1,0)
@@ -117,12 +118,14 @@ func update_preview():
 			# if home pos = goal pos
 			if that_tile == panda.home_pos:
 				tile_id = tile_ids.home_end
-			# check for ressources
+			# check for ressources and others
 			if map.blocks.has(that_tile):
 				if map.blocks[that_tile].ressource_name_or_null() != null:
 					tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null()]
-				if map.blocks[that_tile].is_wip:
+				if map.blocks[that_tile].get_class() == "BlockWIP":
 					tile_id = tile_ids.build
+				if map.blocks[that_tile].get_class() == "BlockArtefact":
+					tile_id = tile_ids.artefact
 
 			# set calculated tile id
 			var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset

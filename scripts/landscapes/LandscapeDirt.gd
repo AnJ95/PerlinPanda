@@ -22,9 +22,10 @@ func tick():
 	if !map.blocks.has(cell_pos):
 		if randi()%100 <= PROB_TO_SPAWN_BUG_HILL: 
 			map.set_block_by_descriptor(cell_pos, "bughill")
+			return
 	
 	# Transform to grass
-	if !map.blocks.has(cell_pos) and randi()%100 <= get_adjacent_spreadable_percent():
+	if (!map.blocks.has(cell_pos) or map.blocks[cell_pos].is_bug_hill) and randi()%100 <= get_adjacent_spreadable_percent():
 		if randi()%100 <= PROB_TO_GRASS_CONVERSION_WHEN_SPREADING:
 			remove()
 			map.set_landscape_by_descriptor(cell_pos, "grass")

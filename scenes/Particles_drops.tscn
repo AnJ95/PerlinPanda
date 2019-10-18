@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://assets/drop.png" type="Texture" id=1]
+
+[sub_resource type="Gradient" id=1]
+
+colors = PoolColorArray( 1, 1, 1, 0.784314, 0.396078, 0.423529, 0.482353, 0.00254902 )
+
+[sub_resource type="GradientTexture" id=2]
+
+gradient = SubResource( 1 )
+
+[sub_resource type="ParticlesMaterial" id=3]
+
+emission_shape = 1
+emission_sphere_radius = 50.0
+flag_disable_z = true
+spread = 34.94
+gravity = Vector3( -980, 0, 0 )
+initial_velocity = 366.46
+angular_velocity = 20.0
+angular_velocity_random = 1.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 90.0
+angle_random = 0.3
+color_ramp = SubResource( 2 )
+
+[node name="Particles_drops" type="Particles2D"]
+rotation = -1.5708
+emitting = false
+amount = 35
+lifetime = 0.7
+one_shot = true
+explosiveness = 0.4
+visibility_rect = Rect2( -200, -200, 300, 300 )
+process_material = SubResource( 3 )
+texture = ExtResource( 1 )
+

@@ -22,7 +22,6 @@ func init(map, cell_pos, cell_info, args, nth):
 	self.args = args
 	self.nth = nth
 	
-	
 	if !args.has("var"):
 		if get_max_var() > 0:
 			args.var = randi() % (get_max_var()+1)

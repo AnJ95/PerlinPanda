@@ -3,10 +3,12 @@ extends Node
 signal ressource_changed(ressource_name, value)
 
 export var ressources = {
-	"bamboo": 20,
-	"stone": 20,
-	"leaves": 20,
-	"population": 0
+	"bamboo": 0,
+	"stone": 0,
+	"leaves": 0,
+	"population": 0,
+	"artefacts" : 0,
+	"artefacts_max" : 0
 }
 
 func add_ressource(ressource_name, value):

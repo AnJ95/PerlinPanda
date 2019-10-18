@@ -27,24 +27,24 @@ scale = 2.0
 scale_random = 1.0
 color_ramp = SubResource( 2 )
 
-[sub_resource type="Gradient" id=8]
+[sub_resource type="Gradient" id=4]
 
 offsets = PoolRealArray( 0.00694444, 0.222222, 0.475694, 1 )
 colors = PoolColorArray( 1, 0.831373, 0, 0.215451, 0.898039, 0.619608, 0.203922, 0.314902, 1, 0, 0, 0.213176, 1, 0, 0, 0 )
 
-[sub_resource type="GradientTexture" id=4]
+[sub_resource type="GradientTexture" id=5]
 
-gradient = SubResource( 8 )
+gradient = SubResource( 4 )
 
-[sub_resource type="Curve" id=5]
+[sub_resource type="Curve" id=6]
 
 _data = [ Vector2( 0, 0.3944 ), 0.0, 0.0, 0, 0, Vector2( 0.734799, 0.0260321 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=6]
+[sub_resource type="CurveTexture" id=7]
 
-curve = SubResource( 5 )
+curve = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=7]
+[sub_resource type="ParticlesMaterial" id=8]
 
 flag_disable_z = true
 gravity = Vector3( 0, 20, 0 )
@@ -54,8 +54,8 @@ angular_velocity = 7.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 scale_random = 0.3
-scale_curve = SubResource( 6 )
-color_ramp = SubResource( 4 )
+scale_curve = SubResource( 7 )
+color_ramp = SubResource( 5 )
 
 [node name="Particles_smoke" type="Particles2D"]
 rotation = -1.5708
@@ -68,6 +68,6 @@ texture = ExtResource( 1 )
 rotation = -1.22173
 amount = 20
 lifetime = 5.0
-process_material = SubResource( 7 )
+process_material = SubResource( 8 )
 texture = ExtResource( 1 )
 

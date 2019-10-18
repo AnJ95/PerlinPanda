@@ -9,9 +9,6 @@ var nth
 
 var stock:int
 
-var is_bamboo = false
-var is_wip = false
-var is_bug_hill = false
 var particle_inst
 
 func get_class(): return "Block"

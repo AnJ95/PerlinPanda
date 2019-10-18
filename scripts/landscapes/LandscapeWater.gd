@@ -1,10 +1,5 @@
 extends "Landscape.gd"
 
-# SAME CONSTS IN SAND!
-const WATER_MIN_LEVEL = 5.5
-const WATER_MAX_LEVEL = 4.5
-const TIDE_TIME = 60
-
 const ANIM_TIME = 0.5
 var anim_time_left = 0.0
 var last_time = 0.0
@@ -36,8 +31,7 @@ func time_update(time:float):
 			args.var = 0
 	last_time = time
 	
-	var s = sin(time * 2.0*PI / TIDE_TIME)
-	var water_height = WATER_MAX_LEVEL + (WATER_MIN_LEVEL-WATER_MAX_LEVEL) * ((s + 1) / 2.0)
+	var water_height = map.weather.get_sea_level()
 	
 	var deep = (cell_info.height == map.layers - 1)
 	if is_originally_deep:

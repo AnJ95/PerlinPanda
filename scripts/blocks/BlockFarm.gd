@@ -18,11 +18,11 @@ func get_speed_factor():
 func get_max_stock():
 	return 4
 	
-func get_regrow_factor():
-	return 1.4
+func get_regrow_prob():
+	return 80
 	
 func shields_landscape_durability():
 	return true
 	
 func can_be_build_on(map, cell_pos):
-	return map.blocks.has(cell_pos) and map.blocks[cell_pos].is_bamboo
+	return map.blocks.has(cell_pos) and map.blocks[cell_pos].get_class() == "BlockBamboo"

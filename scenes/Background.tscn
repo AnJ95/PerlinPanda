@@ -9,54 +9,56 @@ layer = 0
 scale = Vector2( 2, 2 )
 motion_scale = Vector2( 0.1, 0.1 )
 
-[node name="Sprite" type="Sprite" parent="ParallaxLayer"]
+[node name="Node2D" type="Node2D" parent="ParallaxLayer"]
+
+[node name="Sprite" type="Sprite" parent="ParallaxLayer/Node2D"]
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite4" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite4" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( 0, 600 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite7" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite7" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( -1024, -600 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite2" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite2" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( 1024, 0 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite5" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite5" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( -1024, 600 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite8" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite8" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( 0, -600 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite3" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite3" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( -1024, 0 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite6" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite6" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( 1024, 600 )
 texture = ExtResource( 1 )
 region_enabled = true
 region_rect = Rect2( 0, 0, 1024, 600 )
 
-[node name="Sprite9" type="Sprite" parent="ParallaxLayer"]
+[node name="Sprite9" type="Sprite" parent="ParallaxLayer/Node2D"]
 position = Vector2( 1024, -600 )
 texture = ExtResource( 1 )
 region_enabled = true

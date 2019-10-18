@@ -18,7 +18,7 @@ func prep(map, cell_pos, hill):
 func inventory_emptied(_res_name, value):
 	for _i in range(0, value):
 		var pos = map.calc_closest_tile_from(position)
-		if map.blocks.has(pos) and map.blocks[pos].is_bug_hill:
+		if map.blocks.has(pos) and map.blocks[pos].get_class() == "BlockBugHill":
 			map.blocks[pos].upgrade()
 	pass
 
@@ -40,10 +40,13 @@ func _process(delta: float) -> void:
 	
 	# Check if current target in vicinity
 	if move_towards_then(target_pos, SPEED, delta):
-		if map.blocks.has(target_pos) and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
-			start_working_on_ressource(map.blocks[target_pos])
-		if map.blocks.has(target_pos) and map.blocks[target_pos].is_bug_hill:
-			move_inventory_to_target()
+		map.weather.get_day_bonus()
+		
+		if map.blocks.has(target_pos):
+			if map.weather.get_day_bonus() > 0.0 and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
+				start_working_on_ressource(map.blocks[target_pos])
+			if map.weather.get_day_bonus() < 0.0 and map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill":
+				move_inventory_to_target()
 		target_pos = null
 		
 		
@@ -56,7 +59,7 @@ func get_next_target():
 	for adjacent in map.get_adjacent_tiles(cell_pos):
 		if map.landscapes.has(adjacent) and (!map.blocks.has(adjacent) or map.blocks[adjacent].is_passable()):
 			valid.append(adjacent)
-		if map.blocks.has(adjacent) and map.blocks[adjacent].is_bug_hill:
+		if map.blocks.has(adjacent) and map.blocks[adjacent].get_class() == "BlockBugHill":
 			home = adjacent
 		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo" and map.blocks[adjacent].stock > 0:
 			bamboo.append(adjacent)

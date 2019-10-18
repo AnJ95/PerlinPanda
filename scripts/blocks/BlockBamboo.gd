@@ -3,7 +3,6 @@ extends "Block.gd"
 func get_class(): return "BlockBamboo"
 
 func init(map, cell_pos, cell_info, args, nth):
-	is_bamboo = true
 	if !args.has("stock"):
 		if cell_info.fertility > 0.30 and cell_info.humidity > 0.30:
 			stock = 3
@@ -34,10 +33,15 @@ func get_max_stock():
 func got_welled():
 	increase_stock()
 
-
-func get_regrow_factor():
-	return 0.8
+func get_regrow_prob():
+	return 65
 	
+func get_regrow_prob_rain_bonus():
+	return 20
+	
+func get_regrow_prob_day_bonus():
+	return 20
+
 func get_stack_increase_prob():
 	var num_spreading = 0
 	var num_non_spreading = 0
@@ -48,6 +52,7 @@ func get_stack_increase_prob():
 			else:
 				num_non_spreading += 1
 	if num_spreading > 0:
-		var prob_to_spread = get_regrow_factor() * 100 * (num_spreading / float(num_spreading + num_non_spreading))
+		var prob_to_spread = (num_spreading / float(num_spreading + num_non_spreading))
+		prob_to_spread *= get_regrow_prob() + map.weather.get_rain_level() * get_regrow_prob_rain_bonus() + map.weather.get_day_bonus() * get_regrow_prob_day_bonus()
 		return prob_to_spread
 	return 0

@@ -1,10 +1,5 @@
 extends "Landscape.gd"
 
-# SAME CONSTS IN WATER!
-const WATER_MIN_LEVEL = 5.5
-const WATER_MAX_LEVEL = 4.5
-const TIDE_TIME = 60
-
 func get_class(): return "LandscapeSand"
 
 func init(map, cell_pos, cell_info, args, nth):
@@ -20,12 +15,9 @@ func tick():
 	pass
 
 func time_update(time:float):
-	var s = sin(time * 2.0*PI / TIDE_TIME)
-	var water_height = WATER_MAX_LEVEL + (WATER_MIN_LEVEL-WATER_MAX_LEVEL) * ((s + 1) / 2.0)
+	var water_height = map.weather.get_sea_level()
 	if water_height < cell_info.precise_height:
 		conv()
-	
-	
 
 func conv():
 	map.set_landscape_by_descriptor(cell_pos, "water")

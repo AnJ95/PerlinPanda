@@ -3,8 +3,12 @@ extends "Landscape.gd"
 
 var durability = 0
 
-const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY = 30#%
-const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING = 50#%
+const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY = 10#%
+const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING = 35#%
+
+const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS = 10#%
+const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS = 30#%
+
 
 func get_class(): return "LandscapeGrass"
 
@@ -23,11 +27,11 @@ func panda_in_center(_panda):
 
 func tick():
 	if randi()%100 <= get_adjacent_spreadable_percent():
-		if randi()%100 <= PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING:
+		if randi()%100 <= PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING + map.weather.get_rain_level() * PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS:
 			increase_durability()
 		
 	if durability >= max_durability() and !map.blocks.has(cell_pos):
-		if randi()%100 <= PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY:
+		if randi()%100 <= PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY + map.weather.get_rain_level() * PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS:
 			map.set_block_by_descriptor(cell_pos, "vegetation")
 
 func increase_durability():
@@ -41,7 +45,6 @@ func decrease_durability():
 		durability_has_reached_zero()
 	else:
 		update_tile()
-	update_tile()
 
 
 
@@ -49,7 +52,6 @@ func max_durability():
 	return 4
 	
 func durability_has_reached_zero():
-	remove()
 	map.set_landscape_by_descriptor(cell_pos, "dirt")
 
 func got_welled():

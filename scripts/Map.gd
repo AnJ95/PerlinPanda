@@ -40,6 +40,9 @@ onready var map_landscape:TileMap = $Navigation2D/MapLandscape
 onready var map_blocks:TileMap = $Navigation2D/MapBlocks
 onready var map_overlay:TileMap = $Navigation2D/MapOverlay
 onready var all_maps = [map_landscape, map_blocks, map_overlay]
+onready var weather = get_parent().get_node("WeatherManager")
+
+var weatherManager
 
 onready var lex = preload("res://scripts/Lex.gd").new()
 
@@ -127,7 +130,12 @@ func _ready():
 			var ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
 			if ressourceManager.size() > 0:
 				ressourceManager[0].add_ressource("artefacts_max", map_generation_circles.size())
-		
+
+			weatherManager = get_tree().get_nodes_in_group("weatherManager")
+			if weatherManager.size() > 0:
+				weatherManager = weatherManager[0]
+			else:
+				weatherManager = null
 			
 	if Engine.editor_hint and show_case_map_in_editor:
 		generate_next(Vector2(), show_case_size)

@@ -1,0 +1,114 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://scripts/WeatherManager.gd" type="Script" id=1]
+[ext_resource path="res://assets/circleSmooth.png" type="Texture" id=2]
+[ext_resource path="res://assets/raindrop.png" type="Texture" id=3]
+
+[sub_resource type="Gradient" id=1]
+
+offsets = PoolRealArray( 0.046875, 0.178125, 0.303125, 0.59375, 0.690625, 0.73125, 0.771875, 0.85, 0.959375 )
+colors = PoolColorArray( 0.541176, 0.541176, 0.541176, 1, 0.863281, 0.666324, 0.580017, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0.914062, 0.746135, 0.664124, 1, 0.816406, 0.589981, 0.589981, 1, 0.668314, 0.525055, 0.726562, 1, 0.378418, 0.39793, 0.605469, 1, 0.541176, 0.541176, 0.541176, 1 )
+
+[sub_resource type="Gradient" id=2]
+
+offsets = PoolRealArray( 0, 0.204861, 0.736111, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.501647, 1, 1, 1, 0.626784, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=3]
+
+gradient = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+
+emission_shape = 2
+emission_box_extents = Vector3( 275, 50, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 4.0
+initial_velocity_random = 0.4
+angular_velocity = 1.1042e+21
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.7
+scale_random = 0.3
+color_ramp = SubResource( 3 )
+
+[sub_resource type="Gradient" id=5]
+
+offsets = PoolRealArray( 0, 0.204861, 0.736111, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.332031, 0.332031, 0.332031, 0.501647, 0.453613, 0.453613, 0.453613, 0.626784, 1, 1, 1, 0 )
+
+[sub_resource type="GradientTexture" id=6]
+
+gradient = SubResource( 5 )
+
+[sub_resource type="ParticlesMaterial" id=7]
+
+emission_shape = 2
+emission_box_extents = Vector3( 275, 50, 1 )
+flag_disable_z = true
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 4.0
+initial_velocity_random = 0.4
+angular_velocity = 1.1042e+21
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+scale = 2.7
+scale_random = 0.3
+color_ramp = SubResource( 6 )
+
+[sub_resource type="ParticlesMaterial" id=8]
+
+emission_shape = 2
+emission_box_extents = Vector3( 1, 600, 1 )
+flag_disable_z = true
+spread = 5.0
+gravity = Vector3( 200, 50, 0 )
+initial_velocity = 800.0
+initial_velocity_random = 0.2
+angular_velocity = 1.08103e-40
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+angle = 90.0
+
+[node name="WeatherManager" type="CanvasLayer" groups=[
+"weather_manager",
+]]
+layer = 2
+script = ExtResource( 1 )
+day_time_modulate = SubResource( 1 )
+
+[node name="Center" type="Node2D" parent="."]
+position = Vector2( 510, 300 )
+
+[node name="Clouds" type="Particles2D" parent="Center"]
+position = Vector2( 0, -280 )
+rotation = -3.14159
+scale = Vector2( 2, 1 )
+emitting = false
+amount = 20
+lifetime = 10.0
+visibility_rect = Rect2( -2000, -2000, 4000, 4000 )
+process_material = SubResource( 4 )
+texture = ExtResource( 2 )
+
+[node name="StormClouds" type="Particles2D" parent="Center"]
+position = Vector2( 0, -280 )
+rotation = -3.14159
+scale = Vector2( 2, 1 )
+amount = 20
+lifetime = 10.0
+visibility_rect = Rect2( -2000, -2000, 4000, 4000 )
+process_material = SubResource( 7 )
+texture = ExtResource( 2 )
+
+[node name="Rain" type="Particles2D" parent="Center"]
+position = Vector2( 0, -300 )
+rotation = 1.74533
+emitting = false
+amount = 60
+lifetime = 0.9
+visibility_rect = Rect2( -2000, -2000, 4000, 4000 )
+process_material = SubResource( 8 )
+texture = ExtResource( 3 )
+

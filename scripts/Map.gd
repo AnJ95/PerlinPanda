@@ -212,8 +212,10 @@ func _process(delta:float):
 		
 
 func init_map_gens():
+	randomize()
 	for name in map_gens_lex:
 		var gen = OpenSimplexNoise.new()
+		map_gens_lex[name].seed = randi()
 		for property_name in map_gens_lex[name]:
 			gen[property_name] = map_gens_lex[name][property_name]
 		map_gens[name] = gen

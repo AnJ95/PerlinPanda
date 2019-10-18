@@ -119,6 +119,9 @@ func got_welled():
 func is_passable():
 	return true
 	
+func multiple_in_one_path_allowed():
+	return false
+	
 func can_be_build_on(map, cell_pos):
 	return !map.blocks.has(cell_pos)
 	

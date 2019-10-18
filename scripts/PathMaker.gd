@@ -99,7 +99,7 @@ func add_to_current_path(this_tile):
 		return just_ended_path
 
 func is_valid_next(last_tile, this_tile):
-	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and cell_pos_not_already_in_path(this_tile) 
+	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))
 
 func update_preview():
 	map.map_overlay.clear()
@@ -133,8 +133,8 @@ func update_preview():
 				
 	for cur_tile in path:
 		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
-		# dont override the "goal" overlay
-		if map.map_overlay.get_cellv(cur_tile) != tile_ids.home_end + tile_id_offset:
+		# dont override the "goal" or "walk" overlay
+		if map.map_overlay.get_cellv(cur_tile) != tile_ids.home_end + tile_id_offset and map.map_overlay.get_cellv(cur_tile) != tile_ids.walk + tile_id_offset:
 			map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
 	
 	var pts = []

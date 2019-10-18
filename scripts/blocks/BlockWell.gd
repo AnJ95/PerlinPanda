@@ -15,7 +15,7 @@ func get_build_time():
 	return 5.0
 	
 func is_passable():
-	return false
+	return true
 	
 func tick():
 	

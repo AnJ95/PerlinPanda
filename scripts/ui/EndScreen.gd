@@ -7,7 +7,7 @@ const anim_text_frame_time = 1
 var playing_text_anim = true
 var cur_text_id = -1
 var anim_text_time_left = anim_text_frame_time
-onready var anim_nodes = [[$TextMain, $ColorRect], $bamboo, $panda, $TextPandas, $TextSteps, $TextRessources, $TextTime]
+onready var anim_nodes = [[$TextMain, $ColorRect], $bamboo, $panda, $TextPandas, $TextSteps, $TextRessources, $TextTime, $BtnNext]
 
 var anim_panda_time = 0
 var ressourceManager
@@ -29,6 +29,7 @@ func activate():
 	$TextSteps/TextValue.text = str(ressourceManager.steps_taken)
 	$TextRessources/TextValue.text = str(ressourceManager.ressources_gathered)
 	$TextTime/TextValue.text = str(round(ressourceManager.time / 60)) + "mins"
+	
 	active = true
 		
 func _process(delta):
@@ -66,4 +67,5 @@ func on_gui_input(event):
 		if !Engine.editor_hint:
 			g = load("res://scripts/NonToolFix.gd").new().g()
 		
+		ressourceManager.reset()
 		var _x = get_tree().reload_current_scene()

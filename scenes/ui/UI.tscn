@@ -17,12 +17,12 @@
 size = 43
 font_data = ExtResource( 8 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=2]
 
 size = 28
 font_data = ExtResource( 8 )
 
-[sub_resource type="StyleBoxFlat" id=2]
+[sub_resource type="StyleBoxFlat" id=3]
 
 bg_color = Color( 0.65098, 0.631373, 0.529412, 1 )
 
@@ -38,6 +38,7 @@ margin_bottom = 605.0
 
 [node name="RessourceBamboo" parent="VBoxContainer" instance=ExtResource( 1 )]
 margin_right = 1024.0
+rect_min_size = Vector2( 98, 70 )
 mouse_filter = 2
 ressource_name = "bamboo"
 texture = ExtResource( 2 )
@@ -46,6 +47,7 @@ texture = ExtResource( 2 )
 margin_top = 74.0
 margin_right = 1024.0
 margin_bottom = 144.0
+rect_min_size = Vector2( 98, 70 )
 mouse_filter = 2
 ressource_name = "stone"
 texture = ExtResource( 3 )
@@ -54,6 +56,7 @@ texture = ExtResource( 3 )
 margin_top = 148.0
 margin_right = 1024.0
 margin_bottom = 218.0
+rect_min_size = Vector2( 98, 70 )
 mouse_filter = 2
 ressource_name = "leaves"
 texture = ExtResource( 4 )
@@ -62,6 +65,7 @@ texture = ExtResource( 4 )
 margin_top = 222.0
 margin_right = 1024.0
 margin_bottom = 292.0
+rect_min_size = Vector2( 98, 70 )
 mouse_filter = 2
 ressource_name = "population"
 max_ressource_name = "population_max"
@@ -71,6 +75,7 @@ texture = ExtResource( 5 )
 margin_top = 296.0
 margin_right = 1024.0
 margin_bottom = 366.0
+rect_min_size = Vector2( 98, 70 )
 mouse_filter = 2
 value = 0
 ressource_name = "artefacts"
@@ -84,6 +89,7 @@ position = Vector2( 0, 20 )
 script = ExtResource( 7 )
 
 [node name="ColorRect" type="ColorRect" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 254.0
 margin_top = 10.0
 margin_right = 771.0
@@ -119,6 +125,7 @@ margin_bottom = 75.0
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="VBoxContainer/EndScreen"]
+visible = false
 position = Vector2( 488.363, 90.8026 )
 rotation = 0.00470922
 scale = Vector2( 1.46118, 1.46118 )
@@ -126,6 +133,7 @@ texture = ExtResource( 9 )
 hframes = 2
 
 [node name="bamboo" type="Sprite" parent="VBoxContainer/EndScreen"]
+visible = false
 position = Vector2( 554.915, 186.605 )
 scale = Vector2( 1.08236, 1.08236 )
 texture = ExtResource( 10 )
@@ -133,6 +141,7 @@ vframes = 8
 hframes = 6
 
 [node name="TextMain" type="Label" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 211.314
 margin_right = 724.0
@@ -142,62 +151,66 @@ text = "Island # restored
 "
 
 [node name="TextPandas" type="Label" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 273.0
 margin_right = 724.0
 margin_bottom = 307.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Pandas fed:"
 
 [node name="TextValue" type="Label" parent="VBoxContainer/EndScreen/TextPandas"]
 margin_right = 421.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 2
 
 [node name="TextSteps" type="Label" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 315.0
 margin_right = 724.0
 margin_bottom = 349.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Steps Wandered:"
 
 [node name="TextValue" type="Label" parent="VBoxContainer/EndScreen/TextSteps"]
 margin_right = 421.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 2
 
 [node name="TextRessources" type="Label" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 357.0
 margin_right = 724.0
 margin_bottom = 391.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Resources gathered:"
 
 [node name="TextValue" type="Label" parent="VBoxContainer/EndScreen/TextRessources"]
 margin_right = 421.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 2
 
 [node name="TextTime" type="Label" parent="VBoxContainer/EndScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 400.0
 margin_right = 724.0
 margin_bottom = 461.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "Time taken:"
 
 [node name="TextValue" type="Label" parent="VBoxContainer/EndScreen/TextTime"]
 margin_right = 421.0
 margin_bottom = 34.0
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 2 )
 text = "0"
 align = 2
 
@@ -214,7 +227,7 @@ mouse_filter = 2
 margin_top = 535.0
 margin_right = 1024.0
 margin_bottom = 605.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/PanelContainer"]
 margin_right = 1024.0
@@ -232,6 +245,8 @@ margin_right = 328.0
 focus_mode = 2
 block_tile_id = 29
 costs_bamboo = 6
+costs_stone = 0
+costs_leaves = 0
 
 [node name="Street" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 11 )]
 margin_left = 332.0
@@ -239,6 +254,7 @@ margin_right = 494.0
 block_tile_id = 16
 costs_bamboo = 1
 costs_stone = 1
+costs_leaves = 0
 
 [node name="Tower" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 11 )]
 margin_left = 498.0
@@ -246,6 +262,7 @@ margin_right = 660.0
 focus_mode = 2
 block_tile_id = 28
 costs_bamboo = 6
+costs_stone = 0
 costs_leaves = 4
 
 [node name="Well" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 11 )]
@@ -255,6 +272,7 @@ focus_mode = 2
 block_tile_id = 40
 costs_bamboo = 2
 costs_stone = 4
+costs_leaves = 0
 
 [node name="Smoker" parent="VBoxContainer/PanelContainer/HBoxContainer" instance=ExtResource( 11 )]
 margin_left = 830.0

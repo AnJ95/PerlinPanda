@@ -22,6 +22,9 @@ func get_tile_id():
 func get_speed_factor():
 	return 2.0
 	
+func multiple_in_one_path_allowed():
+	return true
+	
 func get_build_time():
 	return 10.0
 	

@@ -34,7 +34,6 @@ func tick():
 	# Transform to grass
 	if (!map.blocks.has(cell_pos) or map.blocks[cell_pos].get_class() == "BlockBugHill") and randi()%100 <= get_adjacent_spreadable_percent():
 		if randi()%100 <= PROB_TO_GRASS_CONVERSION_WHEN_SPREADING + map.weather.get_rain_level() * PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS:
-			remove()
 			map.set_landscape_by_descriptor(cell_pos, "grass")
 
 func get_speed_factor():

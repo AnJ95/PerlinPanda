@@ -133,6 +133,8 @@ func set_particle_emitting(emit:bool):
 		particle_inst.emitting = emit
 	
 func remove():
+	if particle_inst != null:
+		particle_inst.queue_free()
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)
 

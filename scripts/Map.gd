@@ -52,6 +52,7 @@ onready var nth = {
 	"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn"),
 	"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),
 	"ParticlesDrops":preload("res://scenes/Particles_drops.tscn"),
+	"ParticlesSpray":preload("res://scenes/Particles_spray.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn")
 	}
 
@@ -299,6 +300,10 @@ func create_cell_info(cell_pos:Vector2):
 	return cell_info
 
 func set_landscape_by_descriptor(cell_pos:Vector2, descriptor:String):
+	# Clear first
+	if landscapes.has(cell_pos):
+		landscapes[cell_pos].remove()
+		
 	var info = lex.get_info_on_landscape_descriptor(descriptor)
 	landscapes[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
 	pass

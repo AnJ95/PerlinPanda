@@ -1,9 +1,8 @@
 extends "Landscape.gd"
 
-func get_class(): return "LandscapeSand"
+const PARTICLE_DST = 0.15
 
-func init(map, cell_pos, cell_info, args, nth):
-	return .init(map, cell_pos, cell_info, args, nth)	
+func get_class(): return "LandscapeSand"
 
 func get_tile_id():
 	return 2 * 6 # TODO  6 = map.tile_cols
@@ -11,10 +10,16 @@ func get_tile_id():
 func get_max_var():
 	return 4
 
+var last_water_height = -1
 func time_update(time:float):
 	var water_height = map.weather.get_sea_level()
+	
+	# if water rising and above threshold
+	set_particle_emitting(last_water_height > water_height and water_height - PARTICLE_DST < cell_info.precise_height)
 	if water_height < cell_info.precise_height:
 		conv()
+		
+	last_water_height = water_height
 
 func conv():
 	if fire_or_null != null:
@@ -29,3 +34,6 @@ func get_speed_factor():
 	
 func can_build_on(_map, _cell_pos):
 	return false
+	
+func get_particle_instance_or_null():
+	return nth.ParticlesSpray.instance()

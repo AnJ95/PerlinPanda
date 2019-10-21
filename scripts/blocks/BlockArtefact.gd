@@ -5,11 +5,6 @@ var is_activated = false
 func get_class(): return "BlockArtefact"
 
 func init(map, cell_pos, cell_info, args, nth):
-	particle_inst = nth.ParticlesArtefact.instance()
-	particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
-	set_particle_emitting(false)
-	map.add_child(particle_inst)
-	
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
@@ -17,7 +12,6 @@ func get_tile_id():
 
 func get_speed_factor():
 	return 1.3
-	
 
 func panda_in_center(_panda):
 	if !is_activated:

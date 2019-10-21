@@ -7,6 +7,8 @@ var cell_info
 var args
 var nth
 
+var particle_inst
+
 func get_class(): return "Landscape"
 
 func init(map, cell_pos, cell_info, args, nth):
@@ -15,11 +17,22 @@ func init(map, cell_pos, cell_info, args, nth):
 	self.cell_info = cell_info
 	self.args = args
 	self.nth = nth
+	
+	# Particles
+	particle_inst = get_particle_instance_or_null()
+	if particle_inst != null:
+		particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
+		set_particle_emitting(false)
+		map.get_node("Navigation2D/ParticleHolder").add_child(particle_inst)
+		
+	# Variant
 	if !args.has("var"):
 		if get_max_var() > 0:
 			args.var = randi() % (get_max_var() + 1)
 		else:
 			args.var = 0
+			
+	# Visual
 	update_tile()
 	return self
 
@@ -66,6 +79,8 @@ func can_build_on(_map, _cell_pos):
 	return true
 
 func remove():
+	if particle_inst != null:
+		particle_inst.queue_free()
 	map.landscapes.erase(cell_pos)
 
 func got_welled():
@@ -88,6 +103,17 @@ func get_adjacent_spreadable_percent():
 	else:
 		return 100 * (num_spreading / float(num_spreading + num_non_spreading))
 
+
+###################################################	
+### PARTICLES
+func get_particle_instance_or_null():
+	return null
+	
+func set_particle_emitting(emit:bool):
+	if particle_inst != null:
+		particle_inst.emitting = emit
+	
+	
 ################################################
 ### FIRE
 var fire_or_null = null
@@ -120,7 +146,7 @@ func tick_fire():
 			fire_levels += landscape.fire_or_null.fire_level
 	var score = (fire_levels / 3.0) / adj_tiles # 0 when nothing burning, 1 when all adj burning with max strength
 	score *= 8 # 0-8
-	print(score)
+	#print(score)
 	if randi()%100 <= score * 100:
 		self.try_catch_fire() # spread Fire
 

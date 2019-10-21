@@ -13,7 +13,8 @@ func get_tile_id():
 func get_speed_factor():
 	return 1.3
 
-func panda_in_center(_panda):
+func panda_in_center(panda):
+	.panda_in_center(panda)
 	if !is_activated:
 		is_activated = true
 		#start particles

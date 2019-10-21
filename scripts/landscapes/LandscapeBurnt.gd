@@ -2,8 +2,24 @@ extends "Landscape.gd"
 
 const PROB_TO_INCREASE_VAR = 100#%
 
+var landscape_before = "grass"
+
 func get_class(): return "LandscapeBurnt"
 
+func init(map, cell_pos, cell_info, args, nth):
+	.init(map, cell_pos, cell_info, args, nth)
+	
+	if map.landscapes.has(cell_pos):
+		# Pretty hacky stuff
+		landscape_before = map.landscapes[cell_pos].get_class()
+		landscape_before = landscape_before.split("Landscape")[1]
+		landscape_before = landscape_before.to_lower()
+		if !map.lex.landscape_scripts.has(landscape_before):
+			printerr("Invalid class name of Landscape before LandscapeBurnt: " + map.landscapes[cell_pos].get_class()) 
+			landscape_before = "grass"
+
+	return self
+	
 func get_tile_id():
 	return 4*6 # TODO  6 = map.tile_cols
 	
@@ -11,7 +27,7 @@ func get_max_var():
 	return 4
 	
 func got_welled():
-	map.set_landscape_by_descriptor(cell_pos, "grass")
+	map.set_landscape_by_descriptor(cell_pos, landscape_before)
 	
 func tick():
 	.tick()
@@ -19,7 +35,7 @@ func tick():
 	if randi()%100 <= PROB_TO_INCREASE_VAR:
 		args.var += 1
 		if args.var > get_max_var():
-			map.set_landscape_by_descriptor(cell_pos, "grass")
+			map.set_landscape_by_descriptor(cell_pos, landscape_before)
 		else:
 			update_tile()
 

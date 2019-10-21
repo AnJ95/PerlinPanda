@@ -15,12 +15,11 @@ func prep(map, cell_pos, hill):
 	.init(map)
 	return self
 	
-func inventory_emptied(_res_name, value):
-	for _i in range(0, value):
-		var pos = map.calc_closest_tile_from(position)
-		if map.blocks.has(pos) and map.blocks[pos].get_class() == "BlockBugHill":
+func inventory_emptied(_res_name, value): # TODO DELME
+	var pos = map.calc_closest_tile_from(position)
+	if map.blocks.has(pos) and map.blocks[pos].get_class() == "BlockBugHill":
+		for _i in range(0, value):
 			map.blocks[pos].upgrade()
-	pass
 
  
 func _process(delta: float) -> void:
@@ -46,7 +45,8 @@ func _process(delta: float) -> void:
 			if collects() and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
 				start_working_on_ressource(map.blocks[target_pos])
 			if rests() and map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill":
-				move_inventory_to_target()
+				for _i in range(0, inventory.get("bamboo")):
+					hill.upgrade()
 				queue_free()
 				hill.bug_has_died() # causes a respawn later
 		target_pos = null
@@ -72,10 +72,10 @@ func get_next_target():
 			bamboo.append(adjacent)
 	
 	var target
-	if rests() and home != null and inventory.has("bamboo") and inventory.bamboo > 0:
+	if rests() and home != null and inventory.has("bamboo", 1) and inventory.bamboo > 0:
 		target = home
 	else:
-		if collects() and bamboo.size() > 0 and (!inventory.has("bamboo") or inventory.bamboo == 0):
+		if collects() and bamboo.size() > 0 and !inventory.has("bamboo", 1):
 			target = bamboo[randi()%bamboo.size()]
 		else:
 			if valid.size() > 0:
@@ -97,7 +97,7 @@ func start_working_on_ressource(ressource):
 	
 func stepped_on(panda):
 	hill.bug_has_died()
-	move_inventory_to_other_gatherer(panda)
+	inventory.move_to_other(panda.inventory)
 	queue_free()
 
 func get_sprite_angle():

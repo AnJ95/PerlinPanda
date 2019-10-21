@@ -357,7 +357,7 @@ func generate_tile(var cell_pos:Vector2):
 	if cell_pos == start_pos:
 		block = "house"
 		
-	if landscape == "dirt":
+	if block == "" and landscape == "dirt":
 		if int(cell_info.humidity * 100) % 3 == 0:
 			block = "bughill"
 	

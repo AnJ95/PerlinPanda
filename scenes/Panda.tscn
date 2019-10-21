@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=2]
@@ -7,8 +7,7 @@
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
 [ext_resource path="res://assets/zzz.png" type="Texture" id=6]
 [ext_resource path="res://assets/panda.png" type="Texture" id=7]
-[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=8]
-[ext_resource path="res://assets/images/food.png" type="Texture" id=9]
+[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=8]
 
 [sub_resource type="Gradient" id=1]
 
@@ -73,7 +72,6 @@ spread = 10.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 40.0
 initial_velocity_random = 0.2
-angular_velocity = 0.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle = -73.7
@@ -125,39 +123,6 @@ position = Vector2( 0, -10 )
 texture = ExtResource( 7 )
 hframes = 2
 
-[node name="Inventory_bamboo" parent="." instance=ExtResource( 8 )]
-margin_left = -18.0
-margin_top = -103.0
-margin_right = 31.0
-margin_bottom = -33.0002
-rect_min_size = Vector2( 49, 35 )
-value = 0
-ressource_name = "bamboo"
-texture = ExtResource( 9 )
-do_update = false
-small = true
-
-[node name="Inventory_stone" parent="." instance=ExtResource( 8 )]
-margin_left = -19.2542
-margin_top = -135.0
-margin_right = 29.7458
-margin_bottom = -65.1426
-rect_min_size = Vector2( 49, 35 )
-value = 0
-ressource_name = "stone"
-texture = ExtResource( 4 )
-do_update = false
-small = true
-
-[node name="Inventory_leaves" parent="." instance=ExtResource( 8 )]
-margin_left = -19.254
-margin_top = -167.0
-margin_right = 29.746
-margin_bottom = -97.1426
-rect_min_size = Vector2( 49, 35 )
-value = 0
-ressource_name = "stone"
-texture = ExtResource( 5 )
-do_update = false
-small = true
+[node name="Inventory" parent="." instance=ExtResource( 8 )]
+position = Vector2( 0, -110 )
 

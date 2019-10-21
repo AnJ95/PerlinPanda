@@ -35,11 +35,8 @@ func _ready():
 		start_anim_target = home_pos
 		position = (home_pos +Vector2(800, 0)).rotated(randi()%360)
 
-
-
-func inventory_emptied(res_name, value):
+func inventory_emptied(res_name, value): # TODO DELME
 	ressourceManager.add_ressource(res_name, value)
-
 
 func _process(delta: float) -> void:
 	._process(delta)
@@ -102,7 +99,7 @@ func reached_cell():
 
 func reached_house():
 	# move pandas inventory to global ressources
-	move_inventory_to_target()
+	inventory.move_to_other(map.blocks[home_pos].inventory)
 	
 	curr_path_pos = 0
 	# when he is scheduled to change path

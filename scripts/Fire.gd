@@ -63,3 +63,6 @@ func update_visuals():
 	$Outer_2.emitting = strength >= 2
 	$Outer_3.emitting = strength >= 3
 	
+	$Light2D.texture_scale = 2 + fire_level
+	$Light2D.energy = 0.4 + 0.1*fire_level
+	

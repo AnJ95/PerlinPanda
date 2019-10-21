@@ -1,0 +1,47 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://scripts/Inventory.gd" type="Script" id=1]
+[ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/images/food.png" type="Texture" id=3]
+[ext_resource path="res://assets/images/stone.png" type="Texture" id=4]
+[ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
+
+[node name="Inventory" type="Node2D"]
+position = Vector2( 0, -10 )
+script = ExtResource( 1 )
+
+[node name="Inventory_bamboo" parent="." instance=ExtResource( 2 )]
+margin_left = -18.0
+margin_right = 31.0
+margin_bottom = 69.9998
+rect_min_size = Vector2( 49, 35 )
+value = 0
+ressource_name = "bamboo"
+texture = ExtResource( 3 )
+do_update = false
+small = true
+
+[node name="Inventory_stone" parent="." instance=ExtResource( 2 )]
+margin_left = -19.254
+margin_top = -30.0
+margin_right = 29.746
+margin_bottom = 39.8574
+rect_min_size = Vector2( 49, 35 )
+value = 0
+ressource_name = "stone"
+texture = ExtResource( 4 )
+do_update = false
+small = true
+
+[node name="Inventory_leaves" parent="." instance=ExtResource( 2 )]
+margin_left = -19.254
+margin_top = -60.0
+margin_right = 29.746
+margin_bottom = 9.8574
+rect_min_size = Vector2( 49, 35 )
+value = 0
+ressource_name = "stone"
+texture = ExtResource( 5 )
+do_update = false
+small = true
+

@@ -33,6 +33,7 @@ func time_update(time:float):
 					bug.stepped_on(map.get_tree().get_nodes_in_group("panda")[0])
 
 func panda_in_center(panda):
+	.panda_in_center(panda)
 	if !is_smoking:
 		if panda.inventory.has("leaves") and panda.inventory.leaves >= 1:
 			panda.add_to_inventory("leaves", -1)

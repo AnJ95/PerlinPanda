@@ -79,6 +79,8 @@ func can_build_on(_map, _cell_pos):
 	return true
 
 func remove():
+	if fire_or_null != null:
+		fire_or_null.extinguish()
 	if particle_inst != null:
 		particle_inst.queue_free()
 	map.landscapes.erase(cell_pos)

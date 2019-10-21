@@ -13,9 +13,8 @@ func init(map, cell_pos, cell_info, args, nth):
 		map.show_homes()
 	
 	map.generate_next(cell_pos, 2)
-
 	return self
-	
+
 func get_tile_id():
 	return  4
 	
@@ -32,3 +31,11 @@ func get_prob_fire_catch():
 func get_fire_increase_time():
 	return 12
 
+################################################
+### INVENTORY
+func has_inventory():
+	return true
+func inventory_max_values():
+	return {}
+func notify_inventory_increase(ressource, amount):
+	pass

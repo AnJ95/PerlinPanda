@@ -14,7 +14,6 @@ func inst_actual_block():
 	map.set_block_by_tile_id(cell_pos, args.of)
 	
 func get_tile_id():
-	print(args.of)
 	return args.of + 6 # todo
 	
 func get_speed_factor():
@@ -24,6 +23,7 @@ func ressource_name_or_null():
 	return null
 	
 func panda_in_center(panda):
+	.panda_in_center(panda)
 	panda.start_building(self)
 	
 ################################################

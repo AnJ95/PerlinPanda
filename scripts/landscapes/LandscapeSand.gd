@@ -24,6 +24,8 @@ func time_update(time:float):
 func conv():
 	if fire_or_null != null:
 		fire_or_null.extinguish()
+	elif (map.blocks.has(cell_pos) and map.blocks[cell_pos].fire_or_null != null):
+		map.blocks[cell_pos].fire_or_null.extinguish()
 	map.set_landscape_by_descriptor(cell_pos, "water")
 
 func can_spread_grass():

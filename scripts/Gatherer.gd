@@ -3,8 +3,6 @@ extends Node2D
 var map
 var ressourceManager
 
-var inventory = {}
-
 var timer = 0
 
 # for working on ressource
@@ -15,6 +13,8 @@ var building = false
 var job_on = null
 var job_time_left = 1
 
+onready var inventory = $Inventory
+
 func init(map):
 	self.map = map
 	
@@ -24,7 +24,7 @@ func _ready():
 		ressourceManager = ressourceManager[0]
 	else:
 		ressourceManager = null
-	update_inventory_view()
+	inventory = inventory.init(self, true, {}, max_inventory())
 
 func _process(delta:float):
 	timer += delta
@@ -55,9 +55,7 @@ func gather_and_build(delta, speed_factor):
 			if working_on_ressource:
 				working_on_ressource = false
 				stop_particles()
-				var ressource_name = job_on.ressource_name_or_null()
-				var ressource_value = job_on.get_ressource_amount_after_work_done()
-				add_to_inventory(ressource_name, ressource_value)
+				inventory.add(job_on.ressource_name_or_null(), job_on.get_ressource_amount_after_work_done())
 				if self.is_in_group("panda"):
 					ressourceManager.ressources_gathered += 1
 		#### NOT DONE
@@ -111,44 +109,11 @@ func get_sprite_wiggle_amp_freq():
 ####################################
 ## INVENTORY
 
-func move_inventory_to_target():
-	for res_name in inventory.keys():
-		inventory_emptied(res_name, inventory[res_name])
-		inventory.erase(res_name)
-	update_inventory_view()
+func max_inventory():
+	return {}
 
-func move_inventory_to_other_gatherer(other):
-	for res_name in inventory.keys():
-		other.add_to_inventory(res_name, inventory[res_name])
-
-func inventory_emptied(_res_name, _value):
+func notify_inventory_increase(ressource, amount):
 	pass
-	
-		
-func add_to_inventory(res_name, res_value):
-	if !inventory.has(res_name):
-		inventory[res_name] = res_value
-	else:
-		inventory[res_name] += res_value
-	update_inventory_view()
 
-func update_inventory_view():
-	var num_visible = 0
-	for res in ["bamboo", "stone", "leaves"]:
-		var val = 0
-		if inventory.has(res):
-			val = inventory[res]
-			if val > 0:
-				num_visible += 1
-		
-		var node = get_node("Inventory_" + res)
-		if val == 0:
-			node.hide()
-		else:
-			node.show()
-			node.rect_position.y = -90 - (num_visible-1)*30
-		node.value = val
-		node.update()
-		
-		
+	
 	

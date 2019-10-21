@@ -20,6 +20,12 @@ func init(map, cell_pos, cell_info, args, nth):
 	self.args = args
 	self.nth = nth
 	
+	# Inventory
+	if has_inventory():
+		inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		inventory.position = map.calc_px_pos_on_tile(cell_pos)
+		map.get_node("Navigation2D/UIHolder").call_deferred("add_child", inventory)
+	
 	# Particles
 	particle_inst = get_particle_instance_or_null()
 	if particle_inst != null:
@@ -46,6 +52,9 @@ func get_tile_id():
 	return 0
 	
 func panda_in_center(panda):
+	if fire_or_null != null:
+		fire_or_null.extinguish()
+	
 	if ressource_name_or_null() != null and stock > 0:
 		panda.start_working_on_ressource(self)
 
@@ -133,6 +142,8 @@ func set_particle_emitting(emit:bool):
 		particle_inst.emitting = emit
 	
 func remove():
+	if fire_or_null != null:
+		fire_or_null.extinguish()
 	if particle_inst != null:
 		particle_inst.queue_free()
 	map.blocks.erase(cell_pos)
@@ -142,6 +153,9 @@ func remove():
 ### FIRE
 var fire_or_null = null
 func try_catch_fire():
+	# dont consider when landscape below is water
+	if map.landscapes[cell_pos].get_class() == "LandscapeWater":
+		return
 	if randi()%100 <= get_prob_fire_catch():
 		caught_fire()
 func caught_fire():
@@ -160,5 +174,18 @@ func get_fire_increase_time():
 func got_burned_to_the_ground():
 	remove()
 	fire_or_null = null
+	pass
+
+################################################
+### INVENTORY
+onready var inventoryClass = preload("res://scenes/Inventory.tscn")
+var inventory
+
+# Overrides
+func has_inventory():
+	return false
+func inventory_max_values():
+	return {}
+func notify_inventory_increase(ressource, amount):
 	pass
 

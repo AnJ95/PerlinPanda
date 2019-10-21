@@ -34,13 +34,10 @@ func _process(delta):
 
 func strike():
 	var end_scale = Vector2(40, 40)
-	var end_mod = Color(1,1,1,0.0)
-	$Light.scale = Vector2(1,1)
-	$Light.modulate = Color(1,1,1,0.6)
 	
-	$Tween.interpolate_property($Light, "modulate", $Light.modulate, end_mod, FRAME_TIME*2, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
-	$Tween.start()
-	$Tween.interpolate_property($Light, "scale", $Light.scale, end_scale, FRAME_TIME / 2.0, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
+	$Light2D.scale = Vector2(1,1)
+	
+	$Tween.interpolate_property($Light2D, "scale", $Light2D.scale, end_scale, FRAME_TIME / 2.0, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
 	$Tween.start()
 	
 	# Landscape handles checking blocks!

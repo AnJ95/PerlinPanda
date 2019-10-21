@@ -21,7 +21,7 @@ _data = [ Vector2( 0.00466377, 0.328658 ), 0.0, 0.0, 0, 0, Vector2( 0.530151, 0.
 
 curve = SubResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=5]
+[sub_resource type="ParticlesMaterial" id=7]
 
 emission_shape = 1
 emission_sphere_radius = 20.0
@@ -58,14 +58,14 @@ position = Vector2( 0, -10 )
 rotation = -1.5708
 scale = Vector2( 0.8, 0.8 )
 lifetime = 1.2
-process_material = SubResource( 5 )
+process_material = SubResource( 7 )
 texture = ExtResource( 2 )
 
 [node name="Outer_2" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
 lifetime = 1.2
-process_material = SubResource( 5 )
+process_material = SubResource( 7 )
 texture = ExtResource( 2 )
 
 [node name="Outer_3" type="Particles2D" parent="."]
@@ -73,11 +73,16 @@ position = Vector2( 0, -10 )
 rotation = -1.5708
 scale = Vector2( 1.2, 1.2 )
 lifetime = 1.2
-process_material = SubResource( 5 )
+process_material = SubResource( 7 )
 texture = ExtResource( 2 )
 
 [node name="Inner" type="Particles2D" parent="."]
 rotation = -1.5708
 process_material = SubResource( 6 )
 texture = ExtResource( 2 )
+
+[node name="Light2D" type="Light2D" parent="."]
+texture = ExtResource( 2 )
+texture_scale = 3.0
+energy = 0.5
 

@@ -24,6 +24,7 @@ func got_welled():
 	map.set_landscape_by_descriptor(cell_pos, "grass")
 	
 func tick():
+	.tick()
 	# Spawn bug hill
 	if !map.blocks.has(cell_pos):
 		if randi()%100 <= PROB_TO_SPAWN_BUG_HILL + (1-map.weather.get_rain_level()) * PROB_TO_SPAWN_BUG_HILL_DROUGHT_BONUS + (1-map.weather.get_day_bonus()) * PROB_TO_SPAWN_BUG_HILL_NIGHT_BONUS:

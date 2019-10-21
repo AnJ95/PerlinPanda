@@ -135,4 +135,28 @@ func set_particle_emitting(emit:bool):
 func remove():
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)
+
+################################################
+### FIRE
+var fire_or_null = null
+func try_catch_fire():
+	if randi()%100 <= get_prob_fire_catch():
+		caught_fire()
+func caught_fire():
+	if fire_or_null == null:
+		if !Engine.editor_hint:
+			fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
+			map.get_node("Navigation2D/ParticleHolder").call_deferred("add_child", fire_or_null)
+func extinguished_fire():
+	fire_or_null = null
 	
+# Overrides
+func get_prob_fire_catch():
+	return 0
+func get_fire_increase_time():
+	return 7
+func got_burned_to_the_ground():
+	remove()
+	fire_or_null = null
+	pass
+

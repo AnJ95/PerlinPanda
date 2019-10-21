@@ -11,15 +11,14 @@ func get_tile_id():
 func get_max_var():
 	return 4
 
-func tick():
-	pass
-
 func time_update(time:float):
 	var water_height = map.weather.get_sea_level()
 	if water_height < cell_info.precise_height:
 		conv()
 
 func conv():
+	if fire_or_null != null:
+		fire_or_null.extinguish()
 	map.set_landscape_by_descriptor(cell_pos, "water")
 
 func can_spread_grass():

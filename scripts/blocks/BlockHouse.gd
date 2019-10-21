@@ -24,4 +24,11 @@ func get_speed_factor():
 
 func ressource_name_or_null():
 	return null
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 40
+func get_fire_increase_time():
+	return 12
 

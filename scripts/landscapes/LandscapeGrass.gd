@@ -23,9 +23,11 @@ func get_tile_id():
 	return durability
 
 func panda_in_center(_panda):
+	.panda_in_center(_panda)
 	decrease_durability()
 
 func tick():
+	.tick()
 	if randi()%100 <= get_adjacent_spreadable_percent():
 		if randi()%100 <= PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING + map.weather.get_rain_level() * PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS:
 			increase_durability()
@@ -65,3 +67,10 @@ func can_spread_grass():
 	
 func get_speed_factor():
 	return 0.75
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 40
+func get_fire_increase_time():
+	return 10

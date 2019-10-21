@@ -46,3 +46,10 @@ func get_particle_instance_or_null():
 func set_particle_emitting(emit):
 	.set_particle_emitting(emit)
 	particle_inst.get_node("Particles_inner").emitting = emit
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 40
+func get_fire_increase_time():
+	return 4

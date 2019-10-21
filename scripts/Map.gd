@@ -46,8 +46,14 @@ var weatherManager
 
 onready var lex = preload("res://scripts/Lex.gd").new()
 
-onready var nth = {"Panda":preload("res://scenes/Panda.tscn"),"Bug":preload("res://scenes/Bug.tscn")
-,"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn"),"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),"ParticlesDrops":preload("res://scenes/Particles_drops.tscn")}
+onready var nth = {
+	"Panda":preload("res://scenes/Panda.tscn"),
+	"Bug":preload("res://scenes/Bug.tscn"),
+	"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn"),
+	"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),
+	"ParticlesDrops":preload("res://scenes/Particles_drops.tscn"),
+	"Fire":preload("res://scenes/Fire.tscn")
+	}
 
 # OpenSimplex
 var map_gens_lex = {

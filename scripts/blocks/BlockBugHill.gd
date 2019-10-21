@@ -1,5 +1,6 @@
 extends "Block.gd"
 
+const PROB_TO_SPAWN = 100.0
 
 var spawn_num = 0
 
@@ -11,8 +12,9 @@ func init(map, cell_pos, cell_info, args, nth):
 func spawn():
 	if spawn_num <= args.var:
 		var bug = nth.Bug.instance().prep(map, cell_pos, self)
-		map.get_node("Navigation2D/BugHolder").call_deferred("add_child", bug)
-		spawn_num += 1
+		if bug.rests():
+			map.get_node("Navigation2D/BugHolder").call_deferred("add_child", bug)
+			spawn_num += 1
 	
 func bug_has_died():
 	spawn_num -= 1
@@ -30,7 +32,8 @@ func prevents_landscape_tick():
 	return true
 	
 func tick():
-	if randi()%100 < 70:
+	.tick()
+	if randi()%100 <= PROB_TO_SPAWN:
 		spawn()
 
 func upgrade():

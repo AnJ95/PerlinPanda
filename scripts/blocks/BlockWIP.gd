@@ -25,3 +25,10 @@ func ressource_name_or_null():
 	
 func panda_in_center(panda):
 	panda.start_building(self)
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 50
+func get_fire_increase_time():
+	return 8

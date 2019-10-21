@@ -27,4 +27,10 @@ func get_ressource_amount_after_work_done():
 		remove()
 	return amount
 	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 80
+func get_fire_increase_time():
+	return 6
 	

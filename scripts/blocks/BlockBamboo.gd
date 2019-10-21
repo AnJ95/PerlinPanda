@@ -56,3 +56,10 @@ func get_stack_increase_prob():
 		prob_to_spread *= get_regrow_prob() + map.weather.get_rain_level() * get_regrow_prob_rain_bonus() + map.weather.get_day_bonus() * get_regrow_prob_day_bonus()
 		return prob_to_spread
 	return 0
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 60
+func get_fire_increase_time():
+	return 9

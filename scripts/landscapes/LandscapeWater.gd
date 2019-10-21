@@ -17,9 +17,6 @@ func get_tile_id():
 	return 3 * 6 # TODO  6 = map.tile_cols
 func get_max_var():
 	return 4
-	
-func tick():
-	pass
 
 func time_update(time:float):
 	
@@ -43,10 +40,7 @@ func time_update(time:float):
 	if water_height > cell_info.precise_height:
 		conv()
 		return
-		
-		
 	update_tile()
-	
 
 func conv():
 	map.set_landscape_by_descriptor(cell_pos, "sand")

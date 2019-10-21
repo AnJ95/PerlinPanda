@@ -3,10 +3,8 @@ extends Node2D
 
 const FRAME_TIME = 0.19
 const FRAME_SEQ = [0, 1, 2, 3, 2, 3, 2]
-
 const STRUCK_AT_ID = 2
 var frame_id = 0
-
 var frame_time = 0.0
 
 var map
@@ -39,10 +37,13 @@ func strike():
 	var end_mod = Color(1,1,1,0.0)
 	$Light.scale = Vector2(1,1)
 	$Light.modulate = Color(1,1,1,0.6)
-	print("STRIKE")
+	
 	$Tween.interpolate_property($Light, "modulate", $Light.modulate, end_mod, FRAME_TIME*2, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
 	$Tween.start()
 	$Tween.interpolate_property($Light, "scale", $Light.scale, end_scale, FRAME_TIME / 2.0, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
 	$Tween.start()
+	
+	# Landscape handles checking blocks!
+	map.landscapes[cell_pos].try_catch_fire()
 	pass
-	# TODO spawn fire @ cell_pos
+	

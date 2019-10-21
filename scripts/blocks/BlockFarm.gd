@@ -26,3 +26,10 @@ func shields_landscape_durability():
 	
 func can_be_build_on(map, cell_pos):
 	return map.blocks.has(cell_pos) and map.blocks[cell_pos].get_class() == "BlockBamboo"
+	
+################################################
+### FIRE
+func get_prob_fire_catch():
+	return 40
+func get_fire_increase_time():
+	return 10

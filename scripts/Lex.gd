@@ -16,7 +16,7 @@ var landscape_sheet = [
 	"dirt_var_0", "dirt_var_1", "dirt_var_2", "dirt_var_3", "dirt_var_4", "",
 	"sand_var_0", "sand_var_1", "sand_var_2", "sand_var_3", "sand_var_4", "",
 	"water_var_0", "water_var_1", "water_var_2", "water_var_3", "water_var_4", "",
-	"", "", "", "", "", "",
+	"burnt_var_0", "burnt_var_1", "burnt_var_2", "burnt_var_3", "burnt_var_4", "",
 	"", "", "", "", "", "",
 	"", "", "", "", "", ""
 ]
@@ -42,7 +42,8 @@ var landscape_scripts = {
 	"grass": load("res://scripts/landscapes/LandscapeGrass.gd"),
 	"dirt": load("res://scripts/landscapes/LandscapeDirt.gd"),
 	"sand": load("res://scripts/landscapes/LandscapeSand.gd"),
-	"water": load("res://scripts/landscapes/LandscapeWater.gd")
+	"water": load("res://scripts/landscapes/LandscapeWater.gd"),
+	"burnt": load("res://scripts/landscapes/LandscapeBurnt.gd")
 	#"": "res://scripts/landscapes/Landscape.gd"
 }
 

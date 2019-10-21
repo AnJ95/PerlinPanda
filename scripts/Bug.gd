@@ -40,18 +40,25 @@ func _process(delta: float) -> void:
 	
 	# Check if current target in vicinity
 	if move_towards_then(target_pos, SPEED, delta):
-		map.weather.get_day_bonus()
+		var day_bonus = map.weather.get_day_bonus()
 		
 		if map.blocks.has(target_pos):
-			if map.weather.get_day_bonus() > 0.0 and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
+			if collects() and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
 				start_working_on_ressource(map.blocks[target_pos])
-			if map.weather.get_day_bonus() < 0.0 and map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill":
+			if rests() and map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill":
 				move_inventory_to_target()
+				queue_free()
+				hill.bug_has_died() # causes a respawn later
 		target_pos = null
-		
+
+func collects():
+	return map.weather.get_day_bonus() < 0.0
+func rests():
+	return map.weather.get_day_bonus() >= 0.0
 		
 func get_next_target():
 	var cell_pos = map.calc_closest_tile_from(position)
+	var day_bonus = map.weather.get_day_bonus()
 	var valid = []
 	var bamboo = []
 	var home = null
@@ -65,10 +72,10 @@ func get_next_target():
 			bamboo.append(adjacent)
 	
 	var target
-	if home != null and inventory.has("bamboo") and inventory.bamboo > 0:
+	if rests() and home != null and inventory.has("bamboo") and inventory.bamboo > 0:
 		target = home
 	else:
-		if bamboo.size() > 0 and (!inventory.has("bamboo") or inventory.bamboo == 0):
+		if collects() and bamboo.size() > 0 and (!inventory.has("bamboo") or inventory.bamboo == 0):
 			target = bamboo[randi()%bamboo.size()]
 		else:
 			if valid.size() > 0:

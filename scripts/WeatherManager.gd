@@ -13,7 +13,7 @@ const DAY_CYCLE_TIME = 120.0
 # RAIN CYCLE
 const RAIN_CYCLE_TIME = 180.0
 
-const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 1.0
+const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 40.0
 
 var sea_level = 0
 var day_time = 0.0
@@ -71,11 +71,12 @@ func process_lightning(delta, storm_level):
 	time_to_next_lightning -= delta
 	if time_to_next_lightning > 0:
 		return
+	var map = get_parent().get_node("Map")
+	time_to_next_lightning += lightning_time_per_tile / float(map.landscapes.size())
+	
 	if randi()%100 > PROB_TO_LIGHTNING_WHEN_TILE_SELECTED * storm_level:
 		return
 	
-	var map = get_parent().get_node("Map")
-	time_to_next_lightning += lightning_time_per_tile / float(map.landscapes.size())
 	var l = map.map_landscape
 	var lightning = Lightning.instance().init(map, l.get_used_cells()[randi() % l.get_used_cells().size()])
 	map.get_node("Navigation2D/PandaHolder").add_child(lightning)

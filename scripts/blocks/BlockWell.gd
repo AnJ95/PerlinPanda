@@ -32,6 +32,6 @@ func tick():
 				map.blocks[adjacent].got_welled()
 
 func get_particle_instance_or_null():
-	return nth.ParticlesDrop.instance()
+	return nth.ParticlesDrops.instance()
 
 

@@ -18,7 +18,7 @@ func init(map, cell_pos, cell_info, args, nth):
 			printerr("Invalid class name of Landscape before LandscapeBurnt: " + map.landscapes[cell_pos].get_class()) 
 			landscape_before = "grass"
 		if landscape_before == "grass":
-			landscape_before += "_durability_" + str(randi()%2 + 3)
+			landscape_before += "_durability_" + str(randi()%2 + 4)
 
 	return self
 	

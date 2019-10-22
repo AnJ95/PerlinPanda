@@ -135,9 +135,9 @@ func add_ressource_to_current_path(block):
 func add_block_wip_to_current_path(block):
 	var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
 	for res in ressourceUpdater.ressources_max:
-		var missing = block.inventory.get_max(res) - inventory.get(res)
+		var missing = block.inventory.get_max(res) - block.inventory.get(res)
 		var more_available = path[2].ressources_max[res] - path[2].ressources[res]
-		var taking = min(missing, more_available)
+		var taking = max(min(missing, more_available), 0)
 		
 		# take more from start
 		path[2].ressources[res] += taking

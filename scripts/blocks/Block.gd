@@ -30,8 +30,6 @@ func init(map, cell_pos, cell_info, args, nth):
 		
 		scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
 		
-		
-	
 	# Particles
 	particle_inst = get_particle_instance_or_null()
 	if particle_inst != null:

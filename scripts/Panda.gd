@@ -128,15 +128,15 @@ func reached_cell():
 		
 	
 func perform_next_action():
-	if curr_path_pos+1 >= path.size():
+	if curr_path_pos+0 >= path.size():
 		return true
-	var next = path[curr_path_pos+1]
+	var next = path[curr_path_pos+0]
 	return !next is bool or next == true
 	
 func get_next_ressource_updater():
-	if curr_path_pos+2 >= path.size():
+	if curr_path_pos+1 >= path.size():
 		return null
-	var updater = path[curr_path_pos+2]
+	var updater = path[curr_path_pos+1]
 	if is_ressource_updater(updater):
 		return updater
 	else:

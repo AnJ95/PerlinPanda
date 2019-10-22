@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
 
 [node name="Inventory" type="Node2D"]
+light_mask = 0
 position = Vector2( 0, -10 )
 script = ExtResource( 1 )
 

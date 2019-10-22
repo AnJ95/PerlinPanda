@@ -3,6 +3,7 @@
 [ext_resource path="res://scripts/ui/RessourceUpdater.gd" type="Script" id=1]
 
 [node name="RessourceUpdater" type="Node2D"]
+light_mask = 0
 script = ExtResource( 1 )
 show_max = true
 show_when_0 = true
@@ -19,18 +20,38 @@ ressources_max = {
 changeable = true
 
 [node name="Box" type="ColorRect" parent="."]
-margin_right = 80.0
+margin_right = 130.0
 margin_bottom = 111.0
+mouse_filter = 1
 color = Color( 0.65098, 0.631373, 0.529412, 1 )
 
 [node name="Black" type="ColorRect" parent="Box"]
 margin_top = 106.0
-margin_right = 80.0
+margin_right = 130.0
 margin_bottom = 111.0
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="Ressources" type="VBoxContainer" parent="Box"]
-margin_right = 67.0
+margin_left = 25.0
+margin_right = 92.0
 margin_bottom = 105.0
 custom_constants/separation = 0
 
+[connection signal="gui_input" from="Box/RessourceUpdaterButton" to="Box/RessourceUpdaterButton" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton" to="Box/RessourceUpdaterButton" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton" to="Box/RessourceUpdaterButton" method="_mouse_exited"]
+[connection signal="gui_input" from="Box/RessourceUpdaterButton2" to="Box/RessourceUpdaterButton2" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton2" to="Box/RessourceUpdaterButton2" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton2" to="Box/RessourceUpdaterButton2" method="_mouse_exited"]
+[connection signal="gui_input" from="Box/RessourceUpdaterButton3" to="Box/RessourceUpdaterButton3" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton3" to="Box/RessourceUpdaterButton3" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton3" to="Box/RessourceUpdaterButton3" method="_mouse_exited"]
+[connection signal="gui_input" from="Box/RessourceUpdaterButton4" to="Box/RessourceUpdaterButton4" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton4" to="Box/RessourceUpdaterButton4" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton4" to="Box/RessourceUpdaterButton4" method="_mouse_exited"]
+[connection signal="gui_input" from="Box/RessourceUpdaterButton5" to="Box/RessourceUpdaterButton5" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton5" to="Box/RessourceUpdaterButton5" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton5" to="Box/RessourceUpdaterButton5" method="_mouse_exited"]
+[connection signal="gui_input" from="Box/RessourceUpdaterButton6" to="Box/RessourceUpdaterButton6" method="on_gui_input"]
+[connection signal="mouse_entered" from="Box/RessourceUpdaterButton6" to="Box/RessourceUpdaterButton6" method="_mouse_entered"]
+[connection signal="mouse_exited" from="Box/RessourceUpdaterButton6" to="Box/RessourceUpdaterButton6" method="_mouse_exited"]

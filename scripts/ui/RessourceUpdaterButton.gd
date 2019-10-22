@@ -20,7 +20,7 @@ func _mouse_entered():
 func _mouse_exited():
 	color.a = 0.0
 
-func _gui_input(event:InputEvent):
+func on_gui_input(event:InputEvent):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT:
 		if event.pressed:
 			color.a = 0.2
@@ -28,7 +28,9 @@ func _gui_input(event:InputEvent):
 		else:
 			color.a = 0.1
 			
+		get_tree().set_input_as_handled()
 		return true
+	
 
 func clicked():
 	if ownr != null:

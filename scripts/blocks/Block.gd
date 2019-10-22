@@ -25,8 +25,8 @@ func init(map, cell_pos, cell_info, args, nth):
 		inventory = load("res://scenes/Inventory.tscn").instance()
 		adjust_inventory(inventory)
 		inventory.init(self, true, {}, inventory_max_values())
-		scheduled_inventory = inventory.duplicate()
-		inventory.position = map.calc_px_pos_on_tile(cell_pos)
+		scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		inventory.position = map.calc_px_pos_on_tile(cell_pos) - Vector2(0, 100)
 		map.get_node("Navigation2D/UIHolder").call_deferred("add_child", inventory)
 	
 	# Particles

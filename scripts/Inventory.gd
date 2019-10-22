@@ -18,8 +18,17 @@ func init(subscriber, active, start_inventory, max_inventory):
 	self.maximums = max_inventory
 	update_view()
 	return self
-	
 
+func clone():
+	var dupl = duplicate()
+	dupl.inventory = {}
+	dupl.maximums = {}
+	for res in inventory:
+		dupl.inventory[res] = inventory[res]
+	for res in maximums:
+		dupl.maximums[res] = maximums[res]
+	return dupl
+		
 func get_max(ressource):
 	if maximums.has(ressource):
 		return min(maximums[ressource], ABS_MAX)

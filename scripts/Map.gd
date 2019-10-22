@@ -173,7 +173,7 @@ func prepare_presets(start_pos):
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
 		var preset_blocks = preset.get_node("Navigation2D/MapBlocks")
 		# take a Dictionary an fill it with all blocks that are part of any preset
-		print(cell_pos)
+		
 		for preset_pos in preset_landscape.get_used_cells():
 			var landscape_id = preset_landscape.get_cellv(preset_pos)
 			var block_id = preset_blocks.get_cellv(preset_pos)

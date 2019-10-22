@@ -34,6 +34,8 @@ margin_bottom = 601.0
 [node name="Map" parent="." instance=ExtResource( 4 )]
 show_case_size = 24
 
+[node name="MapControls" type="Node2D" parent="."]
+
 [node name="ParallaxBackground" parent="." instance=ExtResource( 5 )]
 layer = -1
 

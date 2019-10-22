@@ -26,7 +26,7 @@ onready var tile_ids = {
 	}
 
 var c:Color = Color(1,1,1,0)
-func _input(event: InputEvent):	
+func _unhandled_input(event: InputEvent):	
 				
 	# Hover effect: show panda path when mouse over house
 	if event is InputEventMouseMotion:
@@ -43,7 +43,14 @@ func _input(event: InputEvent):
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
 		var hovered_cell = map.calc_closest_tile_from(click_pos)
 		for updater in updaters:
-			updaters[updater].visible = updater == hovered_cell
+			if updater == hovered_cell:
+				updaters[updater].visible = true
+				continue
+			var area = Rect2(updaters[updater].position, updaters[updater].get_node("Box").rect_size)
+			if updaters[updater].visible == true and area.has_point(click_pos):
+				updaters[updater].visible = true
+				continue
+			updaters[updater].visible = false
 		
 		# if panda in range: show its line
 		var other = get_panda_in_range(click_pos)
@@ -116,6 +123,20 @@ func add_to_current_path(this_tile):
 				
 			if block.get_class() == "BlockWIP":
 				var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
+				for res in ressourceUpdater.ressources_max:
+					var missing = block.inventory.get_max(res) - inventory.get(res)
+					var more_available = path[2].ressources_max[res] - path[2].ressources[res]
+					var taking = min(missing, more_available)
+					
+					# take more from start
+					path[2].ressources[res] += taking
+					path[2].update()
+					
+					# update this blocks RessourceChanger
+					ressourceUpdater.ressources[res] += taking
+					ressourceUpdater.ressources_max[res] += taking
+					#ressourceUpdater.update()
+					
 				path.append(true)
 				path.append(ressourceUpdater)
 				
@@ -139,7 +160,7 @@ func update_preview():
 	
 	# unparent all RessourceUpdaters
 	for updater in updaters:
-		map.get_node("Navigation2D/UIHolder").remove_child(updaters[updater])
+		map.get_parent().get_node("MapControls").remove_child(updaters[updater])
 	updaters = {}
 	
 	# reset inventory
@@ -189,8 +210,8 @@ func update_preview():
 			last_cell_pos=last_cell_pos
 		elif path_elem.get_filename() == RessourceUpdater.get_path():
 			if path_elem.get_parent() == null:
-				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -50)
-				map.get_node("Navigation2D/UIHolder").add_child(path_elem)
+				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -40)
+				map.get_parent().get_node("MapControls").add_child(path_elem)
 				updaters[last_cell_pos] = path_elem
 				
 				path_elem.add_to_inventory(inventory)
@@ -212,14 +233,18 @@ func done_with_path():
 	if !active or !panda or path.size() < 3:
 		printerr("IllegalStateException: done_with_path() before try_start_path() worked")
 	active = false
-	panda.set_path(path)
+	
+	panda.set_path(path, inventory.clone())
+	
+	# new house inventory = panda inventory - initially taken
+	inventory.move_to_other(map.blocks[panda.home_pos].scheduled_inventory)
+	for res in path[2].ressources:
+		map.blocks[panda.home_pos].scheduled_inventory.add(res, -path[2].ressources[res])
 	
 	if panda.line == null:
 		panda.line = $Line2D.duplicate()
 		get_parent().get_node("Map/Navigation2D/PathHolder").add_child(panda.line)
 		panda.line.points = PoolVector2Array()
-	
-	inventory.move_to_other(map.blocks[panda.home_pos].scheduled_inventory)
 	
 	panda.line.modulate = Color(panda.line.modulate.r, panda.line.modulate.g, panda.line.modulate.b, 0.6)
 	var pts = Array(panda.line.points)
@@ -237,6 +262,7 @@ func try_start_path_from(panda):
 		active = true
 		self.panda = panda
 		var ressourceUpdater = RessourceUpdater.instance().set_max_from_inventory(map.blocks[panda.home_pos].scheduled_inventory)
+		
 		path = [panda.home_pos, true, ressourceUpdater]
 		panda.stop_particles()
 		update_preview()
@@ -244,6 +270,10 @@ func try_start_path_from(panda):
 			
 func cancel():
 	if active:
+		for updater in updaters:
+			updaters[updater].queue_free()
+		updaters = {}
+		
 		active = false
 		update_preview()
 		

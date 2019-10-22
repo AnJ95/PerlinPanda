@@ -13,6 +13,9 @@ var next_paths = []
 var line
 var last_target = null
 
+# for inventory
+var expected_inventory = null
+var next_expected_inventories = []
 # for animation
 var show_start_anim
 var start_anim_target
@@ -51,6 +54,22 @@ func _process(delta: float) -> void:
 	if path == null or path.size() == 0:
 		return
 	
+	# check path	
+	if path[curr_path_pos] is bool:
+		curr_path_pos += 1
+		
+	# take items from house as defined in houses RessourceUpdater
+	var path_elem = path[curr_path_pos]
+	if is_ressource_updater(path_elem):
+		for ressource in path_elem.ressources:
+			var taken = map.blocks[home_pos].inventory.try_take(ressource, path_elem.ressources[ressource])
+			
+			inventory.add(ressource, taken)
+			
+			map.blocks[home_pos].inventory.update_view()
+		curr_path_pos += 1
+	
+			
 	# gather and build, prevent walking if so
 	var speed_factor = calc_speed_factor()
 	var speed = speed_factor * SPEED
@@ -71,7 +90,9 @@ func _process(delta: float) -> void:
 		if position.distance_squared_to(bug.position) < 2500 and position.distance_to(bug.position) < 50:
 			bug.stepped_on(self)
 
-
+func is_ressource_updater(e):
+	return !e is bool and !e is Vector2 and e.get_filename().find("RessourceUpdater") > -1
+	
 func reached_cell():
 	var arr = Array(line.points)
 	arr.pop_front()
@@ -93,9 +114,6 @@ func reached_cell():
 	# when panda walked full circle
 	if curr_path_pos == path.size():
 		reached_house()
-	else:
-		while !path[curr_path_pos] is Vector2:
-			curr_path_pos += 1 # TODO perform actions here
 	
 func perform_next_action():
 	if curr_path_pos+1 >= path.size():
@@ -107,7 +125,7 @@ func get_next_ressource_updater():
 	if curr_path_pos+2 >= path.size():
 		return null
 	var updater = path[curr_path_pos+2]
-	if updater.get_filename().find("RessourceUpdater") >= 0:
+	if is_ressource_updater(updater):
 		return updater
 	else:
 		return null
@@ -116,13 +134,31 @@ func get_next_ressource_updater():
 func reached_house():
 	# move pandas inventory to house
 	inventory.move_to_other(map.blocks[home_pos].inventory)
+	var soll = expected_inventory.inventory
+	var ist = map.blocks[home_pos].inventory.inventory
+	var d = {}
+	for res in ist:
+		d[res] = ist[res]
+	for res in soll:
+		if d.has(res):
+			d[res] -= soll[res]
+		else:
+			d[res] - soll[res]
+	for res in d:
+		map.blocks[home_pos].scheduled_inventory.add(res, d[res])
+		# TODO Live update PathMakers path[3]
+		for next_inventory in next_expected_inventories:
+			next_inventory.add(res, d[res])
+		#map.blocks[home_pos].scheduled_inventory.update()
 	
 	curr_path_pos = 0
 	# when he is scheduled to change path
 	if next_paths.size() > 0:
 		path = next_paths.pop_front()
+		expected_inventory = next_expected_inventories.pop_front()
 	else:
 		path = null
+		expected_inventory = null
 		$Particles_sleeping.emitting = true
 		update_sprite(Vector2(1,1))
 	
@@ -170,12 +206,14 @@ func stop_particles():
 	.stop_particles()
 	$Particles_sleeping.emitting = false
 	
-func set_path(path):
+func set_path(path, expected_inventory_after_path):
 	print("Set path " + str(path))
 	if self.path == null:
 		self.path = path
+		self.expected_inventory = expected_inventory_after_path
 	else:
 		next_paths.append(path)
+		next_expected_inventories.append(expected_inventory_after_path)
 
 func can_gather():
 	return true

@@ -60,9 +60,9 @@ func init():
 		ressource.small = true
 		
 		ressource.value = value
-			
+		
+		ressource.show_max_value = show_max
 		if show_max and ressources_max.has(ressource_name):
-			ressource.show_max_value = true
 			ressource.max_value = ressources_max[ressource_name]
 		
 		ressource.set_name(ressource_name)
@@ -87,20 +87,20 @@ func init():
 		$Box/Ressources.rect_position.x = 1
 
 func update():
-	var i = 0
 	for ressource_name in ressources:
 		var node = $Box/Ressources.get_node(ressource_name)
 		node.value = ressources[ressource_name]
 		node.update()
-		i += 1
 
 ###################################
 ### Special initializers
 
 func set_max_from_inventory(inventory):
 	show_max = true
-	ressources_max = {}
-	for ressource in ressources:
+	ressources = {}
+	ressources_max = {"bamboo":0,"stone":0,"leaves":0}
+	for ressource in ressources_max:
+		ressources[ressource] = 0
 		ressources_max[ressource] = inventory.get(ressource)
 	return self
 		
@@ -134,7 +134,7 @@ func set_from_wip_block(inventory, block):
 	for ressource in block.inventory.maximums:
 		var still_needed = block.inventory.get_max(ressource) - block.inventory.get(ressource)
 		ressources[ressource] = min(still_needed, inventory.get(ressource))
-		ressources_max[ressource] = min(still_needed, inventory.get(ressource))
+		ressources_max[ressource] = ressources[ressource]
 
 	show_max = true
 	show_when_0 = true

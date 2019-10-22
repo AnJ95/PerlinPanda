@@ -37,14 +37,12 @@ func increase_fire_level(add):
 		if map.blocks.has(cell_pos):
 			map.blocks[cell_pos].got_burned_to_the_ground()
 		map.landscapes[cell_pos].got_burned_to_the_ground()
-		var block = null
 		queue_free()
 		
 	update_visuals()
 	
 func extinguish():
 	map.landscapes[cell_pos].extinguished_fire()
-	var block = null
 	if map.blocks.has(cell_pos):
 		map.blocks[cell_pos].extinguished_fire()
 	queue_free()

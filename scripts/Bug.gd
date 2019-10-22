@@ -58,7 +58,6 @@ func rests():
 		
 func get_next_target():
 	var cell_pos = map.calc_closest_tile_from(position)
-	var day_bonus = map.weather.get_day_bonus()
 	var valid = []
 	var bamboo = []
 	var home = null

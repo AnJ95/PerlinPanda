@@ -181,7 +181,6 @@ func got_burned_to_the_ground():
 
 ################################################
 ### INVENTORY
-onready var inventoryClass = preload("res://scenes/Inventory.tscn")
 var inventory
 var scheduled_inventory
 
@@ -192,6 +191,6 @@ func has_inventory():
 	return false
 func inventory_max_values():
 	return {}
-func notify_inventory_increase(ressource, amount):
+func notify_inventory_increase(_ressource, _amount):
 	pass
 

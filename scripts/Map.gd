@@ -33,8 +33,6 @@ var landscapes = {}
 var cell_infos = {}
 var tick_time_left = 0
 
-var gfix
-
 # Nodes
 onready var map_landscape:TileMap = $Navigation2D/MapLandscape
 onready var map_blocks:TileMap = $Navigation2D/MapBlocks

@@ -54,9 +54,7 @@ func _process(delta:float):
 func is_storming():
 	return storm_level > 0.6
 func process_storm(delta, storm_level):
-	var cut_storm_level = y(is_storming(), storm_level, 0)
 	set_particle_amount(stormClouds, y(is_storming(), interpol(0.6, 1.0, storm_level, 10, 20), 0))
-	
 	process_lightning(delta, storm_level)
 
 func is_raining():
@@ -92,7 +90,7 @@ func set_particle_amount(particle:Particles2D, amount:int):
 		particle_duplicates[particle] = [particle]
 		particle.amount = particle_min_delta
 		# add n-1
-		for p in range(0, particles_max, particle_min_delta):
+		for _p in range(0, particles_max, particle_min_delta):
 			var dupl = particle.duplicate()
 			particle_duplicates[particle].append(dupl)
 			$Center.add_child(dupl)

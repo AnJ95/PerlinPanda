@@ -37,5 +37,5 @@ func has_inventory():
 	return true
 func inventory_max_values():
 	return {}
-func notify_inventory_increase(ressource, amount):
+func notify_inventory_increase(_ressource, _amount):
 	pass

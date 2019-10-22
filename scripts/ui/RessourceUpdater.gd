@@ -119,7 +119,6 @@ func add_to_inventory(inventory):
 	return self
 	
 func set_from_ressource_block(block):
-	var ressource_name = block.ressource_name_or_null()
 	ressources = {block.ressource_name_or_null():1}
 
 	show_max = false

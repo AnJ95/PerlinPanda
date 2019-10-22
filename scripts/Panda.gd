@@ -143,7 +143,7 @@ func reached_house():
 		if d.has(res):
 			d[res] -= soll[res]
 		else:
-			d[res] - soll[res]
+			d[res] = -soll[res]
 	for res in d:
 		map.blocks[home_pos].scheduled_inventory.add(res, d[res])
 		# TODO Live update PathMakers path[3]

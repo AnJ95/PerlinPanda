@@ -112,7 +112,7 @@ func get_sprite_wiggle_amp_freq():
 func max_inventory():
 	return {}
 
-func notify_inventory_increase(ressource, amount):
+func notify_inventory_increase(_ressource, _amount):
 	pass
 
 	

@@ -11,7 +11,7 @@ func get_max_var():
 	return 4
 
 var last_water_height = -1
-func time_update(time:float):
+func time_update(_time:float):
 	var water_height = map.weather.get_sea_level()
 	
 	# if water rising and above threshold

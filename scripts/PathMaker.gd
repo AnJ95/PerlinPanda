@@ -3,6 +3,12 @@ extends Node
 export var map_node_path:String = "/root/Scene/Map"
 onready var map = get_node(map_node_path)
 
+onready var RessourceUpdater = preload("res://scenes/ui/RessourceUpdater.tscn")
+var updaters = {}
+
+onready var Inventory = preload("res://scenes/Inventory.tscn")
+var inventory
+
 var active:bool = false
 var panda
 var path = []
@@ -34,8 +40,13 @@ func _input(event: InputEvent):
 		var rect = get_viewport().get_visible_rect().size
 		var cam = get_parent().get_node("Camera2D")
 		
+		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
+		var hovered_cell = map.calc_closest_tile_from(click_pos)
+		for updater in updaters:
+			updaters[updater].visible = updater == hovered_cell
+		
 		# if panda in range: show its line
-		var other = get_panda_in_range((event.position - rect / 2) * cam.zoom + cam.offset)
+		var other = get_panda_in_range(click_pos)
 		if other != null:
 			
 			if other.line != null:
@@ -85,11 +96,23 @@ func add_to_current_path(this_tile):
 	if !active or !panda or path.size() == 0:
 		printerr("IllegalStateException: add_to_current_path() before try_start_path() worked")
 		
-	var last_tile = path[path.size()-1]
+	var last_tile = get_last_cell_pos()
 	
 	if is_valid_next(last_tile, this_tile):
 		var just_ended_path = false
+		
+		# add position
 		path.append(this_tile)
+		
+		# add RessourceUpdater and change inventory
+		if map.blocks.has(this_tile):
+			var block = map.blocks[this_tile]
+			var ressource_name = block.ressource_name_or_null()
+			if ressource_name != null:
+				var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(block)
+				path.append(true)
+				path.append(ressourceUpdater)
+				
 		 
 		if this_tile == path[0]:
 			done_with_path()
@@ -97,17 +120,34 @@ func add_to_current_path(this_tile):
 		update_preview()
 		
 		return just_ended_path
+	#else:
+	#	var Lightning = load("res://scenes/lightning.tscn")
+	#	var lightning = Lightning.instance().init(map, this_tile)
+	#	map.get_node("Navigation2D/ParticleHolder").add_child(lightning)
 
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))
 
 func update_preview():
 	map.map_overlay.clear()
+	
+	# unparent all RessourceUpdaters
+	for updater in updaters:
+		map.get_node("Navigation2D/UIHolder").remove_child(updaters[updater])
+	updaters = {}
+	
+	# reset inventory
+	if inventory != null:
+		inventory.queue_free()
+	inventory = Inventory.instance().init(null, true, {}, {})
+	
+	# show regular stuff if not active
 	if !active:
 		$Line2D.hide()
 		map.show_homes()
 		return
-	var cur_tile = path[path.size()-1]
+		
+	var cur_tile = get_last_cell_pos()
 	
 	for that_tile in map.get_adjacent_tiles(cur_tile):
 		# if valid adjacent tile
@@ -131,15 +171,30 @@ func update_preview():
 			var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
 			map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 				
-	for cur_tile in path:
-		var tile_id_offset = map.cell_infos[cur_tile].height * map.layer_offset
-		# dont override the "goal" or "walk" overlay
-		if map.map_overlay.get_cellv(cur_tile) != tile_ids.home_end + tile_id_offset and map.map_overlay.get_cellv(cur_tile) != tile_ids.walk + tile_id_offset:
-			map.map_overlay.set_cellv(cur_tile, tile_ids.path + tile_id_offset)
+	var last_cell_pos = null
+	for path_elem in path:
+		if path_elem is Vector2:
+			var tile_id_offset = map.cell_infos[path_elem].height * map.layer_offset
+			# dont override the "goal" or "walk" overlay
+			if map.map_overlay.get_cellv(path_elem) != tile_ids.home_end + tile_id_offset and map.map_overlay.get_cellv(path_elem) != tile_ids.walk + tile_id_offset:
+				map.map_overlay.set_cellv(path_elem, tile_ids.path + tile_id_offset)
+			last_cell_pos = path_elem
+		elif path_elem is bool:
+			last_cell_pos=last_cell_pos
+		elif path_elem.get_filename() == RessourceUpdater.get_path():
+			if path_elem.get_parent() == null:
+				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -50)
+				map.get_node("Navigation2D/UIHolder").add_child(path_elem)
+				updaters[last_cell_pos] = path_elem
+				
+				path_elem.add_to_inventory(inventory)
+				
+			
 	
 	var pts = []
 	for cell in path:
-		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
+		if cell is Vector2:
+			pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
 	$Line2D.points = PoolVector2Array(pts)
 	$Line2D.show()
 	
@@ -158,13 +213,16 @@ func done_with_path():
 		get_parent().get_node("Map/Navigation2D/PathHolder").add_child(panda.line)
 		panda.line.points = PoolVector2Array()
 	
+	inventory.move_to_other(map.blocks[panda.home_pos].scheduled_inventory)
+	
 	panda.line.modulate = Color(panda.line.modulate.r, panda.line.modulate.g, panda.line.modulate.b, 0.6)
 	var pts = Array(panda.line.points)
 	# only at start of path, to prevent popFront too early
 	if pts.size() == 0:
 		pts.push_front(map.map_overlay.map_to_world(path[0]) + Vector2(0, map.cell_infos[path[0]].height * map.layer_px_dst))
 	for cell in path:
-		pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
+		if cell is Vector2:
+			pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
 	
 	panda.line.points = PoolVector2Array(pts)
 	
@@ -172,7 +230,8 @@ func done_with_path():
 func try_start_path_from(panda):
 		active = true
 		self.panda = panda
-		path = [panda.home_pos]
+		var ressourceUpdater = RessourceUpdater.instance().set_max_from_inventory(map.blocks[panda.home_pos].scheduled_inventory)
+		path = [panda.home_pos, true, ressourceUpdater]
 		panda.stop_particles()
 		update_preview()
 		return
@@ -181,6 +240,15 @@ func cancel():
 	if active:
 		active = false
 		update_preview()
+		
+func get_last_cell_pos():
+	var last_tile_id = path.size()-1
+	while !path[last_tile_id] is Vector2:
+		last_tile_id -= 1
+	return path[last_tile_id]
+	
+func notify_inventory_increase(_ressource, _add):
+	pass
 			
 func y(c, a, b):
 	if c:

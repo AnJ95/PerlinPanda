@@ -23,6 +23,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	# Inventory
 	if has_inventory():
 		inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		scheduled_inventory = inventory.duplicate()
 		inventory.position = map.calc_px_pos_on_tile(cell_pos)
 		map.get_node("Navigation2D/UIHolder").call_deferred("add_child", inventory)
 	
@@ -180,6 +181,7 @@ func got_burned_to_the_ground():
 ### INVENTORY
 onready var inventoryClass = preload("res://scenes/Inventory.tscn")
 var inventory
+var scheduled_inventory
 
 # Overrides
 func has_inventory():

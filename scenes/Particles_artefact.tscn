@@ -41,11 +41,10 @@ scale_random = 0.32
 color_ramp = SubResource( 2 )
 
 [node name="Particles_artefact" type="Particles2D"]
-position = Vector2( -687.096, -34.0709 )
 rotation = -1.5708
 amount = 7
 lifetime = 3.0
-visibility_rect = Rect2( -200, -200, 250, 250 )
+visibility_rect = Rect2( -800, -800, 1600, 1600 )
 process_material = SubResource( 3 )
 texture = ExtResource( 1 )
 
@@ -55,7 +54,7 @@ amount = 30
 lifetime = 3.0
 one_shot = true
 explosiveness = 0.73
-visibility_rect = Rect2( -200, -200, 250, 250 )
+visibility_rect = Rect2( -800, -800, 1600, 1600 )
 process_material = SubResource( 4 )
 texture = ExtResource( 1 )
 

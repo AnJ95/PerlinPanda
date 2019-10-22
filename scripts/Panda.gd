@@ -18,6 +18,7 @@ var show_start_anim
 var start_anim_target
 
 
+
 func prep(map, cell_pos, cell_info):
 	.init(map)
 	self.home_pos3 = Vector3(cell_pos.x, cell_pos.y, cell_info.height)
@@ -34,9 +35,6 @@ func _ready():
 		show_start_anim = true
 		start_anim_target = home_pos
 		position = (home_pos +Vector2(800, 0)).rotated(randi()%360)
-
-func inventory_emptied(res_name, value): # TODO DELME
-	ressourceManager.add_ressource(res_name, value)
 
 func _process(delta: float) -> void:
 	._process(delta)
@@ -74,7 +72,6 @@ func _process(delta: float) -> void:
 			bug.stepped_on(self)
 
 
-
 func reached_cell():
 	var arr = Array(line.points)
 	arr.pop_front()
@@ -96,9 +93,13 @@ func reached_cell():
 	# when panda walked full circle
 	if curr_path_pos == path.size():
 		reached_house()
+	else:
+		while !path[curr_path_pos] is Vector2:
+			curr_path_pos += 1 # TODO perform actions here
+	
 
 func reached_house():
-	# move pandas inventory to global ressources
+	# move pandas inventory to house
 	inventory.move_to_other(map.blocks[home_pos].inventory)
 	
 	curr_path_pos = 0

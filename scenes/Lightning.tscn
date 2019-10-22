@@ -18,4 +18,5 @@ frame = 2
 [node name="Light2D" type="Light2D" parent="."]
 scale = Vector2( 40, 40 )
 texture = ExtResource( 3 )
+energy = 0.8
 

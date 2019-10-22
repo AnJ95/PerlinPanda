@@ -22,12 +22,15 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	# Inventory
 	if has_inventory():
-		inventory = load("res://scenes/Inventory.tscn").instance()
-		adjust_inventory(inventory)
-		inventory.init(self, true, {}, inventory_max_values())
-		scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		var Inventory = load("res://scenes/Inventory.tscn")
+		inventory = Inventory.instance()
+		inventory = adjust_inventory(inventory).init(self, true, {}, inventory_max_values())
 		inventory.position = map.calc_px_pos_on_tile(cell_pos) - Vector2(0, 100)
 		map.get_node("Navigation2D/UIHolder").call_deferred("add_child", inventory)
+		
+		scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		
+		
 	
 	# Particles
 	particle_inst = get_particle_instance_or_null()
@@ -149,6 +152,8 @@ func remove():
 		fire_or_null.extinguish()
 	if particle_inst != null:
 		particle_inst.queue_free()
+	if has_inventory():
+		inventory.queue_free()
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)
 
@@ -185,8 +190,8 @@ var inventory
 var scheduled_inventory
 
 # Overrides
-func adjust_inventory(_inventory):
-	pass
+func adjust_inventory(inventory):
+	return inventory
 func has_inventory():
 	return false
 func inventory_max_values():

@@ -4,12 +4,9 @@ signal ressource_changed(ressource_name, value)
 signal island_restored()
 
 export var ressources = {
-	"bamboo": 10,
-	"stone": 10,
-	"leaves": 0,
-	"population": 0,
 	"artefacts" : 0,
-	"artefacts_max" : 0
+	"artefacts_max" : 0,
+	"population" : 0
 }
 
 var level = 0
@@ -18,9 +15,6 @@ var ressources_gathered = 0
 var time = 0
 
 func reset():
-	set_ressource("bamboo", 0)
-	set_ressource("stone", 0)
-	set_ressource("leaves", 0)
 	set_ressource("population", 0)
 	set_ressource("artefacts", 0)
 	set_ressource("artefacts_max", 0)

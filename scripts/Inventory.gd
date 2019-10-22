@@ -86,6 +86,7 @@ func update_view():
 
 		var node = get_node("Inventory_" + res)
 		node.show_max_value = show_max
+		node.max_value = get_max(res)
 		node.visible = val > 0 or (show_if_0 and get_max(res) > 0)
 			
 		node.rect_position.y = - (num_visible-1)*30

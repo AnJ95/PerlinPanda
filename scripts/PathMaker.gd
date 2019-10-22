@@ -68,7 +68,6 @@ func _unhandled_input(event: InputEvent):
 	var buildMgr = get_parent().get_node("BuildManager")
 	if buildMgr.input(event):
 		if active:
-			print("CANCEL")
 			cancel()
 		return
 
@@ -114,44 +113,46 @@ func add_to_current_path(this_tile):
 		# add RessourceUpdater and change inventory
 		if map.blocks.has(this_tile):
 			var block = map.blocks[this_tile]
-			
-			var ressource_name = block.ressource_name_or_null()
-			if ressource_name != null:
-				var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(block)
-				path.append(true)
-				path.append(ressourceUpdater)
+			if block.ressource_name_or_null() != null:						add_ressource_to_current_path(block)
+			if block.get_class() == "BlockWIP":								add_block_wip_to_current_path(block)
+			if block.get_class() == "BlockHouse" and this_tile != path[0]:	add_foreign_house_to_current_path(block)
 				
-			if block.get_class() == "BlockWIP":
-				var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
-				for res in ressourceUpdater.ressources_max:
-					var missing = block.inventory.get_max(res) - inventory.get(res)
-					var more_available = path[2].ressources_max[res] - path[2].ressources[res]
-					var taking = min(missing, more_available)
-					
-					# take more from start
-					path[2].ressources[res] += taking
-					path[2].update()
-					
-					# update this blocks RessourceChanger
-					ressourceUpdater.ressources[res] += taking
-					ressourceUpdater.ressources_max[res] += taking
-					#ressourceUpdater.update()
-					
-				path.append(true)
-				path.append(ressourceUpdater)
-				
-		 
 		if this_tile == path[0]:
 			done_with_path()
 			just_ended_path = true
+			
 		update_preview()
 		
 		return just_ended_path
-	#else:
-	#	var Lightning = load("res://scenes/lightning.tscn")
-	#	var lightning = Lightning.instance().init(map, this_tile)
-	#	map.get_node("Navigation2D/ParticleHolder").add_child(lightning)
+		
+func add_ressource_to_current_path(block):
+	var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(block)
+	path.append(true)
+	path.append(ressourceUpdater)
 
+func add_block_wip_to_current_path(block):
+	var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
+	for res in ressourceUpdater.ressources_max:
+		var missing = block.inventory.get_max(res) - inventory.get(res)
+		var more_available = path[2].ressources_max[res] - path[2].ressources[res]
+		var taking = min(missing, more_available)
+		
+		# take more from start
+		path[2].ressources[res] += taking
+		path[2].update()
+		
+		# update this blocks RessourceChanger
+		ressourceUpdater.ressources[res] += taking
+		ressourceUpdater.ressources_max[res] += taking
+		#ressourceUpdater.update()
+	path.append(true)
+	path.append(ressourceUpdater)
+	
+func add_foreign_house_to_current_path(_block):
+	var ressourceUpdater = RessourceUpdater.instance().set_value_and_max_from_inventory(inventory).set_max_from_inventory(inventory)
+	path.append(true)
+	path.append(ressourceUpdater)
+				
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))
 
@@ -163,19 +164,20 @@ func update_preview():
 		map.get_parent().get_node("MapControls").remove_child(updaters[updater])
 	updaters = {}
 	
-	# reset inventory
-	if inventory != null:
-		inventory.queue_free()
-	inventory = Inventory.instance().init(null, true, {}, {})
-	
 	# show regular stuff if not active
 	if !active:
 		$Line2D.hide()
 		map.show_homes()
 		return
 		
+	update_overlay()
+	update_line()
+	update_inventory()
+	p("Expected panda inventory is " + str(inventory.inventory))
+
+func update_overlay():
 	var cur_tile = get_last_cell_pos()
-	
+	# visualize walking possibilities
 	for that_tile in map.get_adjacent_tiles(cur_tile):
 		# if valid adjacent tile
 		if is_valid_next(cur_tile, that_tile):
@@ -197,27 +199,16 @@ func update_preview():
 			# set calculated tile id
 			var tile_id_offset = map.cell_infos[that_tile].height * map.layer_offset
 			map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
-				
-	var last_cell_pos = null
+	
+	# visualize path until now
 	for path_elem in path:
 		if path_elem is Vector2:
 			var tile_id_offset = map.cell_infos[path_elem].height * map.layer_offset
 			# dont override the "goal" or "walk" overlay
 			if map.map_overlay.get_cellv(path_elem) != tile_ids.home_end + tile_id_offset and map.map_overlay.get_cellv(path_elem) != tile_ids.walk + tile_id_offset:
 				map.map_overlay.set_cellv(path_elem, tile_ids.path + tile_id_offset)
-			last_cell_pos = path_elem
-		elif path_elem is bool:
-			last_cell_pos=last_cell_pos
-		elif path_elem.get_filename() == RessourceUpdater.get_path():
-			if path_elem.get_parent() == null:
-				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -40)
-				map.get_parent().get_node("MapControls").add_child(path_elem)
-				updaters[last_cell_pos] = path_elem
-				
-				path_elem.add_to_inventory(inventory)
-				
 			
-	
+func update_line():
 	var pts = []
 	for cell in path:
 		if cell is Vector2:
@@ -225,6 +216,26 @@ func update_preview():
 	$Line2D.points = PoolVector2Array(pts)
 	$Line2D.show()
 	
+func update_inventory():
+	# reset inventory
+	if inventory != null:
+		inventory.queue_free()
+	inventory = Inventory.instance().init(null, true, {}, {})
+	
+	var last_cell_pos = null
+	var last_perform_action = true
+	for path_elem in path:
+		if path_elem is Vector2:
+			last_cell_pos = path_elem
+		if path_elem is bool:
+			last_perform_action = path_elem
+		elif panda.is_ressource_updater(path_elem):
+			if path_elem.get_parent() == null:
+				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -40)
+				map.get_parent().get_node("MapControls").add_child(path_elem)
+				updaters[last_cell_pos] = path_elem
+				path_elem.add_to_inventory(inventory)
+				p("adding " + str(inventory.inventory) + "... ")
 
 func cell_pos_not_already_in_path(cell_pos):
 	return !path.has(cell_pos) or cell_pos == path[0]
@@ -233,10 +244,12 @@ func done_with_path():
 	if !active or !panda or path.size() < 3:
 		printerr("IllegalStateException: done_with_path() before try_start_path() worked")
 	active = false
-	
+
 	panda.set_path(path, inventory.clone())
 	
-	# new house inventory = panda inventory - initially taken
+	# new house inventory = old house inventory + panda inventory - initially taken
+	# new house inventory = current house inventory + panda inventory 
+	p(str(map.blocks[panda.home_pos].scheduled_inventory.inventory) + " += " + str(inventory.inventory))
 	inventory.move_to_other(map.blocks[panda.home_pos].scheduled_inventory)
 	for res in path[2].ressources:
 		map.blocks[panda.home_pos].scheduled_inventory.add(res, -path[2].ressources[res])
@@ -291,3 +304,6 @@ func y(c, a, b):
 		return a
 	else:
 		return b
+		
+func p(obj):
+	print("## PathMaker ## " + str(obj))

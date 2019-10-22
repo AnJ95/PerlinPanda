@@ -57,6 +57,7 @@ func get_fire_increase_time():
 func adjust_inventory(inventory):
 	inventory.show_max = true
 	inventory.show_if_0 = true
+	return inventory
 func has_inventory():
 	return true
 func inventory_max_values():

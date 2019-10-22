@@ -54,22 +54,6 @@ func _process(delta: float) -> void:
 	if path == null or path.size() == 0:
 		return
 	
-	# check path	
-	if path[curr_path_pos] is bool:
-		curr_path_pos += 1
-		
-	# take items from house as defined in houses RessourceUpdater
-	var path_elem = path[curr_path_pos]
-	if is_ressource_updater(path_elem):
-		for ressource in path_elem.ressources:
-			var taken = map.blocks[home_pos].inventory.try_take(ressource, path_elem.ressources[ressource])
-			
-			inventory.add(ressource, taken)
-			
-			map.blocks[home_pos].inventory.update_view()
-		curr_path_pos += 1
-	
-			
 	# gather and build, prevent walking if so
 	var speed_factor = calc_speed_factor()
 	var speed = speed_factor * SPEED
@@ -101,6 +85,8 @@ func reached_cell():
 	map.generate_next(reached_cell, 1)
 	last_target = reached_cell
 	
+	curr_path_pos += 1
+	
 	# give blocks and landscapes below their triggers
 	if map.blocks.has(reached_cell):
 		var block = map.blocks[reached_cell]
@@ -110,10 +96,27 @@ func reached_cell():
 		var landscape = map.landscapes[reached_cell]
 		landscape.panda_in_center(self)
 	
-	curr_path_pos += 1
 	# when panda walked full circle
 	if curr_path_pos == path.size():
 		reached_house()
+		return
+	
+	# skip perform_action
+	if path[curr_path_pos] is bool:
+		curr_path_pos += 1
+		
+	# take items from house as defined in houses RessourceUpdater
+	var path_elem = path[curr_path_pos]
+	if is_ressource_updater(path_elem):
+		if reached_cell == home_pos and map.blocks.has(reached_cell):
+			for ressource in path_elem.ressources:
+				var taken = map.blocks[home_pos].inventory.try_take(ressource, path_elem.ressources[ressource])
+				inventory.add(ressource, taken)
+				map.blocks[home_pos].inventory.update_view()
+		curr_path_pos += 1
+		
+	
+
 	
 func perform_next_action():
 	if curr_path_pos+1 >= path.size():
@@ -132,10 +135,15 @@ func get_next_ressource_updater():
 	 
 
 func reached_house():
+	
+	var soll = expected_inventory.inventory
+	var ist = inventory.clone().inventory
+	
 	# move pandas inventory to house
 	inventory.move_to_other(map.blocks[home_pos].inventory)
-	var soll = expected_inventory.inventory
-	var ist = map.blocks[home_pos].inventory.inventory
+	
+	print("###")
+	print(str(soll) + " -> " + str(ist))
 	var d = {}
 	for res in ist:
 		d[res] = ist[res]
@@ -145,12 +153,18 @@ func reached_house():
 		else:
 			d[res] = -soll[res]
 	for res in d:
+		if d[res] != 0:
+			print("D IS " + str(d[res]))
 		map.blocks[home_pos].scheduled_inventory.add(res, d[res])
 		# TODO Live update PathMakers path[3]
 		for next_inventory in next_expected_inventories:
 			next_inventory.add(res, d[res])
 		#map.blocks[home_pos].scheduled_inventory.update()
 	
+	next_path()
+	
+		
+func next_path():
 	curr_path_pos = 0
 	# when he is scheduled to change path
 	if next_paths.size() > 0:
@@ -206,14 +220,24 @@ func stop_particles():
 	.stop_particles()
 	$Particles_sleeping.emitting = false
 	
-func set_path(path, expected_inventory_after_path):
-	print("Set path " + str(path))
+func set_path(path, expected_inventory):
+	print("Set path " + str(path) + ", expected panda inventory is" + str(expected_inventory.inventory))
 	if self.path == null:
 		self.path = path
-		self.expected_inventory = expected_inventory_after_path
+		self.expected_inventory = expected_inventory
 	else:
 		next_paths.append(path)
-		next_expected_inventories.append(expected_inventory_after_path)
+		next_expected_inventories.append(expected_inventory)
+
+func get_last_expected_inventory():
+	if next_expected_inventories == null or next_expected_inventories.size() == 0:
+		if expected_inventory == null:
+			return null
+		return expected_inventory
+	else:
+		return next_expected_inventories[next_expected_inventories.size()-1]
+		
+		
 
 func can_gather():
 	return true

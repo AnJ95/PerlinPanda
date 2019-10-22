@@ -71,7 +71,7 @@ func get_next_target():
 			bamboo.append(adjacent)
 	
 	var target
-	if rests() and home != null and inventory.has("bamboo", 1) and inventory.bamboo > 0:
+	if rests() and home != null and inventory.has("bamboo", 1) and inventory.get("bamboo") > 0:
 		target = home
 	else:
 		if collects() and bamboo.size() > 0 and !inventory.has("bamboo", 1):

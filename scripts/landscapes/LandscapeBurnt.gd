@@ -17,6 +17,8 @@ func init(map, cell_pos, cell_info, args, nth):
 		if !map.lex.landscape_scripts.has(landscape_before):
 			printerr("Invalid class name of Landscape before LandscapeBurnt: " + map.landscapes[cell_pos].get_class()) 
 			landscape_before = "grass"
+		if landscape_before == "grass":
+			landscape_before += "_durability_" + str(randi()%2 + 3)
 
 	return self
 	

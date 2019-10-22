@@ -102,7 +102,7 @@ func tick():
 	if ressource_name_or_null() != null and randi()%100 <= get_stack_increase_prob():
 		var stock_before = stock
 		increase_stock()
-		print("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
+		map.p("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
 	
 func get_max_stock():
 	return 0
@@ -153,6 +153,7 @@ func remove():
 	if particle_inst != null:
 		particle_inst.queue_free()
 	if has_inventory():
+		print("erasing")
 		inventory.queue_free()
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)

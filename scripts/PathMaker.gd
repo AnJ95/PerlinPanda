@@ -83,13 +83,15 @@ func _unhandled_input(event: InputEvent):
 		
 		var clicked_panda = get_panda_in_range(click_pos)
 		var just_ended_path = false
+		
+		
 		if active and clicked_tile != null:
-			if clicked_panda == null or panda == clicked_panda:
+			if clicked_panda == null or panda == clicked_panda or is_valid_next(get_last_cell_pos(), clicked_tile):
 				just_ended_path = add_to_current_path(clicked_tile)
 			else:
 				cancel()
 				
-		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda): #start new
+		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda) and (!active or is_valid_next(get_last_cell_pos(), clicked_tile)): #start new
 			try_start_path_from(clicked_panda)
 				
 func get_panda_in_range(click_pos):
@@ -148,8 +150,9 @@ func add_block_wip_to_current_path(block):
 	path.append(true)
 	path.append(ressourceUpdater)
 	
-func add_foreign_house_to_current_path(_block):
-	var ressourceUpdater = RessourceUpdater.instance().set_value_and_max_from_inventory(inventory).set_max_from_inventory(inventory)
+func add_foreign_house_to_current_path(block):
+	var ressourceUpdater = RessourceUpdater.instance().set_from_foreign_house(inventory, block)
+	
 	path.append(true)
 	path.append(ressourceUpdater)
 				
@@ -244,15 +247,15 @@ func done_with_path():
 	if !active or !panda or path.size() < 3:
 		printerr("IllegalStateException: done_with_path() before try_start_path() worked")
 	active = false
-
-	panda.set_path(path, inventory.clone())
+	
+	print(inventory.inventory)
+	panda.add_path(path, inventory.clone())
 	
 	# new house inventory = old house inventory + panda inventory - initially taken
-	# new house inventory = current house inventory + panda inventory 
-	p(str(map.blocks[panda.home_pos].scheduled_inventory.inventory) + " += " + str(inventory.inventory))
-	inventory.move_to_other(map.blocks[panda.home_pos].scheduled_inventory)
+	var house = map.blocks[panda.home_pos]
+	inventory.move_to_other(house.scheduled_inventory)
 	for res in path[2].ressources:
-		map.blocks[panda.home_pos].scheduled_inventory.add(res, -path[2].ressources[res])
+		house.scheduled_inventory.add(res, -path[2].ressources[res])
 	
 	if panda.line == null:
 		panda.line = $Line2D.duplicate()
@@ -306,4 +309,5 @@ func y(c, a, b):
 		return b
 		
 func p(obj):
-	print("## PathMaker ## " + str(obj))
+	if map.print_path_maker:
+		print("## PathMaker ## " + str(obj))

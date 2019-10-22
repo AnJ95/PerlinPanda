@@ -21,8 +21,8 @@ func init(subscriber, active, start_inventory, max_inventory):
 
 func clone():
 	var dupl = duplicate()
-	dupl.inventory = {}
-	dupl.maximums = {}
+	dupl.inventory = {"bamboo":0, "stone":0, "leaves":0}
+	dupl.maximums = {"bamboo":ABS_MAX, "stone":ABS_MAX, "leaves":ABS_MAX}
 	for res in inventory:
 		dupl.inventory[res] = inventory[res]
 	for res in maximums:
@@ -97,5 +97,8 @@ func update_view():
 func move_to_other(other_inventory):
 	for res in inventory:
 		var has = try_get(res, ABS_MAX)
-		var can_get = other_inventory.get_max(res)
+		var can_get = other_inventory.get_max(res) - other_inventory.get(res)
 		other_inventory.add(res, try_take(res, min(has, can_get)))
+		
+func _to_string():
+	return "Inventory(" + str(inventory) + " / " + str(maximums) + ")"

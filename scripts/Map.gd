@@ -8,6 +8,13 @@ export var show_case_map_in_editor = true
 export var show_case_size:int = 30
 export var is_preset = false
 
+# What to print and what not
+export var debug_mode = false
+
+export var print_ticking = false
+export var print_path_maker = false
+export var print_panda_pathing = false
+
 # Consts
 export var tile_cols:int = 6
 export var tile_rows:int = 8
@@ -119,7 +126,7 @@ func _ready():
 					too_close = true
 				iterations += 1
 			if (iterations >= 10000):
-				printerr("Too many iterations in map gen!")
+				printerr("## Map ## Too many iterations in map gen!")
 			# if loop done: result in next_pos & next_rad
 			map_generation_circles.append([next_pos, next_rad])
 			
@@ -206,12 +213,13 @@ func _process(delta:float):
 		if has_block:
 			block = blocks[cell]
 		
-		var print_txt = "ticking after " + str(avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())) + "secs "
-		print_txt += str(landscape.get_class()) + " "
-		if has_block:
-			print_txt += block.get_class()+ " "
-		print_txt += " @ " + str(cell) + " time " + str(time) + ""
-		print(print_txt)
+		if print_ticking:
+			var print_txt = "ticking after " + str(avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())) + "secs "
+			print_txt += str(landscape.get_class()) + " "
+			if has_block:
+				print_txt += block.get_class()+ " "
+			print_txt += " @ " + str(cell) + " time " + str(time) + ""
+			p(print_txt)
 		
 		if !has_block or !blocks[cell].prevents_landscape_tick():
 			landscape.tick()
@@ -249,7 +257,7 @@ func generate_next(from:Vector2, rd:float):
 				generate_tile(pos)
 	
 func generate_preset_tile(map_pos, landscape_id, block_id):
-	print("loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
+	print("## Map ## loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
 	
 	cell_infos[map_pos].height = landscape_id / layer_offset
 	landscape_id %= layer_offset
@@ -307,9 +315,18 @@ func set_landscape_by_descriptor(cell_pos:Vector2, descriptor:String):
 	pass
 	
 func set_block_by_tile_id(cell_pos:Vector2, tile_id:int):
+	# Clear first
+	if blocks.has(cell_pos):
+		blocks[cell_pos].remove()
+		
 	var info = lex.get_info_on_block_tile_id(tile_id)
 	blocks[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
+	
 func set_block_by_descriptor(cell_pos:Vector2, descriptor:String):
+	# Clear first
+	if blocks.has(cell_pos):
+		blocks[cell_pos].remove()
+		
 	var info = lex.get_info_on_block_descriptor(descriptor)
 	blocks[cell_pos] = info.class.new().init(self, cell_pos, cell_infos[cell_pos], info.args, nth)
 	pass
@@ -490,6 +507,10 @@ func reset_tick_time_left():
 func show_homes():
 	for panda in get_tree().get_nodes_in_group("panda"):
 		map_overlay.set_cellv(panda.home_pos, 0 + layer_offset * cell_infos[panda.home_pos].height)
+
+func p(obj):
+	if print_ticking:
+		print("## Ticking ## " + str(obj))
 		
 static func y(c, a, b):
 	if c:

@@ -34,8 +34,8 @@ func panda_in_center(panda):
 				var still_needed = inventory.get_max(ressource) - inventory.get(ressource)
 				var wanted = updater.ressources[ressource]
 				inventory.add(ressource, panda.inventory.try_take(ressource, min(still_needed, wanted)))
-		else:
-			panda.inventory.move_to_other(inventory)
+		#else: TODO decision: build if BlockWIP was not present at path making?
+		#	panda.inventory.move_to_other(inventory)
 		
 		var all_ressources = true
 		for ressource in inventory.maximums:

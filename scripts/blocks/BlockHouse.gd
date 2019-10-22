@@ -7,6 +7,12 @@ func get_class(): return "BlockHouse"
 func init(map, cell_pos, cell_info, args, nth):
 	.init(map, cell_pos, cell_info, args, nth)
 	
+	# DEBUG STUFF
+	if map.debug_mode:
+		for inv in [inventory, scheduled_inventory]:
+			for res in ["bamboo", "stone", "leaves"]:
+				inv.add(res, 10)
+	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", panda)
@@ -14,6 +20,9 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	map.generate_next(cell_pos, 2)
 	return self
+	
+func panda_in_center(panda):
+	.panda_in_center(panda)
 
 func get_tile_id():
 	return  4

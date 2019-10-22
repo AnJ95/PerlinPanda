@@ -6,7 +6,7 @@ export var show_when_0:bool = true setget set_show_when_0
 export var ressources = {} setget set_ressources
 export var ressources_max = {} setget set_ressources_max
 export var changeable:bool = true setget set_changeable
-
+export var signum:int = 1
 onready var classButton = preload("res://scenes/ui/RessourceUpdaterButton.tscn")
 onready var classRessource = preload("res://scenes/ui/Ressource.tscn")
 
@@ -115,7 +115,7 @@ func set_value_and_max_from_inventory(inventory):
 	
 func add_to_inventory(inventory):
 	for ressource in ressources:
-		inventory.add(ressource, ressources[ressource])
+		inventory.add(ressource, signum*ressources[ressource])
 	return self
 	
 func set_from_ressource_block(block):
@@ -126,6 +126,15 @@ func set_from_ressource_block(block):
 	changeable = false
 	return self
 	
+func set_from_foreign_house(panda_inventory, block):
+	ressources = {}
+	ressources_max = {}
+	for ressource in panda_inventory.inventory:
+		ressources[ressource] = panda_inventory.get(ressource)
+		ressources_max[ressource] = panda_inventory.get_max(ressource)
+	signum = -1
+	return self
+	
 func set_from_wip_block(inventory, block):
 	ressources = {}
 	ressources_max = {}
@@ -134,7 +143,8 @@ func set_from_wip_block(inventory, block):
 		var still_needed = block.inventory.get_max(ressource) - block.inventory.get(ressource)
 		ressources[ressource] = min(still_needed, inventory.get(ressource))
 		ressources_max[ressource] = ressources[ressource]
-
+	
+	signum = -1
 	show_max = true
 	show_when_0 = true
 	changeable = true
@@ -170,4 +180,8 @@ func set_ressources_max(val):
 func set_changeable(val):
 	changeable = val
 	if is_ready: init()
+	
+###################################
+func _to_string():
+	return "RessourceUpdater(" + str(signum) + "*" + str(ressources) + " / " + str(ressources_max) + ")"
 

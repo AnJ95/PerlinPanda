@@ -22,7 +22,9 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	# Inventory
 	if has_inventory():
-		inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+		inventory = load("res://scenes/Inventory.tscn").instance()
+		adjust_inventory(inventory)
+		inventory.init(self, true, {}, inventory_max_values())
 		scheduled_inventory = inventory.duplicate()
 		inventory.position = map.calc_px_pos_on_tile(cell_pos)
 		map.get_node("Navigation2D/UIHolder").call_deferred("add_child", inventory)
@@ -56,7 +58,7 @@ func panda_in_center(panda):
 	if fire_or_null != null:
 		fire_or_null.extinguish()
 	
-	if ressource_name_or_null() != null and stock > 0:
+	if ressource_name_or_null() != null and panda.perform_next_action() and stock > 0:
 		panda.start_working_on_ressource(self)
 
 func get_ressource_amount_after_work_done():
@@ -184,6 +186,8 @@ var inventory
 var scheduled_inventory
 
 # Overrides
+func adjust_inventory(_inventory):
+	pass
 func has_inventory():
 	return false
 func inventory_max_values():

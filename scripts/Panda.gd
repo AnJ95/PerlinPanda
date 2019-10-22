@@ -97,6 +97,21 @@ func reached_cell():
 		while !path[curr_path_pos] is Vector2:
 			curr_path_pos += 1 # TODO perform actions here
 	
+func perform_next_action():
+	if curr_path_pos+1 >= path.size():
+		return true
+	var next = path[curr_path_pos+1]
+	return !next is bool or next == true
+	
+func get_next_ressource_updater():
+	if curr_path_pos+2 >= path.size():
+		return null
+	var updater = path[curr_path_pos+2]
+	if updater.get_filename().find("RessourceUpdater") >= 0:
+		return updater
+	else:
+		return null
+	 
 
 func reached_house():
 	# move pandas inventory to house

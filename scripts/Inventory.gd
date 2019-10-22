@@ -8,6 +8,9 @@ var inventory = {}
 var maximums = {}
 const ABS_MAX = 99
 
+var show_max = false
+var show_if_0 = false
+
 func init(subscriber, active, start_inventory, max_inventory):
 	self.subscriber = subscriber
 	self.active = active
@@ -69,16 +72,14 @@ func update_view():
 		var val = 0
 		if has(res, 1):
 			val = get(res)
-			if val > 0:
-				num_visible += 1
+		if val > 0 or (show_if_0 and get_max(res) > 0):
+			num_visible += 1
 
 		var node = get_node("Inventory_" + res)
-		if val == 0:
-			node.hide()
-			val = 0
-		else:
-			node.show()
-			node.rect_position.y = - (num_visible-1)*30
+		node.show_max_value = show_max
+		node.visible = val > 0 or (show_if_0 and get_max(res) > 0)
+			
+		node.rect_position.y = - (num_visible-1)*30
 	
 		node.value = val
 		node.update()

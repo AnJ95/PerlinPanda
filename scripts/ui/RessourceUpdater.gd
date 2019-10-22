@@ -126,6 +126,20 @@ func set_from_ressource_block(block):
 	show_when_0 = false
 	changeable = false
 	return self
+	
+func set_from_wip_block(inventory, block):
+	ressources = {}
+	ressources_max = {}
+
+	for ressource in block.inventory.maximums:
+		var still_needed = block.inventory.get_max(ressource) - block.inventory.get(ressource)
+		ressources[ressource] = min(still_needed, inventory.get(ressource))
+		ressources_max[ressource] = min(still_needed, inventory.get(ressource))
+
+	show_max = true
+	show_when_0 = true
+	changeable = true
+	return self
 
 ###################################
 func attempt_change(ressource, amount):

@@ -107,9 +107,15 @@ func add_to_current_path(this_tile):
 		# add RessourceUpdater and change inventory
 		if map.blocks.has(this_tile):
 			var block = map.blocks[this_tile]
+			
 			var ressource_name = block.ressource_name_or_null()
 			if ressource_name != null:
 				var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(block)
+				path.append(true)
+				path.append(ressourceUpdater)
+				
+			if block.get_class() == "BlockWIP":
+				var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
 				path.append(true)
 				path.append(ressourceUpdater)
 				

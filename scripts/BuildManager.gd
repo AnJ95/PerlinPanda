@@ -78,13 +78,19 @@ func hide_possible_build_sites():
 		map.map_overlay.set_cellv(pos, -1);
 		
 	map.show_homes()
-
+	
+func get_price_by_block_id(block_id):
+	for buyable in get_tree().get_nodes_in_group("buyable"):
+		if buyable.block_tile_id == block_id:
+			return {"bamboo":buyable.costs_bamboo, "stone":buyable.costs_stone, "leaves":buyable.costs_leaves}
+	
+	
 func buy(map, cell_pos):
 	var selected_building = selected_building_or_null
 	if selected_building != null:
-		ressourceManager.add_ressource("bamboo", -selected_building.costs_bamboo)
-		ressourceManager.add_ressource("stone", -selected_building.costs_stone)
-		ressourceManager.add_ressource("leaves", -selected_building.costs_leaves)
+		#ressourceManager.add_ressource("bamboo", -selected_building.costs_bamboo)
+		#ressourceManager.add_ressource("stone", -selected_building.costs_stone)
+		#ressourceManager.add_ressource("leaves", -selected_building.costs_leaves)
 	
 		# WIP is always under image
 		map.set_block_by_tile_id(cell_pos, selected_building.block_tile_id + map.tile_cols)

@@ -7,7 +7,9 @@
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=5]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=6]
 
-[node name="Buyable" type="ColorRect"]
+[node name="Buyable" type="ColorRect" groups=[
+"buyable",
+]]
 margin_right = 162.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 162, 70 )

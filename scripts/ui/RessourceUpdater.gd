@@ -135,6 +135,15 @@ func set_from_foreign_house(panda_inventory, block):
 	signum = -1
 	return self
 	
+func set_from_smoker(panda_inventory, block):
+	ressources = {}
+	ressources_max = {}
+	ressources["leaves"] = min(panda_inventory.get("leaves"), block.inventory.get_free("leaves"))
+	ressources_max["leaves"] = ressources["leaves"]
+	signum = -1
+	show_when_0 = true
+	return self
+	
 func set_from_wip_block(inventory, block):
 	ressources = {}
 	ressources_max = {}

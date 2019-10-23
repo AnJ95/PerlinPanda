@@ -22,6 +22,14 @@ func ressource_name_or_null():
 	return null
 	
 func time_update(time:float):
+	# start smoking if not before and leaves left
+	if !is_smoking:
+		if inventory.has("leaves", 1):
+			inventory.add("leaves", - 1)
+			is_smoking = true
+			set_particle_emitting(true)
+			smoking_start_time = map.time
+
 	if is_smoking:
 		if time - smoking_start_time > SMOKE_TIME:
 			is_smoking = false
@@ -34,12 +42,11 @@ func time_update(time:float):
 
 func panda_in_center(panda):
 	.panda_in_center(panda)
-	if !is_smoking:
-		if panda.inventory.has("leaves") and panda.inventory.leaves >= 1:
-			panda.add_to_inventory("leaves", -1)
-			is_smoking = true
-			set_particle_emitting(true)
-			smoking_start_time = map.time
+	if panda.home_pos != cell_pos and panda.perform_next_action():
+		var resUpdater = panda.get_next_ressource_updater()
+		var can_get = inventory.get_free("leaves")
+		var taken = panda.inventory.try_take("leaves", min(resUpdater.ressources["leaves"], can_get))
+		inventory.add("leaves", taken)
 
 func get_particle_instance_or_null():
 	return nth.ParticlesSmoke.instance()
@@ -51,6 +58,13 @@ func set_particle_emitting(emit):
 ################################################
 ### FIRE
 func get_prob_fire_catch():
-	return 40
+	return 0
 func get_fire_increase_time():
 	return 4
+	
+################################################
+### INVENTORY
+func has_inventory():
+	return true
+func inventory_max_values():
+	return {"bamboo":0,"stone":0,"leaves":5}

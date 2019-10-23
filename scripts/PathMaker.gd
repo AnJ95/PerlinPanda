@@ -122,6 +122,7 @@ func add_to_current_path(this_tile):
 			if block.ressource_name_or_null() != null:						add_ressource_to_current_path(block)
 			if block.get_class() == "BlockWIP":								add_block_wip_to_current_path(block)
 			if block.get_class() == "BlockHouse" and this_tile != path[0]:	add_foreign_house_to_current_path(block)
+			if block.get_class() == "BlockSmoker" and this_tile != path[0]:	add_smoker_to_current_path(block)
 				
 		if this_tile == path[0]:
 			done_with_path()
@@ -158,6 +159,12 @@ func add_block_wip_to_current_path(block):
 	
 func add_foreign_house_to_current_path(block):
 	var ressourceUpdater = RessourceUpdater.instance().set_from_foreign_house(inventory, block)
+	ressourceUpdater.set_subscriber(self)
+	path.append(true)
+	path.append(ressourceUpdater)
+	
+func add_smoker_to_current_path(block):
+	var ressourceUpdater = RessourceUpdater.instance().set_from_smoker(inventory, block)
 	ressourceUpdater.set_subscriber(self)
 	path.append(true)
 	path.append(ressourceUpdater)

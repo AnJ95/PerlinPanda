@@ -107,7 +107,7 @@ func get_panda_in_range(click_pos):
 func add_to_current_path(this_tile):
 	if !active or !panda or path.size() == 0:
 		printerr("IllegalStateException: add_to_current_path() before try_start_path() worked")
-		
+
 	var last_tile = get_last_cell_pos()
 	
 	if is_valid_next(last_tile, this_tile):
@@ -133,11 +133,13 @@ func add_to_current_path(this_tile):
 		
 func add_ressource_to_current_path(block):
 	var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(inventory, block)
+	ressourceUpdater.set_subscriber(self)
 	path.append(true)
 	path.append(ressourceUpdater)
 
 func add_block_wip_to_current_path(block):
 	var ressourceUpdater = RessourceUpdater.instance().set_from_wip_block(inventory, block)
+	
 	for res in ressourceUpdater.ressources_max:
 		var missing = block.inventory.get_max(res) - block.inventory.get(res)
 		var more_available = path[2].ressources_max[res] - path[2].ressources[res]
@@ -150,13 +152,13 @@ func add_block_wip_to_current_path(block):
 		# update this blocks RessourceChanger
 		ressourceUpdater.ressources[res] += taking
 		ressourceUpdater.ressources_max[res] += taking
-		#ressourceUpdater.update()
+	ressourceUpdater.set_subscriber(self)
 	path.append(true)
 	path.append(ressourceUpdater)
 	
 func add_foreign_house_to_current_path(block):
 	var ressourceUpdater = RessourceUpdater.instance().set_from_foreign_house(inventory, block)
-	
+	ressourceUpdater.set_subscriber(self)
 	path.append(true)
 	path.append(ressourceUpdater)
 				
@@ -165,11 +167,6 @@ func is_valid_next(last_tile, this_tile):
 
 func update_preview():
 	map.map_overlay.clear()
-	
-	# unparent all RessourceUpdaters
-	for updater in updaters:
-		map.get_parent().get_node("MapControls").remove_child(updaters[updater])
-	updaters = {}
 	
 	# show regular stuff if not active
 	if !active:
@@ -235,7 +232,7 @@ func update_inventory():
 	# reset inventory
 	if inventory != null:
 		inventory.queue_free()
-	inventory = Inventory.instance().init(null, true, {}, panda.max_inventory())
+	inventory = Inventory.instance().init(null, true, {"bamboo":0,"stone":0,"leaves":0}, panda.max_inventory())
 	
 	var last_cell_pos = null
 	var last_perform_action = true
@@ -248,9 +245,9 @@ func update_inventory():
 			if path_elem.get_parent() == null:
 				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -40)
 				map.get_parent().get_node("MapControls").add_child(path_elem)
-				updaters[last_cell_pos] = path_elem
-				path_elem.add_to_inventory(inventory)
-				p("adding " + str(inventory.inventory) + "... ")
+			updaters[last_cell_pos] = path_elem
+			path_elem.add_to_inventory(inventory)
+			p("adding " + str(inventory.inventory) + "... ")
 
 func cell_pos_not_already_in_path(cell_pos):
 	return !path.has(cell_pos) or cell_pos == path[0]
@@ -260,7 +257,11 @@ func done_with_path():
 		printerr("IllegalStateException: done_with_path() before try_start_path() worked")
 	active = false
 	
-	print(inventory.inventory)
+	for updater in updaters:
+		if updaters[updater].get_parent() != null:
+			updaters[updater].get_parent().remove_child(updaters[updater])
+	updaters = {}
+		
 	panda.add_path(path, inventory.clone())
 	
 	# new house inventory = old house inventory + panda inventory - initially taken
@@ -290,6 +291,7 @@ func try_start_path_from(panda):
 		active = true
 		self.panda = panda
 		var ressourceUpdater = RessourceUpdater.instance().set_max_from_inventory(map.blocks[panda.home_pos].scheduled_inventory)
+		ressourceUpdater.set_subscriber(self)
 		
 		path = [panda.home_pos, true, ressourceUpdater]
 		panda.stop_particles()
@@ -304,7 +306,8 @@ func cancel():
 		
 		active = false
 		update_preview()
-		
+
+
 func get_last_cell_pos():
 	var last_tile_id = path.size()-1
 	while !path[last_tile_id] is Vector2:
@@ -313,6 +316,9 @@ func get_last_cell_pos():
 	
 func notify_inventory_increase(_ressource, _add):
 	pass
+	
+func ressourceUpdaterChanged():
+	update_preview()
 			
 func y(c, a, b):
 	if c:

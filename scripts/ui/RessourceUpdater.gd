@@ -21,7 +21,6 @@ func _ready():
 	pass
 
 func init():
-	#print($Box/Ressources.rect_size)
 	# clear Ressources first
 	for node in $Box/Ressources.get_children():
 		node.queue_free()
@@ -132,7 +131,7 @@ func set_from_foreign_house(panda_inventory, block):
 	ressources_max = {}
 	for ressource in panda_inventory.inventory:
 		ressources[ressource] = panda_inventory.get(ressource)
-		ressources_max[ressource] = panda_inventory.get_max(ressource)
+		ressources_max[ressource] = panda_inventory.get(ressource)
 	signum = -1
 	return self
 	
@@ -157,9 +156,14 @@ func attempt_change(ressource, amount):
 	if new_amount >= 0 and new_amount <= ressources_max[ressource]:
 		ressources[ressource] += amount
 	update()
-	pass
+
+	if subscriber != null:
+		subscriber.ressourceUpdaterChanged()
 	
-	
+
+var subscriber = null
+func set_subscriber(subscriber):
+	self.subscriber = subscriber
 ###################################
 ### Setgets	
 func set_show_max(val):
@@ -185,4 +189,3 @@ func set_changeable(val):
 ###################################
 func _to_string():
 	return "RessourceUpdater(" + str(signum) + "*" + str(ressources) + " / " + str(ressources_max) + ")"
-

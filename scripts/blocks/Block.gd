@@ -151,7 +151,6 @@ func remove():
 	if particle_inst != null:
 		particle_inst.queue_free()
 	if has_inventory():
-		print("erasing")
 		inventory.queue_free()
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)

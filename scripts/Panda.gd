@@ -117,12 +117,6 @@ func reached_cell():
 						var taken = map.blocks[home_pos].inventory.try_take(ressource, path_elem.ressources[ressource])
 						inventory.add(ressource, taken)
 						map.blocks[home_pos].inventory.update_view()
-				## Foreign House
-				else:
-					for ressource in path_elem.ressources:
-						var taken = inventory.try_take(ressource, path_elem.ressources[ressource])
-						block.inventory.add(ressource, taken)
-						block.inventory.update_view()
 				
 		curr_path_pos += 1
 		

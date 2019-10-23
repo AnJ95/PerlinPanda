@@ -23,6 +23,13 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 func panda_in_center(panda):
 	.panda_in_center(panda)
+	# Foreign House
+	if panda.home_pos != cell_pos and panda.perform_next_action():
+		var resUpdater = panda.get_next_ressource_updater()
+		for ressource in resUpdater.ressources:
+			var taken = panda.inventory.try_take(ressource, resUpdater.ressources[ressource])
+			inventory.add(ressource, taken)
+			inventory.update_view()
 
 func get_tile_id():
 	return  4

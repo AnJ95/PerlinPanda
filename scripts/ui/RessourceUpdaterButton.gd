@@ -27,7 +27,7 @@ func on_gui_input(event:InputEvent):
 			clicked()
 		else:
 			color.a = 0.1
-			
+		
 		get_tree().set_input_as_handled()
 		return true
 	
@@ -38,5 +38,3 @@ func clicked():
 		if is_plus:
 			change = 1
 		ownr.attempt_change(ressource, change)
-
-			

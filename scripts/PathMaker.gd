@@ -8,6 +8,7 @@ var updaters = {}
 
 onready var Inventory = preload("res://scenes/Inventory.tscn")
 var inventory
+var taking_from_home
 
 var active:bool = false
 var panda
@@ -120,23 +121,23 @@ func add_to_current_path(this_tile):
 		if map.blocks.has(this_tile) and this_tile != panda.home_pos:
 			var block = map.blocks[this_tile]
 			var updater = create_ressource_updater(block)
-			
-			if block.get_class() == "BlockWIP":
-				for res in updater.ressources_max:
-					var missing = block.inventory.get_max(res) - block.inventory.get(res)
-					var more_available = path[2].ressources_max[res] - path[2].ressources[res]
-					var taking = max(min(missing, more_available), 0)
-					print(taking)
-					# take more from start
-					path[2].ressources[res] += taking
-					path[2].update()
-					
-					# update this blocks RessourceChanger
-					updater.ressources[res] += taking
-					updater.ressources_max[res] += taking
-					updater.update()
-
 			if updater != null:
+				if updater.signum < 0:
+					for res in updater.ressources_max:
+						var house = map.blocks[panda.home_pos]
+						
+						var missing = block.inventory.get_max(res) - block.inventory.get(res)
+						var in_inv = inventory.get(res)
+						var missing_with_inv = max(missing - in_inv, 0)
+						var in_house = house.inventory.get(res)
+	
+						var taking = min(missing_with_inv, in_house)
+						# take more from start
+						taking_from_home.ressources[res] += taking
+						
+						# update this blocks RessourceChanger
+						updater.ressources[res] += taking
+						updater.update()
 				path.append(true)
 				path.append(updater)
 				
@@ -153,27 +154,20 @@ func create_ressource_updater(block):
 	if block.ressource_name_or_null() != null:							updater = create_ressource_updater_from_ressource(block)
 	if block.get_class() == "BlockWIP":									updater = create_ressource_updater_from_block_wip(block)
 	if block.get_class() == "BlockHouse" and block.cell_pos != path[0]:	updater = create_ressource_updater_from_foreign_house(block)
-	if block.get_class() == "BlockHouse" and block.cell_pos == path[0]:	updater = create_ressource_updater_from_own_house(block)
 	if block.get_class() == "BlockSmoker":								updater = create_ressource_updater_from_smoker(block)
-	
-	if updater != null:
-		updater.set_subscriber(self)
 	return updater
 		
 		
 func create_ressource_updater_from_ressource(block):
-	return RessourceUpdater.instance().set_from_ressource_block(inventory, block)
-	
-
+	return RessourceUpdater.instance().set_from_ressource_block(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
 func create_ressource_updater_from_block_wip(block):
-	return RessourceUpdater.instance().set_from_wip_block(inventory, block)
-	
+	return RessourceUpdater.instance().set_from_wip_block(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
 func create_ressource_updater_from_foreign_house(block):
-	return RessourceUpdater.instance().set_from_foreign_house(inventory, block)
+	return RessourceUpdater.instance().set_from_foreign_house(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
 func create_ressource_updater_from_own_house(block):
-	return RessourceUpdater.instance().set_max_from_inventory(block.scheduled_inventory)
+	return RessourceUpdater.instance().set_from_own_house(inventory, taking_from_home, null, block)
 func create_ressource_updater_from_smoker(block):
-	return RessourceUpdater.instance().set_from_smoker(inventory, block)
+	return RessourceUpdater.instance().set_from_smoker(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
 				
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))
@@ -245,7 +239,7 @@ func update_inventory():
 	# reset inventory
 	if inventory != null:
 		inventory.queue_free()
-	inventory = Inventory.instance().init(null, true, {"bamboo":0,"stone":0,"leaves":0}, panda.max_inventory())
+	inventory = Inventory.instance().init(null, true, {}, panda.max_inventory())
 	
 	var last_cell_pos = null
 	var last_perform_action = true
@@ -256,8 +250,9 @@ func update_inventory():
 			last_perform_action = path_elem
 		elif panda.is_ressource_updater(path_elem):
 			if path_elem.get_parent() == null:
-				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos) - Vector2(path_elem.get_node("Box").rect_size.x / 2.0, -40)
-				map.get_parent().get_node("MapControls").add_child(path_elem)
+				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos)
+				if path_elem.show:
+					map.get_parent().get_node("MapControls").add_child(path_elem)
 							
 			updaters[last_cell_pos] = path_elem
 			path_elem.add_to_inventory(inventory)
@@ -270,7 +265,7 @@ func done_with_path():
 	if !active or !panda or path.size() < 3:
 		printerr("IllegalStateException: done_with_path() before try_start_path() worked")
 	active = false
-	
+
 	for updater in updaters:
 		if updaters[updater].get_parent() != null:
 			updaters[updater].get_parent().remove_child(updaters[updater])
@@ -281,8 +276,8 @@ func done_with_path():
 	# new house inventory = old house inventory + panda inventory - initially taken
 	var house = map.blocks[panda.home_pos]
 	inventory.move_to_other(house.scheduled_inventory)
-	for res in path[2].ressources:
-		house.scheduled_inventory.add(res, -path[2].ressources[res])
+	for res in taking_from_home.ressources:
+		house.scheduled_inventory.add(res, -taking_from_home.ressources[res])
 	
 	if panda.line == null:
 		panda.line = $Line2D.duplicate()
@@ -300,13 +295,11 @@ func done_with_path():
 	
 	panda.line.points = PoolVector2Array(pts)
 	
-	
 func try_start_path_from(panda):
+		taking_from_home = create_ressource_updater_from_own_house(map.blocks[panda.home_pos])
 		active = true
 		self.panda = panda
-		var ressourceUpdater = create_ressource_updater_from_own_house(map.blocks[panda.home_pos])
-		
-		path = [panda.home_pos, true, ressourceUpdater]
+		path = [panda.home_pos, true, taking_from_home]
 		panda.stop_particles()
 		update_preview()
 		return
@@ -320,7 +313,6 @@ func cancel():
 		active = false
 		update_preview()
 
-
 func get_last_cell_pos():
 	var last_tile_id = path.size()-1
 	while !path[last_tile_id] is Vector2:
@@ -329,9 +321,6 @@ func get_last_cell_pos():
 	
 func notify_inventory_increase(_ressource, _add):
 	pass
-	
-func ressourceUpdaterChanged():
-	update_preview()
 			
 func y(c, a, b):
 	if c:

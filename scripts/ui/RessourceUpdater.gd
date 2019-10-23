@@ -1,6 +1,7 @@
 tool
 extends Node2D
 
+var show:bool = true
 export var show_max:bool = true setget set_show_max
 export var show_when_0:bool = true setget set_show_when_0
 export var ressources = {} setget set_ressources
@@ -36,8 +37,10 @@ func init():
 	
 	# calc total width
 	var width = 57
+	var res_width = width
 	if show_max:
 		width += 23
+		res_width = width
 	if changeable:
 		width += BUTTON_WIDTH * 2
 		
@@ -70,6 +73,8 @@ func init():
 		
 		ressource.value = value
 		
+		ressource.rect_size.x = res_width
+		
 		ressource.show_max_value = show_max
 		if show_max and ressources_max.has(ressource_name):
 			ressource.max_value = ressources_max[ressource_name]
@@ -91,10 +96,13 @@ func init():
 	$Box.rect_size = Vector2(width, RESSOURCE_HEIGHT * visible_ressources)
 	$Box/Black.rect_position = Vector2(0, $Box.rect_size.y - BORDER_WIDTH)
 	$Box/Black.rect_size = Vector2($Box.rect_size.x, BORDER_WIDTH)
+	$Box/Ressources.rect_size.x = res_width
 	if changeable:
 		$Box/Ressources.rect_position.x = BUTTON_WIDTH
 	else:
 		$Box/Ressources.rect_position.x = 1
+		
+	position -= Vector2(width / 2.0, -40)
 
 func update():
 	if is_ready:
@@ -131,7 +139,7 @@ func add_to_inventory(inventory):
 		inventory.add(ressource, signum*ressources[ressource])
 	return self
 	
-func set_from_ressource_block(panda_inventory, block):
+func set_from_ressource_block(panda_inventory, _taking_from_home, _house_inventory, block):
 	var res = block.ressource_name_or_null()
 	ressources = {res : min(1, panda_inventory.get_free(res))}
 
@@ -140,37 +148,46 @@ func set_from_ressource_block(panda_inventory, block):
 	changeable = false
 	return self
 	
-func set_from_foreign_house(panda_inventory, block):
+func set_from_foreign_house(panda_inventory, taking_from_home, house_inventory, block):
 	ressources = {}
 	ressources_max = {}
-	for ressource in panda_inventory.inventory:
-		ressources[ressource] = panda_inventory.get(ressource)
-		ressources_max[ressource] = panda_inventory.get(ressource)
+	for res in panda_inventory.inventory:
+		ressources[res] = panda_inventory.get(res)
+		ressources_max[res] = panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res]
 	signum = -1
+	changeable = false
 	return self
 	
-func set_from_smoker(panda_inventory, block):
+func set_from_own_house(_panda_inventory, _taking_from_home, _house_inventory, _block):
+	ressources = {"bamboo":0,"stone":0,"leaves":0}
+	ressources_max = {}
+	show = false
+	changeable = false
+	return self
+	
+func set_from_smoker(panda_inventory, taking_from_home, house_inventory, block):
 	ressources = {}
 	ressources_max = {}
 	ressources["leaves"] = min(panda_inventory.get("leaves"), block.inventory.get_free("leaves"))
-	ressources_max["leaves"] = ressources["leaves"]
+	ressources_max["leaves"] = panda_inventory.get("leaves") + house_inventory.get("leaves") - taking_from_home.ressources["leaves"]
 	signum = -1
 	show_when_0 = true
+	changeable = false
 	return self
 	
-func set_from_wip_block(inventory, block):
+func set_from_wip_block(panda_inventory, taking_from_home, house_inventory, block):
 	ressources = {}
 	ressources_max = {}
 
-	for ressource in block.inventory.maximums:
-		var still_needed = block.inventory.get_max(ressource) - block.inventory.get(ressource)
-		ressources[ressource] = min(still_needed, inventory.get(ressource))
-		ressources_max[ressource] = ressources[ressource]
+	for res in block.inventory.maximums:
+		var still_needed = block.inventory.get_max(res) - block.inventory.get(res)
+		ressources[res] = min(still_needed, panda_inventory.get(res))
+		ressources_max[res] = panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res]
 	
 	signum = -1
 	show_max = true
-	show_when_0 = true
-	changeable = true
+	show_when_0 = false
+	changeable = false
 	return self
 
 ###################################
@@ -183,9 +200,6 @@ func attempt_change(ressource, amount):
 			if !changes.has(ressource): changes[ressource] = 0
 			changes[ressource] += new_amount - amount
 		update()
-
-	#if subscriber != null:
-	#	subscriber.ressourceUpdaterChanged()
 	
 
 var subscriber = null

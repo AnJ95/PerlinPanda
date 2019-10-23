@@ -185,7 +185,7 @@ func set_from_wip_block(panda_inventory, taking_from_home, house_inventory, bloc
 		if block.inventory.maximums[res] > 0:
 			var still_needed = block.inventory.get_max(res) - block.inventory.get(res)
 			ressources[res] = min(still_needed, panda_inventory.get(res))
-			ressources_max[res] = panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res]
+			ressources_max[res] = max(0, panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res])
 	
 	signum = -1
 	show_max = true

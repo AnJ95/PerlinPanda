@@ -9,9 +9,10 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	# DEBUG STUFF
 	if map.debug_mode:
+		map.generate_next(cell_pos, 5)
 		for inv in [inventory, scheduled_inventory]:
 			for res in ["bamboo", "stone", "leaves"]:
-				inv.add(res, 10)
+				inv.add(res, 6)
 	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
@@ -29,6 +30,7 @@ func panda_in_center(panda):
 		for ressource in resUpdater.ressources:
 			var taken = panda.inventory.try_take(ressource, resUpdater.ressources[ressource])
 			inventory.add(ressource, taken)
+			scheduled_inventory.add(ressource, taken)
 			inventory.update_view()
 
 func get_tile_id():
@@ -36,9 +38,10 @@ func get_tile_id():
 	
 func get_speed_factor():
 	return 1.5
-
-func ressource_name_or_null():
-	return null
+	
+func remove():
+	panda.remove()
+	.remove()
 	
 ################################################
 ### FIRE

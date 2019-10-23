@@ -34,13 +34,13 @@ func got_welled():
 	increase_stock()
 
 func get_regrow_prob():
-	return 65
+	return 60
 	
 func get_regrow_prob_rain_bonus():
-	return 20
+	return 28
 	
 func get_regrow_prob_day_bonus():
-	return 20
+	return 28
 
 func get_stack_increase_prob():
 	var num_spreading = 0
@@ -62,4 +62,4 @@ func get_stack_increase_prob():
 func get_prob_fire_catch():
 	return 60
 func get_fire_increase_time():
-	return 9
+	return 11

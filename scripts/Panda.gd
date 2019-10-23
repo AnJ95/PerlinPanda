@@ -156,7 +156,7 @@ func reached_house():
 		if d[res] != 0:
 			p("## MISMATCH in " + res + ": " + str(ist[res]))
 		map.blocks[home_pos].scheduled_inventory.add(res, d[res])
-		# TODO Live update PathMakers path[2]
+		
 		for next_inventory in next_expected_inventories:
 			next_inventory.add(res, d[res])
 	
@@ -208,6 +208,9 @@ func calc_speed_factor():
 		var block_standing_on = map.blocks[standing_on]
 		speed_factor *= block_standing_on.get_speed_factor()
 	
+	if map.debug_mode:
+		speed_factor *= 2.5
+	
 	return speed_factor
 		
 func update_sprite(n):
@@ -252,9 +255,17 @@ func gatherable_ressources():
 func can_build():
 	return true
 	
+func remove():
+	queue_free()
+	var pathMaker = get_tree().get_nodes_in_group("path_maker")
+	if pathMaker.size() > 0 and pathMaker[0].active and pathMaker[0].panda == self:
+		pathMaker[0].cancel()
+		
+	ressourceManager.add_ressource("population", -1)
+	
 ####################################
 ## INVENTORY
-# Is no displayed concretly and therefore confusing
+# Is not displayed concretly and therefore confusing
 #func max_inventory():
 	#return {"bamboo":1,"stone":1,"leaves":1}
 	#return {"bamboo":4,"stone":2,"leaves":6}

@@ -9,7 +9,7 @@ export var show_case_size:int = 30
 export var is_preset = false
 
 # What to print and what not
-export var debug_mode = true
+export var debug_mode = false
 
 export var print_ticking = false
 export var print_path_maker = false
@@ -392,9 +392,9 @@ func generate_tile(var cell_pos:Vector2):
 		if cell_info.fertility < 0:
 			var stone_a = (cell_info.height == 0 or block == "dirt") 	and cell_info.humidity < 0.22
 			var stone_b = cell_info.height == 1 						and cell_info.humidity < -0.12
-			var stone_c = cell_info.height == 2 						and cell_info.humidity < -0.06
-			var stone_d = cell_info.height == 3 						and cell_info.humidity < -0.14
-			var stone_e = cell_info.height == 4 						and cell_info.humidity < -0.20
+			var stone_c = cell_info.height == 2 						and cell_info.humidity < -0.03
+			var stone_d = cell_info.height == 3 						and cell_info.humidity < -0.12
+			var stone_e = cell_info.height == 4 						and cell_info.humidity < -0.18
 			
 			if stone_a or stone_b or stone_c or stone_d or stone_e:
 				block = "stone"

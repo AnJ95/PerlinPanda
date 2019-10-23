@@ -144,7 +144,10 @@ func add_to_inventory(inventory):
 	
 func set_from_ressource_block(panda_inventory, _taking_from_home, _house_inventory, block):
 	var res = block.ressource_name_or_null()
-	ressources = {res : min(1, panda_inventory.get_free(res))}
+	
+	var amount = min(1, panda_inventory.get_free(res))
+	if block.stock == 0: amount = 0
+	ressources = {res : amount}
 
 	show_max = false
 	show_when_0 = false

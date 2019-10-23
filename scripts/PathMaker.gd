@@ -88,7 +88,7 @@ func _unhandled_input(event: InputEvent):
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
 		var clicked_tile = map.calc_closest_tile_from(click_pos)
 		
-		var clicked_panda = get_panda_in_range(click_pos)
+		var clicked_panda = get_house_in_range(click_pos)
 		var just_ended_path = false
 		
 		

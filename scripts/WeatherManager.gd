@@ -25,7 +25,7 @@ var storm_level = 0.0
 const lightning_time_per_tile = 50.0
 var time_to_next_lightning = 0
 
-var Lightning = preload("res://scenes/lightning.tscn")
+onready var Lightning = preload("res://scenes/Lightning.tscn")
 
 export var day_time_modulate:Gradient
 

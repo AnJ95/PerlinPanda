@@ -9,7 +9,7 @@ export var show_case_size:int = 30
 export var is_preset = false
 
 # What to print and what not
-export var debug_mode = false
+export var debug_mode = true
 
 export var print_ticking = false
 export var print_path_maker = false
@@ -58,7 +58,8 @@ onready var nth = {
 	"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),
 	"ParticlesDrops":preload("res://scenes/Particles_drops.tscn"),
 	"ParticlesSpray":preload("res://scenes/Particles_spray.tscn"),
-	"Fire":preload("res://scenes/Fire.tscn")
+	"Fire":preload("res://scenes/Fire.tscn"),
+	"OrangeLight":preload("res://scenes/OrangeLight.tscn")
 	}
 
 # OpenSimplex

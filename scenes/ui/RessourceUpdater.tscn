@@ -23,18 +23,21 @@ changeable = true
 signum = 1
 
 [node name="Box" type="ColorRect" parent="."]
+light_mask = 0
 margin_right = 130.0
 margin_bottom = 111.0
 mouse_filter = 1
 color = Color( 0.65098, 0.631373, 0.529412, 1 )
 
 [node name="Black" type="ColorRect" parent="Box"]
+light_mask = 0
 margin_top = 106.0
 margin_right = 130.0
 margin_bottom = 111.0
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="Ressources" type="VBoxContainer" parent="Box"]
+light_mask = 0
 margin_left = 25.0
 margin_right = 92.0
 margin_bottom = 105.0

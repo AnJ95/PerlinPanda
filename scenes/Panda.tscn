@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
 [ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=2]
@@ -8,6 +8,7 @@
 [ext_resource path="res://assets/zzz.png" type="Texture" id=6]
 [ext_resource path="res://assets/panda.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scenes/OrangeLight.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=1]
 
@@ -72,6 +73,7 @@ spread = 10.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 40.0
 initial_velocity_random = 0.2
+angular_velocity = 0.0
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle = -73.7
@@ -125,4 +127,6 @@ hframes = 2
 
 [node name="Inventory" parent="." instance=ExtResource( 8 )]
 position = Vector2( 0, -110 )
+
+[node name="OrangeLight" parent="." instance=ExtResource( 9 )]
 

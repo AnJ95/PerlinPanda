@@ -8,6 +8,7 @@
 font_data = ExtResource( 2 )
 
 [node name="Ressource" type="HBoxContainer"]
+light_mask = 0
 margin_right = 98.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 98, 70 )
@@ -22,6 +23,7 @@ do_update = true
 small = false
 
 [node name="TextureRect" type="TextureRect" parent="."]
+light_mask = 0
 margin_right = 54.0
 margin_bottom = 70.0
 rect_min_size = Vector2( 54, 70 )
@@ -30,6 +32,7 @@ expand = true
 stretch_mode = 6
 
 [node name="Label" type="Label" parent="."]
+light_mask = 0
 margin_left = 58.0
 margin_right = 78.0
 margin_bottom = 70.0

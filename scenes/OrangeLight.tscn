@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://assets/circleSmooth.png" type="Texture" id=1]
+
+[node name="OrangeLight" type="Light2D"]
+texture = ExtResource( 1 )
+texture_scale = 8.0
+color = Color( 1, 0.690196, 0.592157, 1 )
+energy = 0.65
+

@@ -18,6 +18,10 @@ func init(map, cell_pos, cell_info, args, nth):
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", panda)
 		map.show_homes()
+		
+		var light = nth.OrangeLight.instance()
+		light.position = map.calc_px_pos_on_tile(cell_pos)
+		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", light)
 	
 	map.generate_next(cell_pos, 2)
 	return self

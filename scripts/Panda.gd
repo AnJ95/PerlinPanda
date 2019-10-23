@@ -268,7 +268,6 @@ func remove():
 		map.map_overlay.clear()
 		map.show_homes()
 		
-		
 	ressourceManager.add_ressource("population", -1)
 	
 ####################################

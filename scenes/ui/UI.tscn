@@ -86,7 +86,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = -0.00625619
+rotation = -0.0173553
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -220,8 +220,8 @@ margin_bottom = 75.0
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="FailScreen"]
-position = Vector2( 41302.7, 112.369 )
-rotation = -0.0938429
+position = Vector2( 60462.6, 112.369 )
+rotation = -0.26033
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2

@@ -38,13 +38,12 @@ layer = -1
 [node name="PathMaker" type="Node" parent="." groups=[
 "path_maker",
 ]]
-editor/display_folded = true
 script = ExtResource( 6 )
 map_node_path = "/root/Scene/Map"
 
 [node name="Line2D" type="Line2D" parent="PathMaker"]
 width = 8.0
-default_color = Color( 1, 1, 1, 0.352941 )
+default_color = Color( 0, 0, 0, 0.352941 )
 texture_mode = -992608255
 joint_mode = 2
 begin_cap_mode = 2

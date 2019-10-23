@@ -93,7 +93,7 @@ func move_towards_then(target_cell, speed, delta):
 	
 	# Check if current target in vicinity
 	var d:float = position.distance_to(target_pos)
-	if d > 10:
+	if d > 3:
 		var wiggle = get_sprite_wiggle_amp_freq()
 		$Sprite.rotation_degrees = get_sprite_angle() + wiggle[0] * sin(wiggle[1] * timer * (2*PI))
 		position = position.linear_interpolate(target_pos, (speed * delta)/d)

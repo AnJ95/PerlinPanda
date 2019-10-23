@@ -10,7 +10,7 @@ const SPEED_FACTOR_PER_LAYER_UP = 0.9
 var path = null
 var curr_path_pos = 0
 var next_paths = []
-var line
+var line:Line2D
 var last_target = null
 
 # for inventory
@@ -68,6 +68,8 @@ func _process(delta: float) -> void:
 		ressourceManager.steps_taken += 1
 	else:
 		update_sprite((target_pos - position))
+		line.points[0] = position
+		line.points = line.points
 				
 	# Check for stepping on bug
 	for bug in get_tree().get_nodes_in_group("bug"):

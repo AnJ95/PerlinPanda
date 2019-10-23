@@ -31,7 +31,7 @@ onready var tile_ids = {
 	"ressource" : 			3,
 	"build" : 				3 + 1*map.tile_cols}
 
-var c:Color = Color(1,1,1,0)
+var c:Color = Color(0,0,0,0)
 func _unhandled_input(event: InputEvent):	
 				
 	# Hover effect: show panda path when mouse over house
@@ -59,13 +59,13 @@ func _unhandled_input(event: InputEvent):
 			updaters[updater].visible = false
 		
 		# if panda in range: show its line
-		var other = get_panda_in_range(click_pos)
-		if other != null:
-			
-			if other.line != null:
-				c.a = 0.8
-				other.line.default_color = c
-	
+		for other in [get_house_in_range(click_pos), get_panda_in_range(click_pos)]:
+			if other != null:
+				if other.line != null:
+					c.a = 0.8
+					other.line.default_color = c
+		
+		
 	# Scrolling first
 	if get_parent().get_node("Camera2D").input(event):
 		return
@@ -116,9 +116,15 @@ func toggle_tile(tile):
 			
 			update_preview()
 		
-func get_panda_in_range(click_pos):
+func get_house_in_range(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):
 		if !panda.show_start_anim and map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
+			return panda
+	return null
+	
+func get_panda_in_range(click_pos):
+	for panda in get_tree().get_nodes_in_group("panda"):
+		if !panda.show_start_anim and map.calc_px_pos_on_tile(map.calc_closest_tile_from(panda.position)).distance_to(click_pos) < 40:
 			return panda
 	return null
 	

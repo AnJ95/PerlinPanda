@@ -7,6 +7,8 @@ light_mask = 0
 script = ExtResource( 1 )
 show_max = true
 show_when_0 = true
+show_when_max_0 = true
+show_when_max_undefined = true
 ressources = {
 "bamboo": 0,
 "leaves": 0,
@@ -18,6 +20,7 @@ ressources_max = {
 "stone": 10
 }
 changeable = true
+signum = 1
 
 [node name="Box" type="ColorRect" parent="."]
 margin_right = 130.0

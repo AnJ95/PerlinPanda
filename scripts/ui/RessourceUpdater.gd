@@ -4,6 +4,9 @@ extends Node2D
 var show:bool = true
 export var show_max:bool = true setget set_show_max
 export var show_when_0:bool = true setget set_show_when_0
+export var show_when_max_0:bool = true
+export var show_when_max_undefined:bool = true
+
 export var ressources = {} setget set_ressources
 export var ressources_max = {} setget set_ressources_max
 export var changeable:bool = true setget set_changeable
@@ -51,7 +54,7 @@ func init():
 		if ressources.has(ressource_name):
 			value = ressources[ressource_name]
 			
-		if show_when_0 or value > 0:
+		if (show_when_0 or value > 0) and (show_when_max_0 or ressources_max.has(ressource_name) and ressources_max[ressource_name] > 0) and (show_when_max_undefined or ressources_max.has(ressource_name)):
 			visible_ressources += 1
 		else:
 			continue
@@ -171,7 +174,6 @@ func set_from_smoker(panda_inventory, taking_from_home, house_inventory, block):
 	ressources["leaves"] = min(panda_inventory.get("leaves"), block.inventory.get_free("leaves"))
 	ressources_max["leaves"] = panda_inventory.get("leaves") + house_inventory.get("leaves") - taking_from_home.ressources["leaves"]
 	signum = -1
-	show_when_0 = true
 	changeable = false
 	return self
 	
@@ -180,13 +182,14 @@ func set_from_wip_block(panda_inventory, taking_from_home, house_inventory, bloc
 	ressources_max = {}
 
 	for res in block.inventory.maximums:
-		var still_needed = block.inventory.get_max(res) - block.inventory.get(res)
-		ressources[res] = min(still_needed, panda_inventory.get(res))
-		ressources_max[res] = panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res]
+		if block.inventory.maximums[res] > 0:
+			var still_needed = block.inventory.get_max(res) - block.inventory.get(res)
+			ressources[res] = min(still_needed, panda_inventory.get(res))
+			ressources_max[res] = panda_inventory.get(res) + house_inventory.get(res) - taking_from_home.ressources[res]
 	
 	signum = -1
 	show_max = true
-	show_when_0 = false
+	show_when_max_undefined = false
 	changeable = false
 	return self
 

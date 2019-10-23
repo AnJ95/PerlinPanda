@@ -19,6 +19,7 @@ onready var tile_ids = {
 	"home_end" : 			0 + 1*map.tile_cols,
 	"path" : 				0 + 2*map.tile_cols,
 	"path_multiple" : 		0 + 3*map.tile_cols,
+	"path_inactive" : 		0 + 4*map.tile_cols,
 	
 	"walk" : 				1,
 	"walk_multiple" :		1 + 1*map.tile_cols,
@@ -91,6 +92,8 @@ func _unhandled_input(event: InputEvent):
 		
 		
 		if active and clicked_tile != null:
+			if !cell_pos_not_already_in_path(clicked_tile):
+				toggle_tile(clicked_tile)
 			if clicked_panda == null or panda == clicked_panda or is_valid_next(get_last_cell_pos(), clicked_tile):
 				just_ended_path = add_to_current_path(clicked_tile)
 			else:
@@ -98,7 +101,13 @@ func _unhandled_input(event: InputEvent):
 				
 		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda) and (!active or is_valid_next(get_last_cell_pos(), clicked_tile)): #start new
 			try_start_path_from(clicked_panda)
-				
+
+func toggle_tile(tile):
+	if path[path.size() - 1 - 2] is Vector2 and path[path.size() - 1 - 2] == tile:
+		if path[path.size() - 1 - 1] is bool:
+			path[path.size() - 1 - 1] = !path[path.size() - 1 - 1]
+			update_preview()
+		
 func get_panda_in_range(click_pos):
 	for panda in get_tree().get_nodes_in_group("panda"):
 		if !panda.show_start_anim and map.calc_px_pos_on_tile(panda.home_pos).distance_to(click_pos) < 40:
@@ -215,14 +224,20 @@ func update_overlay():
 			map.map_overlay.set_cellv(that_tile, tile_id + tile_id_offset)
 	
 	# visualize path until now
-	for path_elem in path:
+	for i in range(path.size()):
+		var path_elem = path[i]
 		if path_elem is Vector2:
 			var tile_id_offset = map.cell_infos[path_elem].height * map.layer_offset
 			# dont override the "goal" or "walk" overlay
 			var now = map.map_overlay.get_cellv(path_elem)
 			if now != tile_ids.home_end + tile_id_offset and now != tile_ids.walk + tile_id_offset and now != tile_ids.walk_multiple + tile_id_offset:
-				# show either black or black with hole
 				var tile_id = tile_ids.path
+				
+				# check if inactive
+				if i+1 < path.size() and path[i+1] is bool and !path[i+1]:
+					tile_id = tile_ids.path_inactive
+				
+				# check if multiple walks allowed
 				if map.blocks.has(path_elem) and map.blocks[path_elem].multiple_in_one_path_allowed():
 					tile_id = tile_ids.path_multiple
 				map.map_overlay.set_cellv(path_elem, tile_id + tile_id_offset)
@@ -242,21 +257,26 @@ func update_inventory():
 	inventory = Inventory.instance().init(null, true, {}, panda.max_inventory())
 	
 	var last_cell_pos = null
-	var last_perform_action = true
+	var last_perform_action = false
 	for path_elem in path:
 		if path_elem is Vector2:
 			last_cell_pos = path_elem
+			last_perform_action = false
 		if path_elem is bool:
 			last_perform_action = path_elem
 		elif panda.is_ressource_updater(path_elem):
-			if path_elem.get_parent() == null:
-				path_elem.position = map.calc_px_pos_on_tile(last_cell_pos)
-				if path_elem.show:
-					map.get_parent().get_node("MapControls").add_child(path_elem)
-							
-			updaters[last_cell_pos] = path_elem
-			path_elem.add_to_inventory(inventory)
-			p("adding " + str(inventory.inventory) + "... ")
+			if last_perform_action:
+				if path_elem.get_parent() == null:
+					path_elem.position = map.calc_px_pos_on_tile(last_cell_pos)
+					if path_elem.show:
+						map.get_parent().get_node("MapControls").add_child(path_elem)
+								
+				updaters[last_cell_pos] = path_elem
+				path_elem.add_to_inventory(inventory)
+				p("adding " + str(inventory.inventory) + "... ")
+			else:
+				if path_elem.get_parent() != null:
+					path_elem.get_parent().remove_child(path_elem)
 
 func cell_pos_not_already_in_path(cell_pos):
 	return !path.has(cell_pos) or cell_pos == path[0]

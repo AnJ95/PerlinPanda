@@ -7,7 +7,10 @@ const anim_text_frame_time = 1
 var playing_text_anim = true
 var cur_text_id = -1
 var anim_text_time_left = anim_text_frame_time
-onready var anim_nodes = [[$TextMain, $ColorRect], $bamboo, $panda, $TextPandas, $TextSteps, $TextRessources, $TextTime, $BtnNext]
+
+export var signal_listening_to = "island_restored"
+export var won = true
+export var anim_nodes = [[], ["TextMain", "ColorRect"], "bamboo", "panda", "TextPandas", "TextSteps", "TextRessources", "TextTime", "BtnNext"]
 
 var anim_panda_time = 0
 var ressourceManager
@@ -19,12 +22,13 @@ func _ready():
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
 	if ressourceManager.size() > 0:
 		ressourceManager = ressourceManager[0]
-		ressourceManager.connect("island_restored", self, "activate")
+		ressourceManager.connect(signal_listening_to, self, "activate")
 		
 func activate():
 	if active:
 		return
-	$TextMain.text = "Island " + str(ressourceManager.level) + " restored!"
+	if won:
+		$TextMain.text = "Island " + str(ressourceManager.level) + " restored!"
 	$TextPandas/TextValue.text = str(ressourceManager.ressources.population)
 	$TextSteps/TextValue.text = str(ressourceManager.steps_taken)
 	$TextRessources/TextValue.text = str(ressourceManager.ressources_gathered)
@@ -33,10 +37,8 @@ func activate():
 	active = true
 		
 func _process(delta):
-	if !active:
-		return
-		
-	if playing_text_anim:
+
+	if active and playing_text_anim:
 		anim_text_time_left -= delta
 		if anim_text_time_left <= 0:
 			anim_text_time_left = anim_text_frame_time
@@ -46,12 +48,18 @@ func _process(delta):
 			else:
 				if anim_nodes[cur_text_id] is Array:
 					for node in anim_nodes[cur_text_id]:
-						show_child(node)
+						show_child(get_node(node))
 				else:
-					show_child(anim_nodes[cur_text_id])
+					show_child(get_node(anim_nodes[cur_text_id]))
 		
 	anim_panda_time += delta
-	$panda.rotation_degrees = sin(anim_panda_time * 10)
+	if won:
+		$panda.rotation_degrees = sin(anim_panda_time * 10)
+	else:
+		anim_panda_time += delta
+		$panda.rotation_degrees = 15*sin(anim_panda_time * 5)
+		if anim_panda_time > anim_text_frame_time * 10:
+			$panda.position.x += delta * 110
 	
 func show_child(node):
 	
@@ -66,6 +74,9 @@ func on_gui_input(event):
 		var g = {"level":1}
 		if !Engine.editor_hint:
 			g = load("res://scripts/NonToolFix.gd").new().g()
+			
+		if won:
+			g.level += 1
 		
 		ressourceManager.reset()
 		var _x = get_tree().reload_current_scene()

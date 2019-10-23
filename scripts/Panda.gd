@@ -209,7 +209,7 @@ func calc_speed_factor():
 		speed_factor *= block_standing_on.get_speed_factor()
 	
 	if map.debug_mode:
-		speed_factor *= 2.5
+		speed_factor *= 3.5
 	
 	return speed_factor
 		
@@ -257,9 +257,17 @@ func can_build():
 	
 func remove():
 	queue_free()
+	remove_from_group("panda")
+	
 	var pathMaker = get_tree().get_nodes_in_group("path_maker")
-	if pathMaker.size() > 0 and pathMaker[0].active and pathMaker[0].panda == self:
-		pathMaker[0].cancel()
+	if pathMaker.size() > 0 and pathMaker[0].active:
+		if pathMaker[0].panda == self:
+			pathMaker[0].cancel()
+	
+	if !pathMaker[0].active:
+		map.map_overlay.clear()
+		map.show_homes()
+		
 		
 	ressourceManager.add_ressource("population", -1)
 	

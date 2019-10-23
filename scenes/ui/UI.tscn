@@ -86,7 +86,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = 0.00470922
+rotation = -0.00625619
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -175,6 +175,131 @@ align = 2
 
 [node name="Tween" type="Tween" parent="EndScreen"]
 
+[node name="FailScreen" type="Node2D" parent="."]
+editor/display_folded = true
+position = Vector2( 0, 20 )
+script = ExtResource( 4 )
+signal_listening_to = "all_pandas_fled"
+won = false
+anim_nodes = [ [  ], [ "TextMain", "ColorRect" ], "panda", "TextPandas", "TextSteps", "TextRessources", "TextTime", "BtnNext" ]
+
+[node name="ColorRect" type="ColorRect" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 254.0
+margin_top = 10.0
+margin_right = 771.0
+margin_bottom = 471.0
+color = Color( 0.65098, 0.631373, 0.529412, 1 )
+
+[node name="Black" type="ColorRect" parent="FailScreen/ColorRect"]
+margin_top = 445.0
+margin_right = 517.0
+margin_bottom = 461.0
+color = Color( 0, 0, 0, 0.117647 )
+
+[node name="BtnNext" type="ColorRect" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 830.0
+margin_top = 213.0
+margin_right = 980.0
+margin_bottom = 288.0
+color = Color( 0.65098, 0.631373, 0.529412, 1 )
+
+[node name="Text" type="Label" parent="FailScreen/BtnNext"]
+margin_left = 9.7018
+margin_top = 5.34018
+margin_right = 164.702
+margin_bottom = 113.34
+custom_fonts/font = SubResource( 1 )
+text = "RETRY"
+
+[node name="Black" type="ColorRect" parent="FailScreen/BtnNext"]
+margin_top = 61.0
+margin_right = 150.0
+margin_bottom = 75.0
+color = Color( 0, 0, 0, 0.117647 )
+
+[node name="panda" type="Sprite" parent="FailScreen"]
+position = Vector2( 41302.7, 112.369 )
+rotation = -0.0938429
+scale = Vector2( 1.46118, 1.46118 )
+texture = ExtResource( 6 )
+hframes = 2
+
+[node name="TextMain" type="Label" parent="FailScreen"]
+margin_left = 303.0
+margin_top = 211.314
+margin_right = 724.0
+margin_bottom = 319.314
+custom_fonts/font = SubResource( 1 )
+text = "All Pandas fled!"
+
+[node name="TextPandas" type="Label" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 303.0
+margin_top = 273.0
+margin_right = 724.0
+margin_bottom = 307.0
+custom_fonts/font = SubResource( 2 )
+text = "Pandas fed:"
+
+[node name="TextValue" type="Label" parent="FailScreen/TextPandas"]
+margin_right = 421.0
+margin_bottom = 34.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 2
+
+[node name="TextSteps" type="Label" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 303.0
+margin_top = 315.0
+margin_right = 724.0
+margin_bottom = 349.0
+custom_fonts/font = SubResource( 2 )
+text = "Steps Wandered:"
+
+[node name="TextValue" type="Label" parent="FailScreen/TextSteps"]
+margin_right = 421.0
+margin_bottom = 34.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 2
+
+[node name="TextRessources" type="Label" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 303.0
+margin_top = 357.0
+margin_right = 724.0
+margin_bottom = 391.0
+custom_fonts/font = SubResource( 2 )
+text = "Resources gathered:"
+
+[node name="TextValue" type="Label" parent="FailScreen/TextRessources"]
+margin_right = 421.0
+margin_bottom = 34.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 2
+
+[node name="TextTime" type="Label" parent="FailScreen"]
+editor/display_folded = true
+margin_left = 303.0
+margin_top = 400.0
+margin_right = 724.0
+margin_bottom = 461.0
+custom_fonts/font = SubResource( 2 )
+text = "Time taken:"
+
+[node name="TextValue" type="Label" parent="FailScreen/TextTime"]
+margin_right = 421.0
+margin_bottom = 34.0
+custom_fonts/font = SubResource( 2 )
+text = "0"
+align = 2
+
+[node name="Tween" type="Tween" parent="FailScreen"]
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
 editor/display_folded = true
 margin_top = 530.0
@@ -238,3 +363,4 @@ costs_stone = 1
 costs_leaves = 2
 
 [connection signal="gui_input" from="EndScreen/BtnNext" to="EndScreen" method="on_gui_input"]
+[connection signal="gui_input" from="FailScreen/BtnNext" to="FailScreen" method="on_gui_input"]

@@ -28,8 +28,7 @@ func panda_in_center(panda):
 		var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
 		if ressourceManager.size() > 0:
 			ressourceManager[0].add_ressource("artefacts", 1)
-			if ressourceManager[0].ressources.artefacts >= ressourceManager[0].ressources.artefacts_max:
-				ressourceManager[0].emit_signal("island_restored")
+				
 		
 			
 func get_particle_instance_or_null():

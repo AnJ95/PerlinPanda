@@ -50,7 +50,5 @@ func input(event):
 				var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
 				if ressourceManager.size() > 0:
 					ressourceManager[0].add_ressource("artefacts", 1)
-					if ressourceManager[0].ressources.artefacts >= ressourceManager[0].ressources.artefacts_max:
-						ressourceManager[0].emit_signal("island_restored")
 
 			

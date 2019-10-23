@@ -2,6 +2,7 @@ extends Node
 
 signal ressource_changed(ressource_name, value)
 signal island_restored()
+signal all_pandas_fled()
 
 export var ressources = {
 	"artefacts" : 0,
@@ -26,9 +27,14 @@ func reset():
 func add_ressource(ressource_name, value):
 	set_ressource(ressource_name, ressources[ressource_name] + value)
 	
-func set_ressource(ressource_name, value):
+func set_ressource(ressource_name, value, emit_signals=true):
 	ressources[ressource_name] = value
 	emit_signal("ressource_changed", ressource_name, value)
+	if emit_signals:
+		if ressource_name == "artefacts" and has_ressource("artefacts", ressources.artefacts_max):
+			emit_signal("island_restored")
+		if ressource_name == "population" and !has_ressource("population", 1):
+			emit_signal("all_pandas_fled")
 	
 func has_ressource(ressource_name, value):
 	return ressources[ressource_name] >= value
@@ -36,7 +42,7 @@ func has_ressource(ressource_name, value):
 func _ready():
 	# initially fire all ressource change signals
 	for ressource_name in ressources:
-		set_ressource(ressource_name, ressources[ressource_name])
+		set_ressource(ressource_name, ressources[ressource_name], false)
 	
 	var g = {"level":1}
 	if !Engine.editor_hint:

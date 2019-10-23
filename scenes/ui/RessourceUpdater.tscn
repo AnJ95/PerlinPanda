@@ -5,7 +5,7 @@
 
 [node name="RessourceUpdater" type="Node2D"]
 light_mask = 0
-position = Vector2( -65, 40 )
+position = Vector2( -130, 80 )
 script = ExtResource( 1 )
 ressources = {
 "bamboo": 0,

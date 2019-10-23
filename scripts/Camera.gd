@@ -43,12 +43,15 @@ func input(event):
 			var click_pos = (last_mouse_pos - rect / 2) * zoom + offset
 			var cell_pos = map.calc_closest_tile_from(click_pos)
 			
-			if event.scancode == 76:
-				var lightning = load("res://scenes/lightning.tscn").instance().init(map, cell_pos)
-				map.get_node("Navigation2D/PandaHolder").add_child(lightning)
-			if event.scancode == 65:
-				var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
-				if ressourceManager.size() > 0:
-					ressourceManager[0].add_ressource("artefacts", 1)
+			if cell_pos != null:
+				if event.scancode == 76: # L
+					var lightning = load("res://scenes/lightning.tscn").instance().init(map, cell_pos)
+					map.get_node("Navigation2D/PandaHolder").add_child(lightning)
+				if event.scancode == 65: # A
+					var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
+					if ressourceManager.size() > 0:
+						ressourceManager[0].add_ressource("artefacts", 1)
+				if event.scancode == 81: # Q
+					var ressourceManager = map.set_block_by_descriptor(cell_pos, "artefact")
 
 			

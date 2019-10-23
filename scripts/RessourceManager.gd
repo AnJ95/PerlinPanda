@@ -2,6 +2,7 @@ extends Node
 
 signal ressource_changed(ressource_name, value)
 signal island_restored()
+signal artefact_discovered(block)
 signal all_pandas_fled()
 
 export var ressources = {
@@ -31,7 +32,8 @@ func set_ressource(ressource_name, value, emit_signals=true):
 	ressources[ressource_name] = value
 	emit_signal("ressource_changed", ressource_name, value)
 	if emit_signals:
-		if ressource_name == "artefacts" and has_ressource("artefacts", ressources.artefacts_max):
+		# TODO 
+		if false and ressource_name == "artefacts" and has_ressource("artefacts", ressources.artefacts_max): 
 			emit_signal("island_restored")
 		if ressource_name == "population" and !has_ressource("population", 1):
 			emit_signal("all_pandas_fled")

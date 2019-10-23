@@ -6,15 +6,15 @@ export var costs_bamboo:int setget set_costs_bamboo
 export var costs_stone:int setget set_costs_stone
 export var costs_leaves:int setget set_costs_leaves
 
-const col_inactive:Color = Color(0.4,0.7,0.3, 0.0)
-const col_active:Color = Color(0.4,0.7,0.3, 1.0)
+export var col_inactive:Color = Color(0.0,0.0,0.0, 0.07)
+export var col_active:Color = Color(0.4,0.7,0.3, 1.0)
 
 var buildManager
 
 onready var sprite = $HBoxContainer/TextureRect/Sprite
 onready var costsBamboo = $HBoxContainer/VBoxContainer/CostsBamboo
 onready var costsStone = $HBoxContainer/VBoxContainer/CostsStone
-onready var costsLeaves = $HBoxContainer/CenterContainer/CostsLeaves
+onready var costsLeaves = $HBoxContainer/VBoxContainer/CostsLeaves
 
 var is_selected = false
 

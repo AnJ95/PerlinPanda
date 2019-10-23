@@ -10,53 +10,48 @@
 [node name="Buyable" type="ColorRect" groups=[
 "buyable",
 ]]
-margin_right = 162.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 162, 70 )
+margin_right = 115.0
+margin_bottom = 92.0
+rect_min_size = Vector2( 115, 89 )
 mouse_default_cursor_shape = 2
-color = Color( 0.65, 0.5, 0.5, 1 )
 script = ExtResource( 1 )
 block_tile_id = 0
 costs_bamboo = 0
 costs_stone = 0
 costs_leaves = 0
-
-[node name="White" type="ColorRect" parent="."]
-visible = false
-margin_right = 162.0
-margin_bottom = 3.0
-color = Color( 1, 1, 1, 0.196078 )
+col_inactive = Color( 0.596078, 0.584314, 0.501961, 1 )
 
 [node name="Black" type="ColorRect" parent="."]
-margin_top = 66.0
-margin_right = 162.0
-margin_bottom = 70.0
+margin_top = 88.0
+margin_right = 115.0
+margin_bottom = 92.0
 grow_vertical = 0
 color = Color( 0, 0, 0, 0.196078 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
-margin_right = 152.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 162, 65 )
+margin_right = 115.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 115, 65 )
 
 [node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
-margin_right = 47.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 47, 70 )
+margin_right = 60.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 60, 70 )
 
 [node name="Sprite" type="Sprite" parent="HBoxContainer/TextureRect"]
-position = Vector2( 25, 49 )
-scale = Vector2( 0.44007, 0.44007 )
+position = Vector2( 34, 65 )
+scale = Vector2( 0.53, 0.53 )
 texture = ExtResource( 2 )
 vframes = 8
 hframes = 6
+frame = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
-margin_left = 51.0
-margin_right = 101.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 50, 50 )
-custom_constants/separation = 0
+margin_left = 64.0
+margin_right = 114.0
+margin_bottom = 89.0
+rect_min_size = Vector2( 50, 89 )
+custom_constants/separation = -8
 
 [node name="CostsBamboo" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
 margin_right = 50.0
@@ -68,30 +63,23 @@ do_update = false
 small = true
 
 [node name="CostsStone" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
-margin_top = 35.0
+margin_top = 27.0
 margin_right = 50.0
+margin_bottom = 62.0
 rect_min_size = Vector2( 49, 35 )
 value = 0
 texture = ExtResource( 5 )
 do_update = false
 small = true
 
-[node name="CenterContainer" type="CenterContainer" parent="HBoxContainer"]
-margin_left = 105.0
-margin_right = 154.0
-margin_bottom = 70.0
-rect_min_size = Vector2( 49, 70 )
-mouse_filter = 2
-
-[node name="CostsLeaves" parent="HBoxContainer/CenterContainer" instance=ExtResource( 3 )]
-margin_top = 17.0
-margin_right = 49.0
-margin_bottom = 52.0
+[node name="CostsLeaves" parent="HBoxContainer/VBoxContainer" instance=ExtResource( 3 )]
+margin_top = 54.0
+margin_right = 50.0
+margin_bottom = 89.0
 rect_min_size = Vector2( 49, 35 )
 value = 0
 ressource_name = "leaves"
 texture = ExtResource( 6 )
 do_update = false
 small = true
-
 [connection signal="gui_input" from="." to="." method="on_gui_input"]

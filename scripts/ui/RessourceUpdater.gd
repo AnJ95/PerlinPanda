@@ -76,7 +76,7 @@ func init():
 		
 		ressource.value = value
 		
-		ressource.rect_size.x = res_width
+		ressource.rect_size = Vector2(res_width, RESSOURCE_HEIGHT)
 		
 		ressource.show_max_value = show_max
 		if show_max and ressources_max.has(ressource_name):
@@ -99,7 +99,7 @@ func init():
 	$Box.rect_size = Vector2(width, RESSOURCE_HEIGHT * visible_ressources)
 	$Box/Black.rect_position = Vector2(0, $Box.rect_size.y - BORDER_WIDTH)
 	$Box/Black.rect_size = Vector2($Box.rect_size.x, BORDER_WIDTH)
-	$Box/Ressources.rect_size.x = res_width
+	$Box/Ressources.rect_size = Vector2(res_width, RESSOURCE_HEIGHT * visible_ressources)
 	if changeable:
 		$Box/Ressources.rect_position.x = BUTTON_WIDTH
 	else:

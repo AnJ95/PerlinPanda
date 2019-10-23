@@ -106,6 +106,14 @@ func toggle_tile(tile):
 	if path[path.size() - 1 - 2] is Vector2 and path[path.size() - 1 - 2] == tile:
 		if path[path.size() - 1 - 1] is bool:
 			path[path.size() - 1 - 1] = !path[path.size() - 1 - 1]
+			
+			var signum = -1
+			if path[path.size() - 1 - 1]:
+				signum = 1
+			
+			for res in last_taking:
+				taking_from_home.ressources[res] += signum * last_taking[res]
+			
 			update_preview()
 		
 func get_panda_in_range(click_pos):
@@ -114,14 +122,17 @@ func get_panda_in_range(click_pos):
 			return panda
 	return null
 	
+	
+var last_taking = {}
 func add_to_current_path(this_tile):
 	if !active or !panda or path.size() == 0:
 		printerr("IllegalStateException: add_to_current_path() before try_start_path() worked")
-
+	
 	var last_tile = get_last_cell_pos()
 	
 	if is_valid_next(last_tile, this_tile):
 		var just_ended_path = false
+		last_taking = {}
 		
 		# add position
 		path.append(this_tile)
@@ -135,15 +146,16 @@ func add_to_current_path(this_tile):
 					for res in updater.ressources_max:
 						var house = map.blocks[panda.home_pos]
 						
+						# calc what need to be taken from home additionally to inventory
 						var missing = block.inventory.get_max(res) - block.inventory.get(res)
 						var in_inv = inventory.get(res)
 						var missing_with_inv = max(missing - in_inv, 0)
-						var in_house = house.inventory.get(res)
-	
+						var in_house = house.scheduled_inventory.get(res)
 						var taking = min(missing_with_inv, in_house)
+						
 						# take more from start
 						taking_from_home.ressources[res] += taking
-						
+						last_taking[res] = taking
 						# update this blocks RessourceChanger
 						updater.ressources[res] += taking
 						updater.update()
@@ -168,15 +180,15 @@ func create_ressource_updater(block):
 		
 		
 func create_ressource_updater_from_ressource(block):
-	return RessourceUpdater.instance().set_from_ressource_block(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
+	return RessourceUpdater.instance().set_from_ressource_block(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
 func create_ressource_updater_from_block_wip(block):
-	return RessourceUpdater.instance().set_from_wip_block(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
+	return RessourceUpdater.instance().set_from_wip_block(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
 func create_ressource_updater_from_foreign_house(block):
-	return RessourceUpdater.instance().set_from_foreign_house(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
+	return RessourceUpdater.instance().set_from_foreign_house(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
 func create_ressource_updater_from_own_house(block):
 	return RessourceUpdater.instance().set_from_own_house(inventory, taking_from_home, null, block)
 func create_ressource_updater_from_smoker(block):
-	return RessourceUpdater.instance().set_from_smoker(inventory, taking_from_home, map.blocks[panda.home_pos].inventory, block)
+	return RessourceUpdater.instance().set_from_smoker(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
 				
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))

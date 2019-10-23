@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/lightning.png-15f393daf51b76de8bb6fd2ec18e51b5.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/bamboo.png-61b29e5a95989ca69d4e95e99f028bea.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

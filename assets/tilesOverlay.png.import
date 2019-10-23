@@ -3,6 +3,9 @@
 importer="texture"
 type="StreamTexture"
 path="res://.import/tilesOverlay.png-d18de3c596cd24b49a0f53a4257b765b.stex"
+metadata={
+"vram_texture": false
+}
 
 [deps]
 

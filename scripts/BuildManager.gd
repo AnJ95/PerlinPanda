@@ -5,12 +5,17 @@ var selected_building_or_null = null
 var map
 
 var ressourceManager
+var pathMaker
 func _ready():
+	
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
-	if ressourceManager.size() > 0:
-		ressourceManager = ressourceManager[0]
-	else:
-		ressourceManager = null
+	if ressourceManager.size() > 0: ressourceManager = ressourceManager[0]
+	else: ressourceManager = null
+	
+	pathMaker = get_tree().get_nodes_in_group("path_maker")
+	if pathMaker.size() > 0: pathMaker = pathMaker[0]
+	else: pathMaker = null
+	
 	map = get_parent().get_node("Map")
 	
 		
@@ -28,7 +33,6 @@ func cancel():
 		selected_building_or_null.unselect()
 	selected_building_or_null = null
 	hide_possible_build_sites()
-	
 	
 func input(event):
 	if !event is InputEventMouseButton:
@@ -70,8 +74,10 @@ func show_possible_build_sites():
 	hide_possible_build_sites()
 		
 	for pos in map.landscapes:
+		var tile_id = pathMaker.tile_ids.build_no
 		if map.landscapes[pos].can_build_on(map, pos) and proto.can_be_build_on(map, pos):
-			map.map_overlay.set_cellv(pos, 1 + map.cell_infos[pos].height * map.layer_offset);
+			tile_id = pathMaker.tile_ids.build_yes
+		map.map_overlay.set_cellv(pos, tile_id + map.cell_infos[pos].height * map.layer_offset);
 			
 func hide_possible_build_sites():
 	for pos in map.map_overlay.get_used_cells():

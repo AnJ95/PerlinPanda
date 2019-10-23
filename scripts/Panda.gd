@@ -258,4 +258,11 @@ func gatherable_ressources():
 func can_build():
 	return true
 	
+####################################
+## INVENTORY
+# Is no displayed concretly and therefore confusing
+#func max_inventory():
+	#return {"bamboo":1,"stone":1,"leaves":1}
+	#return {"bamboo":4,"stone":2,"leaves":6}
+	
 	

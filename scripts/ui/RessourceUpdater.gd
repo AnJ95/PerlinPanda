@@ -118,8 +118,9 @@ func add_to_inventory(inventory):
 		inventory.add(ressource, signum*ressources[ressource])
 	return self
 	
-func set_from_ressource_block(block):
-	ressources = {block.ressource_name_or_null():1}
+func set_from_ressource_block(panda_inventory, block):
+	var res = block.ressource_name_or_null()
+	ressources = {res : min(1, panda_inventory.get_free(res))}
 
 	show_max = false
 	show_when_0 = false

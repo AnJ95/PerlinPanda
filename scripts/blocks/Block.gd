@@ -59,7 +59,7 @@ func panda_in_center(panda):
 	if fire_or_null != null:
 		fire_or_null.extinguish()
 	
-	if ressource_name_or_null() != null and panda.perform_next_action() and stock > 0:
+	if ressource_name_or_null() != null and panda.perform_next_action() and stock > 0 and panda.inventory.get_free(ressource_name_or_null()) >= 1:
 		panda.start_working_on_ressource(self)
 
 func get_ressource_amount_after_work_done():

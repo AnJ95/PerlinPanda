@@ -70,6 +70,9 @@ func get(ressource):
 	if !inventory.has(ressource):
 		return 0
 	return inventory[ressource]
+
+func get_free(ressource):
+	return get_max(ressource) - get(ressource)
 	
 func update_view():
 	visible = active

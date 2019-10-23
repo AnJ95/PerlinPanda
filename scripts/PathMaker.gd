@@ -17,13 +17,17 @@ onready var tile_ids = {
 	"home_start" : 			0,
 	"home_end" : 			0 + 1*map.tile_cols,
 	"path" : 				0 + 2*map.tile_cols,
+	"path_multiple" : 		0 + 3*map.tile_cols,
+	
 	"walk" : 				1,
-	"bamboo" : 				2,
-	"stone" : 				3,
-	"leaves" : 				2,
-	"build" : 				4,
-	"artefact" : 			1 + 1*map.tile_cols,
-	}
+	"walk_multiple" :		1 + 1*map.tile_cols,
+	"artefact" : 			1 + 2*map.tile_cols,
+	
+	"build_yes" : 			2,
+	"build_no" : 			2 + 1*map.tile_cols,
+	
+	"ressource" : 			3,
+	"build" : 				3 + 1*map.tile_cols}
 
 var c:Color = Color(1,1,1,0)
 func _unhandled_input(event: InputEvent):	
@@ -128,7 +132,7 @@ func add_to_current_path(this_tile):
 		return just_ended_path
 		
 func add_ressource_to_current_path(block):
-	var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(block)
+	var ressourceUpdater = RessourceUpdater.instance().set_from_ressource_block(inventory, block)
 	path.append(true)
 	path.append(ressourceUpdater)
 
@@ -192,11 +196,14 @@ func update_overlay():
 				tile_id = tile_ids.home_end
 			# check for ressources and others
 			if map.blocks.has(that_tile):
-				if map.blocks[that_tile].ressource_name_or_null() != null:
-					tile_id = tile_ids[map.blocks[that_tile].ressource_name_or_null()]
-				if map.blocks[that_tile].get_class() == "BlockWIP":
+				var block = map.blocks[that_tile]
+				if block.multiple_in_one_path_allowed():
+					tile_id = tile_ids.walk_multiple
+				if block.ressource_name_or_null() != null:
+					tile_id = tile_ids["ressource"]
+				if block.get_class() == "BlockWIP":
 					tile_id = tile_ids.build
-				if map.blocks[that_tile].get_class() == "BlockArtefact":
+				if block.get_class() == "BlockArtefact":
 					tile_id = tile_ids.artefact
 
 			# set calculated tile id
@@ -208,8 +215,13 @@ func update_overlay():
 		if path_elem is Vector2:
 			var tile_id_offset = map.cell_infos[path_elem].height * map.layer_offset
 			# dont override the "goal" or "walk" overlay
-			if map.map_overlay.get_cellv(path_elem) != tile_ids.home_end + tile_id_offset and map.map_overlay.get_cellv(path_elem) != tile_ids.walk + tile_id_offset:
-				map.map_overlay.set_cellv(path_elem, tile_ids.path + tile_id_offset)
+			var now = map.map_overlay.get_cellv(path_elem)
+			if now != tile_ids.home_end + tile_id_offset and now != tile_ids.walk + tile_id_offset and now != tile_ids.walk_multiple + tile_id_offset:
+				# show either black or black with hole
+				var tile_id = tile_ids.path
+				if map.blocks.has(path_elem) and map.blocks[path_elem].multiple_in_one_path_allowed():
+					tile_id = tile_ids.path_multiple
+				map.map_overlay.set_cellv(path_elem, tile_id + tile_id_offset)
 			
 func update_line():
 	var pts = []
@@ -223,7 +235,7 @@ func update_inventory():
 	# reset inventory
 	if inventory != null:
 		inventory.queue_free()
-	inventory = Inventory.instance().init(null, true, {}, {})
+	inventory = Inventory.instance().init(null, true, {}, panda.max_inventory())
 	
 	var last_cell_pos = null
 	var last_perform_action = true

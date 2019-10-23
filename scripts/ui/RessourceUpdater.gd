@@ -14,6 +14,9 @@ const RESSOURCE_HEIGHT = 37
 const BORDER_WIDTH = 5
 const BUTTON_WIDTH = 25
 
+var ress = {}
+var btns = []
+
 var is_ready = false 
 func _ready():
 	is_ready = true
@@ -24,6 +27,12 @@ func init():
 	# clear Ressources first
 	for node in $Box/Ressources.get_children():
 		node.queue_free()
+	for res in ress:
+		ress[res].queue_free()
+	ress = {}
+	for node in btns:
+		node.queue_free()
+	btns = []
 	
 	# calc total width
 	var width = 57
@@ -51,6 +60,7 @@ func init():
 			btn.rect_size = Vector2(BUTTON_WIDTH, RESSOURCE_HEIGHT)
 			
 			$Box.add_child(btn)
+			btns.append(btn)
 		
 		var ressource = classRessource.instance()
 		ressource.ressource_name = ressource_name
@@ -64,7 +74,7 @@ func init():
 		if show_max and ressources_max.has(ressource_name):
 			ressource.max_value = ressources_max[ressource_name]
 		
-		ressource.set_name(ressource_name)
+		ress[ressource_name] = ressource
 		$Box/Ressources.add_child(ressource)
 		
 		if changeable:
@@ -74,6 +84,7 @@ func init():
 			btn.rect_size = Vector2(BUTTON_WIDTH, RESSOURCE_HEIGHT)
 			
 			$Box.add_child(btn)
+			btns.append(btn)
 		
 	
 	# set up positions and sizes
@@ -86,10 +97,13 @@ func init():
 		$Box/Ressources.rect_position.x = 1
 
 func update():
-	for ressource_name in ressources:
-		var node = $Box/Ressources.get_node(ressource_name)
-		node.value = ressources[ressource_name]
-		node.update()
+	if is_ready:
+		for ressource_name in ressources:
+			var node = ress[ressource_name]
+			node.value = ressources[ressource_name]
+			if show_max and ressources_max.has(ressource_name):
+				node.max_value = ressources_max[ressource_name]
+			node.update()
 
 ###################################
 ### Special initializers
@@ -160,14 +174,18 @@ func set_from_wip_block(inventory, block):
 	return self
 
 ###################################
+var changes = {}
 func attempt_change(ressource, amount):
 	var new_amount = ressources[ressource] + amount
 	if new_amount >= 0 and new_amount <= ressources_max[ressource]:
 		ressources[ressource] += amount
-	update()
+		if amount != new_amount:
+			if !changes.has(ressource): changes[ressource] = 0
+			changes[ressource] += new_amount - amount
+		update()
 
-	if subscriber != null:
-		subscriber.ressourceUpdaterChanged()
+	#if subscriber != null:
+	#	subscriber.ressourceUpdaterChanged()
 	
 
 var subscriber = null

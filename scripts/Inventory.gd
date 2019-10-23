@@ -87,7 +87,7 @@ func update_view():
 		if val > 0 or (show_if_0 and get_max(res) > 0):
 			num_visible += 1
 
-		var node = get_node("Inventory_" + res)
+		var node = $FollowLayer.get_node("Inventory_" + res)
 		node.show_max_value = show_max
 		node.max_value = get_max(res)
 		node.visible = val > 0 or (show_if_0 and get_max(res) > 0)

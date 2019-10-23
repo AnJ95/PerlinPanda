@@ -86,7 +86,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = -0.0173553
+rotation = -0.0172098
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -185,6 +185,7 @@ anim_nodes = [ [  ], [ "TextMain", "ColorRect" ], "panda", "TextPandas", "TextSt
 
 [node name="ColorRect" type="ColorRect" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 254.0
 margin_top = 10.0
 margin_right = 771.0
@@ -199,6 +200,7 @@ color = Color( 0, 0, 0, 0.117647 )
 
 [node name="BtnNext" type="ColorRect" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 830.0
 margin_top = 213.0
 margin_right = 980.0
@@ -220,13 +222,15 @@ margin_bottom = 75.0
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="FailScreen"]
-position = Vector2( 60462.6, 112.369 )
-rotation = -0.26033
+visible = false
+position = Vector2( 67502.4, 112.369 )
+rotation = -0.258147
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
 
 [node name="TextMain" type="Label" parent="FailScreen"]
+visible = false
 margin_left = 303.0
 margin_top = 211.314
 margin_right = 724.0
@@ -236,6 +240,7 @@ text = "All Pandas fled!"
 
 [node name="TextPandas" type="Label" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 303.0
 margin_top = 273.0
 margin_right = 724.0
@@ -252,6 +257,7 @@ align = 2
 
 [node name="TextSteps" type="Label" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 303.0
 margin_top = 315.0
 margin_right = 724.0
@@ -268,6 +274,7 @@ align = 2
 
 [node name="TextRessources" type="Label" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 303.0
 margin_top = 357.0
 margin_right = 724.0
@@ -284,6 +291,7 @@ align = 2
 
 [node name="TextTime" type="Label" parent="FailScreen"]
 editor/display_folded = true
+visible = false
 margin_left = 303.0
 margin_top = 400.0
 margin_right = 724.0
@@ -301,7 +309,6 @@ align = 2
 [node name="Tween" type="Tween" parent="FailScreen"]
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
-editor/display_folded = true
 margin_top = 530.0
 margin_right = 1024.0
 margin_bottom = 600.0
@@ -324,7 +331,7 @@ margin_right = 328.0
 focus_mode = 2
 color = Color( 0.4, 0.7, 0.3, 0 )
 block_tile_id = 29
-costs_bamboo = 6
+costs_bamboo = 5
 
 [node name="Street" parent="PanelContainer/HBoxContainer" instance=ExtResource( 8 )]
 margin_left = 332.0
@@ -340,7 +347,7 @@ margin_right = 660.0
 focus_mode = 2
 color = Color( 0.4, 0.7, 0.3, 0 )
 block_tile_id = 28
-costs_bamboo = 6
+costs_bamboo = 4
 costs_leaves = 4
 
 [node name="Well" parent="PanelContainer/HBoxContainer" instance=ExtResource( 8 )]
@@ -349,8 +356,8 @@ margin_right = 826.0
 focus_mode = 2
 color = Color( 0.4, 0.7, 0.3, 0 )
 block_tile_id = 40
-costs_bamboo = 2
-costs_stone = 4
+costs_bamboo = 1
+costs_stone = 3
 
 [node name="Smoker" parent="PanelContainer/HBoxContainer" instance=ExtResource( 8 )]
 margin_left = 830.0
@@ -360,7 +367,6 @@ color = Color( 0.4, 0.7, 0.3, 0 )
 block_tile_id = 41
 costs_bamboo = 2
 costs_stone = 1
-costs_leaves = 2
 
 [connection signal="gui_input" from="EndScreen/BtnNext" to="EndScreen" method="on_gui_input"]
 [connection signal="gui_input" from="FailScreen/BtnNext" to="FailScreen" method="on_gui_input"]

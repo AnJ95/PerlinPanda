@@ -29,7 +29,7 @@ func _ready():
 
 func init():
 	# clear Ressources first
-	for node in $Box/Ressources.get_children():
+	for node in $FollowLayer/Box/Ressources.get_children():
 		node.queue_free()
 	for res in ress:
 		ress[res].queue_free()
@@ -65,7 +65,7 @@ func init():
 			btn.rect_position = Vector2(0, (visible_ressources-1)*RESSOURCE_HEIGHT)
 			btn.rect_size = Vector2(BUTTON_WIDTH, RESSOURCE_HEIGHT)
 			
-			$Box.add_child(btn)
+			$FollowLayer/Box.add_child(btn)
 			btns.append(btn)
 		
 		var ressource = classRessource.instance()
@@ -83,7 +83,7 @@ func init():
 			ressource.max_value = ressources_max[ressource_name]
 		
 		ress[ressource_name] = ressource
-		$Box/Ressources.add_child(ressource)
+		$FollowLayer/Box/Ressources.add_child(ressource)
 		
 		if changeable:
 			var btn = classButton.instance()
@@ -91,19 +91,19 @@ func init():
 			btn.rect_position = Vector2(width - BUTTON_WIDTH, (visible_ressources-1)*RESSOURCE_HEIGHT)
 			btn.rect_size = Vector2(BUTTON_WIDTH, RESSOURCE_HEIGHT)
 			
-			$Box.add_child(btn)
+			$FollowLayer/Box.add_child(btn)
 			btns.append(btn)
 		
 	
 	# set up positions and sizes
-	$Box.rect_size = Vector2(width, RESSOURCE_HEIGHT * visible_ressources)
-	$Box/Black.rect_position = Vector2(0, $Box.rect_size.y - BORDER_WIDTH)
-	$Box/Black.rect_size = Vector2($Box.rect_size.x, BORDER_WIDTH)
-	$Box/Ressources.rect_size = Vector2(res_width, RESSOURCE_HEIGHT * visible_ressources)
+	$FollowLayer/Box.rect_size = Vector2(width, RESSOURCE_HEIGHT * visible_ressources)
+	$FollowLayer/Box/Black.rect_position = Vector2(0, $FollowLayer/Box.rect_size.y - BORDER_WIDTH)
+	$FollowLayer/Box/Black.rect_size = Vector2($FollowLayer/Box.rect_size.x, BORDER_WIDTH)
+	$FollowLayer/Box/Ressources.rect_size = Vector2(res_width, RESSOURCE_HEIGHT * visible_ressources)
 	if changeable:
-		$Box/Ressources.rect_position.x = BUTTON_WIDTH
+		$FollowLayer/Box/Ressources.rect_position.x = BUTTON_WIDTH
 	else:
-		$Box/Ressources.rect_position.x = 1
+		$FollowLayer/Box/Ressources.rect_position.x = 1
 		
 	position -= Vector2(width / 2.0, -40)
 

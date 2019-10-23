@@ -17,6 +17,7 @@ const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 20.0
 
 var sea_level = 0
 var day_time = 0.0
+var day_level = 0.0
 var day_bonus = 0.0
 var rain_level = 0
 var storm_level = 0.0
@@ -40,6 +41,7 @@ func _process(delta:float):
 	sea_level = TIDE_MAX_LEVEL + (TIDE_MIN_LEVEL-TIDE_MAX_LEVEL) * ((s + 1) / 2.0)
 	day_time = fmod(weather_time, DAY_CYCLE_TIME)
 	day_bonus = -cos(2*PI * weather_time / DAY_CYCLE_TIME)
+	day_level = (day_bonus+1) / 2.0
 	rain_level = (sin(-2*PI * weather_time / RAIN_CYCLE_TIME) + 1) / 2.0
 	storm_level = rain_level * rain_level
 	

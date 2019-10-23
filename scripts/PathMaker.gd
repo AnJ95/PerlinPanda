@@ -49,14 +49,15 @@ func _unhandled_input(event: InputEvent):
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
 		var hovered_cell = map.calc_closest_tile_from(click_pos)
 		for updater in updaters:
+			var box = updaters[updater].get_node("FollowLayer/Box")
 			if updater == hovered_cell:
-				updaters[updater].visible = true
+				box.visible = true
 				continue
-			var area = Rect2(updaters[updater].position, updaters[updater].get_node("Box").rect_size)
-			if updaters[updater].visible == true and area.has_point(click_pos):
-				updaters[updater].visible = true
+			var area = Rect2(updaters[updater].position, updaters[updater].get_node("FollowLayer/Box").rect_size)
+			if box.visible == true and area.has_point(click_pos):
+				box.visible = true
 				continue
-			updaters[updater].visible = false
+			box.visible = false
 		
 		# if panda in range: show its line
 		for other in [get_house_in_range(click_pos), get_panda_in_range(click_pos)]:

@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://scripts/ui/Building.gd" type="Script" id=1]
 [ext_resource path="res://assets/tilesBlocks.png" type="Texture" id=2]
@@ -6,6 +6,23 @@
 [ext_resource path="res://assets/images/bamboo.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=5]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=6]
+
+[sub_resource type="Animation" id=1]
+resource_name = "highlight"
+length = 1.5
+step = 0.75
+tracks/0/type = "value"
+tracks/0/path = NodePath(".:color")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.75, 1.5 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 0.596078, 0.584314, 0.501961, 1 ), Color( 0.4, 0.701961, 0.301961, 1 ), Color( 0.596078, 0.584314, 0.501961, 1 ) ]
+}
 
 [node name="Buyable" type="ColorRect" groups=[
 "buyable",
@@ -21,6 +38,10 @@ costs_bamboo = 0
 costs_stone = 0
 costs_leaves = 0
 col_inactive = Color( 0.596078, 0.584314, 0.501961, 1 )
+col_active = Color( 0.4, 0.701961, 0.301961, 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/highlight = SubResource( 1 )
 
 [node name="Black" type="ColorRect" parent="."]
 margin_top = 88.0

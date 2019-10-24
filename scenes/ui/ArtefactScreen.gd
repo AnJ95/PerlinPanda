@@ -68,6 +68,7 @@ func on_click_buyable(buyable):
 	# add to ui
 	if !already_unlocked:
 		unlocked_buyables.add_child(dupl)
+		dupl.highlight()
 	
 	after_select(dupl)
 

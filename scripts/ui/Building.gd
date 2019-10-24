@@ -96,6 +96,8 @@ func set_costs_leaves(val):
 		costsLeaves.value = val
 		costsLeaves.update()
 
+func highlight():
+	$AnimationPlayer.play("highlight")
 
 func select():
 	buildManager.select_building(self)

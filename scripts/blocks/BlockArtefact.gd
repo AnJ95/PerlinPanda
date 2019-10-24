@@ -28,13 +28,7 @@ func panda_in_center(panda):
 		var artefactScreen = nth.ArtefactScreen.instance().set_position(map.calc_px_pos_on_tile(cell_pos))
 		map.get_parent().get_node("MapControls").add_child(artefactScreen)
 		
-		# update inventory
-		var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
-		if ressourceManager.size() > 0:
-			ressourceManager[0].add_ressource("artefacts", 1)
-			ressourceManager[0].emit_signal("artefact_discovered", self)
-		
-			
+
 func get_particle_instance_or_null():
 	return nth.ParticlesArtefact.instance()
 	

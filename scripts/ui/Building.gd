@@ -16,8 +16,15 @@ onready var costsBamboo = $HBoxContainer/VBoxContainer/CostsBamboo
 onready var costsStone = $HBoxContainer/VBoxContainer/CostsStone
 onready var costsLeaves = $HBoxContainer/VBoxContainer/CostsLeaves
 
+# Set ny Buyables
+var locked_id
+
 var is_selected = false
 
+# required by ArtefactScreen
+var is_active = true
+var is_unlockable = false
+var unlockable_parent = null
 
 func _ready():
 	sprite.frame = block_tile_id
@@ -49,16 +56,22 @@ func set_all_colors_to(c):
 	
 	
 func on_gui_input(event):
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
-		var was_selected = is_selected
-		
-		if buildManager.has_selected_building():
-			buildManager.cancel()
-		
-		if !was_selected:
-			select()
+	if is_active:
+		if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
+			var was_selected = is_selected
+			
+			if is_unlockable:
+				unlockable_parent.on_click_buyable(self)
+			else:
+				if buildManager.has_selected_building():
+					buildManager.cancel()
+				
+				if !was_selected:
+					select()
 	get_tree().set_input_as_handled()
 	return true
+	
+
 			
 func set_block_tile_id(val):
 	block_tile_id = val

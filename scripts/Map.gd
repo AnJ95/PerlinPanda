@@ -83,9 +83,7 @@ func _ready():
 	if Engine.editor_hint and preprocess_tile_sets_in_editor:
 		update_tileset_regions()
 	
-	var g = {"level":1}
-	if !Engine.editor_hint:
-		g = load("res://scripts/NonToolFix.gd").new().g()
+	var g = load("res://scripts/NonToolFix.gd").new().g()
 	
 	if !is_preset:
 		# Clear everything

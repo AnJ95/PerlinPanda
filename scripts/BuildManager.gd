@@ -94,10 +94,6 @@ func get_price_by_block_id(block_id):
 func buy(map, cell_pos):
 	var selected_building = selected_building_or_null
 	if selected_building != null:
-		#ressourceManager.add_ressource("bamboo", -selected_building.costs_bamboo)
-		#ressourceManager.add_ressource("stone", -selected_building.costs_stone)
-		#ressourceManager.add_ressource("leaves", -selected_building.costs_leaves)
-	
 		# WIP is always under image
 		map.set_block_by_tile_id(cell_pos, selected_building.block_tile_id + map.tile_cols)
 		

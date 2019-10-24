@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://scenes/ui/Ressource.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/images/artefact.png" type="Texture" id=2]
@@ -7,7 +7,8 @@
 [ext_resource path="res://assets/zorque.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/panda.png" type="Texture" id=6]
 [ext_resource path="res://assets/tilesBlocks.png" type="Texture" id=7]
-[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=8]
+[ext_resource path="res://scripts/ui/Buyables.gd" type="Script" id=8]
+[ext_resource path="res://scenes/ui/Buyable.tscn" type="PackedScene" id=9]
 
 [sub_resource type="DynamicFont" id=1]
 size = 43
@@ -83,7 +84,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = -0.0170049
+rotation = -0.00582023
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -220,8 +221,8 @@ color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="FailScreen"]
 visible = false
-position = Vector2( 362769, 112.369 )
-rotation = -0.255074
+position = Vector2( 392114, 112.369 )
+rotation = -0.0873035
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -310,23 +311,24 @@ margin_top = 508.0
 margin_right = 1024.0
 margin_bottom = 600.0
 custom_styles/panel = SubResource( 3 )
+script = ExtResource( 8 )
 
-[node name="Unlocked" type="HBoxContainer" parent="Buyables"]
+[node name="Unlocked" type="HBoxContainer" parent="Buyables" groups=[
+"unlocked_buyables",
+]]
 margin_right = 1024.0
 margin_bottom = 92.0
 custom_constants/separation = 20
 
-[node name="HouseLv1" parent="Buyables/Unlocked" instance=ExtResource( 8 )]
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
+[node name="HouseLv1" parent="Buyables/Unlocked" instance=ExtResource( 9 )]
 block_tile_id = 4
 costs_bamboo = 4
 costs_stone = 2
 costs_leaves = 4
 
-[node name="Street" parent="Buyables/Unlocked" instance=ExtResource( 8 )]
+[node name="Street" parent="Buyables/Unlocked" instance=ExtResource( 9 )]
 margin_left = 135.0
 margin_right = 250.0
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
 block_tile_id = 16
 costs_bamboo = 1
 costs_stone = 1
@@ -340,35 +342,31 @@ margin_right = 1024.0
 margin_bottom = 92.0
 custom_constants/separation = 20
 
-[node name="Farm" parent="Buyables/Locked" instance=ExtResource( 8 )]
+[node name="Farm" parent="Buyables/Locked" instance=ExtResource( 9 )]
 focus_mode = 2
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
 block_tile_id = 29
 costs_bamboo = 5
 
-[node name="Tower" parent="Buyables/Locked" instance=ExtResource( 8 )]
+[node name="Tower" parent="Buyables/Locked" instance=ExtResource( 9 )]
 margin_left = 135.0
 margin_right = 250.0
 focus_mode = 2
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
 block_tile_id = 28
 costs_bamboo = 4
 costs_leaves = 4
 
-[node name="Well" parent="Buyables/Locked" instance=ExtResource( 8 )]
+[node name="Well" parent="Buyables/Locked" instance=ExtResource( 9 )]
 margin_left = 270.0
 margin_right = 385.0
 focus_mode = 2
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
 block_tile_id = 40
 costs_bamboo = 1
 costs_stone = 3
 
-[node name="Smoker" parent="Buyables/Locked" instance=ExtResource( 8 )]
+[node name="Smoker" parent="Buyables/Locked" instance=ExtResource( 9 )]
 margin_left = 405.0
 margin_right = 520.0
 focus_mode = 2
-color = Color( 0.596078, 0.584314, 0.501961, 1 )
 block_tile_id = 41
 costs_bamboo = 2
 costs_stone = 1

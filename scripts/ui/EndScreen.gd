@@ -71,9 +71,7 @@ func show_child(node):
 
 func on_gui_input(event):
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
-		var g = {"level":1}
-		if !Engine.editor_hint:
-			g = load("res://scripts/NonToolFix.gd").new().g()
+		var g = load("res://scripts/NonToolFix.gd").new().g()
 			
 		if won:
 			g.level += 1

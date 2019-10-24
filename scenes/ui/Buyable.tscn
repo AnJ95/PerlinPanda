@@ -12,8 +12,9 @@
 ]]
 margin_right = 115.0
 margin_bottom = 92.0
-rect_min_size = Vector2( 115, 89 )
+rect_min_size = Vector2( 115, 92 )
 mouse_default_cursor_shape = 2
+color = Color( 0.596078, 0.584314, 0.501961, 1 )
 script = ExtResource( 1 )
 block_tile_id = 0
 costs_bamboo = 0
@@ -44,7 +45,6 @@ scale = Vector2( 0.53, 0.53 )
 texture = ExtResource( 2 )
 vframes = 8
 hframes = 6
-frame = 4
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
 margin_left = 64.0

@@ -1,6 +1,7 @@
 extends "Block.gd"
 
 var panda
+var repeat_icon
 
 func get_class(): return "BlockHouse"
 
@@ -25,15 +26,11 @@ func init(map, cell_pos, cell_info, args, nth):
 		light.position = map.calc_px_pos_on_tile(cell_pos)
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", light)
 	
-	
-	repeat_icon = nth.RepeatIcon.instance().init(map, cell_pos, self)
-	map.get_parent().get_node("MapControls").append()
+		
+		repeat_icon = nth.RepeatIcon.instance().init(map, cell_pos, self)
+		map.get_parent().get_node("MapControls").call_deferred("add_child", repeat_icon)
 	
 	return self
-	
-################################################
-### REPEAT
-var repeat_icon
 
 
 func panda_in_center(panda):
@@ -55,6 +52,8 @@ func get_speed_factor():
 	
 func remove():
 	panda.remove()
+	if repeat_icon != null:
+		repeat_icon.queue_free()
 	.remove()
 	
 ################################################

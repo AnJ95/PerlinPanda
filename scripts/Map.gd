@@ -65,7 +65,8 @@ onready var nth = {
 	"ParticlesVision":preload("res://scenes/particles/Particles_vision.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn"),
 	"OrangeLight":preload("res://scenes/OrangeLight.tscn"),
-	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn")
+	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn"),
+	"RepeatIcon":preload("res://scenes/ui/RepeatIcon.tscn")
 	}
 
 # OpenSimplex

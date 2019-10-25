@@ -48,10 +48,7 @@ func input(event):
 					var lightning = load("res://scenes/lightning.tscn").instance().init(map, cell_pos)
 					map.get_node("Navigation2D/PandaHolder").add_child(lightning)
 				if event.scancode == 65: # A
-					var ressourceManager = map.get_tree().get_nodes_in_group("ressource_manager")
-					if ressourceManager.size() > 0:
-						ressourceManager[0].add_ressource("artefacts", 1)
-				if event.scancode == 81: # Q
-					var ressourceManager = map.set_block_by_descriptor(cell_pos, "artefact")
+					map.set_block_by_descriptor(cell_pos, "artefact")
+					
 
 			

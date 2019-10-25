@@ -9,6 +9,7 @@ var updaters = {}
 onready var Inventory = preload("res://scenes/Inventory.tscn")
 var inventory
 var taking_from_home
+var currently_hovered_house
 
 var active:bool = false
 var panda
@@ -31,9 +32,21 @@ onready var tile_ids = {
 	"ressource" : 			3,
 	"build" : 				3 + 1*map.tile_cols}
 
+var line
+var enable_visuals = true
+func init(enable_visuals=true):
+	self.enable_visuals = enable_visuals
+	if !enable_visuals:
+		line = Line2D.new()
+	return self
+	
+func _ready():
+	if line == null:
+		line = $Line2D
 var c:Color = Color(0,0,0,0)
 func _unhandled_input(event: InputEvent):	
-				
+	if !enable_visuals:
+		return
 	# Hover effect: show panda path when mouse over house
 	if event is InputEventMouseMotion:
 		# first hide all lines
@@ -59,12 +72,29 @@ func _unhandled_input(event: InputEvent):
 				continue
 			box.visible = false
 		
+		# show house repeat icon
+		var house = get_house_in_range(click_pos)
+		if house == null:
+			house = get_panda_in_range(click_pos)
+			
+				
+		if house != null:
+			house = map.blocks[house.home_pos]
+			house.repeat_icon.house_mouse_enter()
+			if currently_hovered_house != null and currently_hovered_house != house:
+				currently_hovered_house.repeat_icon.house_mouse_leave()
+			currently_hovered_house = house
+		else:
+			if currently_hovered_house != null:
+				currently_hovered_house.repeat_icon.house_mouse_leave()
+			currently_hovered_house = null
+		
+		
 		# if panda in range: show its line
-		for other in [get_house_in_range(click_pos), get_panda_in_range(click_pos)]:
-			if other != null:
-				if other.line != null:
-					c.a = 0.8
-					other.line.default_color = c
+		if currently_hovered_house != null and currently_hovered_house.panda != null:
+			if currently_hovered_house.panda.line != null:
+				c.a = 0.8
+				currently_hovered_house.panda.line.default_color = c
 		
 		
 	# Scrolling first
@@ -102,6 +132,7 @@ func _unhandled_input(event: InputEvent):
 				
 		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda) and (!active or is_valid_next(get_last_cell_pos(), clicked_tile)): #start new
 			try_start_path_from(clicked_panda)
+			#if clicked_panda.repeat:
 
 func toggle_tile(tile):
 	if path[path.size() - 1 - 2] is Vector2 and path[path.size() - 1 - 2] == tile:
@@ -201,15 +232,16 @@ func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))
 
 func update_preview():
-	map.map_overlay.clear()
+	if enable_visuals:
+		map.map_overlay.clear()
 	
-	# show regular stuff if not active
-	if !active:
-		$Line2D.hide()
-		map.show_homes()
-		return
+		# show regular stuff if not active
+		if !active:
+			line.hide()
+			map.show_homes()
+			return
 		
-	update_overlay()
+		update_overlay()
 	update_line()
 	update_inventory()
 	p("Expected panda inventory is " + str(inventory.inventory))
@@ -266,8 +298,8 @@ func update_line():
 	for cell in path:
 		if cell is Vector2:
 			pts.append(map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst))
-	$Line2D.points = PoolVector2Array(pts)
-	$Line2D.show()
+	line.points = PoolVector2Array(pts)
+	line.show()
 	
 func update_inventory():
 	# reset inventory
@@ -287,7 +319,7 @@ func update_inventory():
 			if last_perform_action:
 				if path_elem.get_parent() == null:
 					path_elem.position = map.calc_px_pos_on_tile(last_cell_pos)
-					if path_elem.show:
+					if path_elem.show and enable_visuals:
 						map.get_parent().get_node("MapControls").add_child(path_elem)
 								
 				updaters[last_cell_pos] = path_elem
@@ -319,7 +351,7 @@ func done_with_path():
 		house.scheduled_inventory.add(res, -taking_from_home.ressources[res])
 	
 	if panda.line == null:
-		panda.line = $Line2D.duplicate()
+		panda.line = line.duplicate()
 		get_parent().get_node("Map/Navigation2D/PathHolder").add_child(panda.line)
 		panda.line.points = PoolVector2Array()
 	
@@ -335,13 +367,16 @@ func done_with_path():
 	panda.line.points = PoolVector2Array(pts)
 	
 func try_start_path_from(panda):
-		taking_from_home = create_ressource_updater_from_own_house(map.blocks[panda.home_pos])
-		active = true
-		self.panda = panda
-		path = [panda.home_pos, true, taking_from_home]
-		panda.stop_particles()
-		update_preview()
-		return
+	#if panda.repeat and enable_visuals:
+	#	panda.set_repeat(false)
+		
+	taking_from_home = create_ressource_updater_from_own_house(map.blocks[panda.home_pos])
+	active = true
+	self.panda = panda
+	path = [panda.home_pos, true, taking_from_home]
+	panda.stop_particles()
+	update_preview()
+	return
 			
 func cancel():
 	if active:

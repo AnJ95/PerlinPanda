@@ -107,8 +107,6 @@ func get_info_on_landscape_tile_id(tile_id):
 	
 func _get_info_on_tile_id(scripts, sheet, tile_id):
 	# first get descriptor by tile id from sheet
-	#var sheet_x = int(tile_id) % sheet[0].size()
-	#var sheet_y = int(tile_id) / sheet[0].size()
 	if tile_id < 0 or tile_id + 1 > sheet.size():
 		err("invalid tile_id '" + str(tile_id) + "', is not in tilesheet")
 		return null

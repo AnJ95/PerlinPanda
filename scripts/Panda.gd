@@ -41,7 +41,6 @@ func _ready():
 
 func _process(delta: float) -> void:
 	._process(delta)
-	
 	# start animation
 	if show_start_anim:
 		if move_towards_then(start_anim_target, 12*SPEED, delta):
@@ -68,13 +67,15 @@ func _process(delta: float) -> void:
 		ressourceManager.steps_taken += 1
 	else:
 		update_sprite((target_pos - position))
-		line.points[0] = position
-		line.points = line.points
+		if line.points.size() > 0:
+			line.points[0] = position
+			line.points = line.points
 				
 	# Check for stepping on bug
 	for bug in get_tree().get_nodes_in_group("bug"):
 		if position.distance_squared_to(bug.position) < 2500 and position.distance_to(bug.position) < 50:
 			bug.stepped_on(self)
+
 
 func is_ressource_updater(e):
 	return !e is bool and !e is Vector2 and e.get_filename().find("RessourceUpdater") > -1
@@ -173,14 +174,23 @@ func next_path():
 		expected_inventory = next_expected_inventories.pop_front()
 	else:
 		path = null
-		expected_inventory = null
-		$Particles_sleeping.emitting = true
-		update_sprite(Vector2(1,1))
+		map.blocks[home_pos].scheduled_inventory = map.blocks[home_pos].inventory.clone()
+		if repeat:
+			repeat()
+		else:
+			expected_inventory = null
+			$Particles_sleeping.emitting = true
+			update_sprite(Vector2(1,1))
+		
+		
 	
 	if path != null:
 		p("######## PATH START")
 		p("## Path:" + str(path))
 		p("## Expected inventory: " + expected_inventory._to_string())
+		
+
+
 	
 func calc_speed_factor():
 	var speed_factor = 1.0
@@ -269,9 +279,94 @@ func remove():
 	if !pathMaker[0].active:
 		map.map_overlay.clear()
 		map.show_homes()
+	
+	if repeat_line != null:
+		repeat_line.queue_free()
 		
 	ressourceManager.add_ressource("population", -1)
+
+####################################
+## REPEAT
+
+func repeat():
+	var pathMaker = load("res://scenes/PathMaker.tscn").instance().init(false)
+	map.get_parent().add_child(pathMaker)
 	
+	pathMaker.try_start_path_from(self)
+	for i in range(repeat_path.size()):
+		var path_elem = repeat_path[i]
+		if path_elem is Vector2:
+			pathMaker.add_to_current_path(path_elem);
+			if pathMaker.path[pathMaker.path.size()-2] is bool and repeat_path.size() > i+1 and repeat_path[i+1] is bool:
+				pathMaker.path[pathMaker.path.size()-2] = repeat_path[i+1]
+				
+	for p in range(repeat_next_paths.size()):
+		var repeat_path = repeat_next_paths[p]
+		pathMaker.try_start_path_from(self)
+		for i in range(repeat_path.size()):
+			var path_elem = repeat_path[i]
+			if path_elem is Vector2:
+				pathMaker.add_to_current_path(path_elem);
+				if pathMaker.path[pathMaker.path.size()-2] is bool and repeat_path.size() > i+1 and repeat_path[i+1] is bool:
+					pathMaker.path[pathMaker.path.size()-2] = repeat_path[i+1]
+					
+var repeat = false
+var repeat_path
+var repeat_next_paths
+var repeat_line
+func set_repeat(repeat):
+	map.blocks[home_pos].repeat_icon.set_pressed(repeat)
+	if repeat:
+		repeat_path = path
+		repeat_next_paths = []; for e in next_paths: repeat_next_paths.append(e)
+		draw_orange_line()
+	else:
+		# delete anything but the current path
+		next_paths = []
+		
+		# slice the line until house is reached
+		var pts = Array(line.points)
+		var pts_new = []
+		var home_px_pos = map.map_overlay.map_to_world(home_pos) + Vector2(0, map.cell_infos[home_pos].height * map.layer_px_dst)
+		for pt in pts:
+			pts_new.append(pt)
+			if pt == home_px_pos:
+				break
+		line.points = PoolVector2Array(pts_new)
+		
+		# hide orange line
+		if repeat_line != null:
+			repeat_line.hide()
+			
+	self.repeat = repeat
+			
+	
+func draw_orange_line():
+	
+	var pts = []
+	
+	# create one list for all paths
+	var paths = []
+	paths.append(path)
+	for path in next_paths: paths.append(path)
+	
+	# add all points
+	for path in paths:
+		if pts.size() == 0: pts.push_front(map.map_overlay.map_to_world(path[0]) + Vector2(0, map.cell_infos[path[0]].height * map.layer_px_dst))
+		for cell in path:
+			if cell is Vector2:
+				var pt = map.map_overlay.map_to_world(cell) + Vector2(0, map.cell_infos[cell].height * map.layer_px_dst)
+				pts.append(pt)
+
+	if repeat_line == null:
+		repeat_line = line.duplicate()
+		repeat_line.default_color = Color(0.8,0.3,0.2,0.8)
+	repeat_line.show()
+	repeat_line.points = PoolVector2Array(pts)
+	
+	line.get_parent().add_child(repeat_line)
+
+
 ####################################
 ## INVENTORY
 # Is not displayed concretly and therefore confusing

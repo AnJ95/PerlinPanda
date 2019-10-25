@@ -20173,6 +20173,8 @@
 
 [node name="Map" type="Node2D"]
 script = ExtResource( 1 )
+preprocess_tile_sets_in_editor = false
+show_case_map_in_editor = false
 show_case_size = 4
 is_preset = true
 avg_tick_time_of_one_tile = 50.0
@@ -20186,7 +20188,7 @@ cell_size = Vector2( 86, 100 )
 cell_half_offset = 1
 cell_y_sort = true
 format = 1
-tile_data = PoolIntArray( -65537, 201, 0, -131072, 202, 0, -131071, 204, 0, -2, 201, 0, -1, 102, 0, -65536, 102, 0, -65535, 103, 0, -65534, 201, 0, 65534, 201, 0, 65535, 104, 0, 0, 3, 0, 1, 103, 0, 2, 201, 0, 131070, 204, 0, 131071, 201, 0, 65536, 102, 0, 65537, 202, 0, 65538, 202, 0, 131072, 202, 0 )
+tile_data = PoolIntArray( -65537, 204, 0, -131072, 202, 0, -131071, 204, 0, -2, 201, 0, -1, 104, 0, -65536, 103, 0, -65535, 104, 0, -65534, 202, 0, 65534, 203, 0, 65535, 101, 0, 0, 1, 0, 1, 102, 0, 2, 203, 0, 131070, 202, 0, 131071, 204, 0, 65536, 102, 0, 65537, 204, 0, 65538, 202, 0, 131072, 202, 0 )
 
 [node name="MapBlocks" type="TileMap" parent="Navigation2D"]
 tile_set = SubResource( 2 )

@@ -5,7 +5,6 @@ onready var locked_buyables = get_tree().get_nodes_in_group("locked_buyables")[0
 onready var buyables = $FollowLayer/Buyables
 
 var ressourceManager
-var selected_building = null
 
 const unlock_possibilities = 3
 
@@ -87,7 +86,7 @@ func set_position(pos:Vector2):
 func select_random_buyables():
 	var selected_ids = []
 	var left = locked_buyables.get_children().size()
-	for i in range(min(unlock_possibilities, left)):
+	for _i in range(min(unlock_possibilities, left)):
 		var selected_id = randi()%left
 		while selected_ids.find(selected_id) != -1:
 			selected_id = randi()%left

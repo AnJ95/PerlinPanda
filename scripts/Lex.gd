@@ -4,11 +4,11 @@ var block_sheet = [
 	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_4", "stone_var_1_stock_4", "house", "farm_stock_4", "", "", "", "", "", "",
 	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2", "", "", "", "", "", "",
 	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2", "", "", "", "", "", "",
-	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_16", "farm_stock_1", "", "", "", "", "", "",
+	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_28", "farm_stock_1", "", "", "", "", "", "",
 	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_3", "tower", "farm_stock_0", "", "", "", "", "", "",
-	"bughill_var_0", "bug_fill_var_1", "bug_fill_var_2", "", "wip_of_28", "wip_of_29", "", "", "", "", "", "",
+	"bughill_var_0", "bug_fill_var_1", "bug_fill_var_2", "", "wip_of_52", "wip_of_53", "", "", "", "", "", "",
 	"vegetation_var_0", "vegetation_var_1", "vegetation_var_2", "vegetation_var_3", "well", "smoker", "", "", "", "", "", "",
-	"artefact_var_0", "artefact_var_1", "", "", "wip_of_40", "wip_of_41", "", "", "", "", "", ""
+	"artefact_var_0", "artefact_var_1", "", "", "wip_of_76", "wip_of_77", "", "", "", "", "", ""
 ]
 
 var landscape_sheet = [

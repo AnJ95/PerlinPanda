@@ -32,9 +32,12 @@ var layer_px_dst = 15
 
 var time = 0
 
+# Vision
+const vision_per_rd_time = 0.8
+var visions = []
+
 # State
 var level = 1
-var cur_gen = 0
 var blocks = {}
 var landscapes = {}
 var cell_infos = {}
@@ -59,6 +62,7 @@ onready var nth = {
 	"ParticlesDrops":preload("res://scenes/particles/Particles_drops.tscn"),
 	"ParticlesWelled":preload("res://scenes/particles/Particles_welled.tscn"),
 	"ParticlesSpray":preload("res://scenes/particles/Particles_spray.tscn"),
+	"ParticlesVision":preload("res://scenes/particles/Particles_vision.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn"),
 	"OrangeLight":preload("res://scenes/OrangeLight.tscn"),
 	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn")
@@ -78,8 +82,6 @@ var start_pos = Vector2()
 
 func _ready():
 	init_map_gens()
-	
-	var _x = connect("generate_next", self, "generate_next")
 	
 	if Engine.editor_hint and preprocess_tile_sets_in_editor:
 		update_tileset_regions()
@@ -144,14 +146,12 @@ func _ready():
 			if ressourceManager.size() > 0:
 				ressourceManager[0].add_ressource("artefacts_max", map_generation_circles.size())
 
-			weatherManager = get_tree().get_nodes_in_group("weatherManager")
-			if weatherManager.size() > 0:
-				weatherManager = weatherManager[0]
-			else:
-				weatherManager = null
+			var weatherManager = get_tree().get_nodes_in_group("weatherManager")
+			if weatherManager.size() > 0: self.weatherManager = weatherManager[0]
+
 			
 	if Engine.editor_hint and show_case_map_in_editor:
-		generate_next(Vector2(), show_case_size)
+		grant_vision(Vector2(), show_case_size)
 
 	
 
@@ -196,10 +196,32 @@ func ensure_cache_singleton(preset_id):
 
 	
 func _process(delta:float):
+	# VISION
+	var remove_idx = []
+	for i in range(visions.size()):
+		var from = visions[i][0]
+		var rd = visions[i][1]
+		var time = visions[i][2]
+		
+		generate_tile(from)
+		
+		for dst in range(1, rd+1):
+			if time <= vision_per_rd_time * dst:
+				for pos in get_adjacent_tiles(from, rd-dst):
+					generate_tile(pos)
+		visions[i][2] -= delta
+		if visions[i][2] <= 0:
+			remove_idx.append(i)
+			
+	remove_idx.invert()
+	for idx in remove_idx:
+		visions.remove(idx)
+		
 	# too much lag
 	if Engine.editor_hint:
 		return
 		
+	# TICK
 	tick_time_left -= delta
 	time += delta
 	while tick_time_left <= 0:
@@ -242,20 +264,13 @@ func init_map_gens():
 			gen[property_name] = map_gens_lex[name][property_name]
 		map_gens[name] = gen
 
-func generate_next(from:Vector2, rd:float):
-	cur_gen += 1
-		
-	for y in range(-rd-1, rd+2):
-		for x in range(-rd-1, rd+2):
-			var pos = from + Vector2(x, y)
-			if landscapes.has(pos):
-				continue
-			
-			var a = map_landscape.map_to_world(from)
-			var b = map_landscape.map_to_world(pos)
-			
-			if a.distance_to(b) <=  rd * 105:
-				generate_tile(pos)
+
+func grant_vision(from:Vector2, rd:int):
+	visions.append([from, rd, rd*vision_per_rd_time])
+	if rd > 1:
+		var particle = nth.ParticlesVision.instance().init(rd, calc_px_pos_on_tile(from))
+		$Navigation2D/UIHolder.call_deferred("add_child", particle)
+	
 	
 func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("## Map ## loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
@@ -493,13 +508,22 @@ func are_tiles_adjacent(a:Vector2, b:Vector2):
 	var c4 = int(round(abs(a.x))) % 2 == 1 and abs(a.x - b.x) == 1 and a.y+1 == b.y
 	return c1 or c2 or c3 or c4
 	
-func get_adjacent_tiles(a:Vector2):
-	var tiles = []
-	for y in range(a.y - 1, a.y + 2):
-		for x in range(a.x - 1, a.x + 2):
-			var b = Vector2(x, y)
-			if are_tiles_adjacent(a, b):
-				tiles.append(b)
+func get_adjacent_tiles(a:Vector2,rd:int=1):
+	var tiles_dic = {a:true}
+	
+	for dst in range(rd):
+		var add_to_tiles_dic = {}
+		for tile in tiles_dic:
+			for y in range(tile.y - 1, tile.y + 2):
+				for x in range(tile.x - 1, tile.x + 2):
+					var b = Vector2(x, y)
+					if are_tiles_adjacent(tile, b):
+						add_to_tiles_dic[b] = true
+		for tile in add_to_tiles_dic:
+			tiles_dic[tile] = true
+	
+	# convert to array
+	var tiles = []; for tile in tiles_dic: if tile != a: tiles.append(tile)
 	return tiles
 	
 func reset_tick_time_left():

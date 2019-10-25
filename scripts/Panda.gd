@@ -84,7 +84,7 @@ func reached_cell():
 	arr.pop_front()
 	line.points = PoolVector2Array(arr)
 	var reached_cell = path[curr_path_pos]
-	map.generate_next(reached_cell, 1)
+	map.grant_vision(reached_cell, 1)
 	last_target = reached_cell
 	
 	curr_path_pos += 1

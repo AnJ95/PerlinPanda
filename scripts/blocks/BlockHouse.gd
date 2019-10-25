@@ -9,10 +9,12 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	# DEBUG STUFF
 	if map.debug_mode:
-		map.generate_next(cell_pos, 5)
+		map.grant_vision(cell_pos, 3)
 		for inv in [inventory, scheduled_inventory]:
 			for res in ["bamboo", "stone", "leaves"]:
-				inv.add(res, 6)
+				inv.add(res, 20)
+	else:
+		map.grant_vision(cell_pos, 3)
 	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
@@ -23,7 +25,7 @@ func init(map, cell_pos, cell_info, args, nth):
 		light.position = map.calc_px_pos_on_tile(cell_pos)
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", light)
 	
-	map.generate_next(cell_pos, 2)
+	
 	return self
 	
 func panda_in_center(panda):

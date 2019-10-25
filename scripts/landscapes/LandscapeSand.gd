@@ -5,7 +5,7 @@ const PARTICLE_DST = 0.15
 func get_class(): return "LandscapeSand"
 
 func get_tile_id():
-	return 2 * 6 # TODO  6 = map.tile_cols
+	return 2 * 12
 	
 func get_max_var():
 	return 4

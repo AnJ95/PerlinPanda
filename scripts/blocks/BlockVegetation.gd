@@ -8,7 +8,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	return self
 	
 func get_tile_id():
-	return 36
+	return 0 + 6*12
 	
 func ressource_name_or_null():
 	return "leaves"

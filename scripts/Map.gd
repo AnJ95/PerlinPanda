@@ -16,7 +16,7 @@ export var print_path_maker = false
 export var print_panda_pathing = false
 
 # Consts
-export var tile_cols:int = 6
+export var tile_cols:int = 12
 export var tile_rows:int = 8
 var layer_offset:int = 100
 

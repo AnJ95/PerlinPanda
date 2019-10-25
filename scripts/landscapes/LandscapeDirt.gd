@@ -15,7 +15,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
-	return 6 # TODO  6 = map.tile_cols
+	return 12
 	
 func get_max_var():
 	return 4

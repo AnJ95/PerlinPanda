@@ -1,24 +1,24 @@
 extends Node
 
 var block_sheet = [
-	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_4", "stone_var_1_stock_4", "house", "farm_stock_4",
-	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2",
-	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2",
-	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_16", "farm_stock_1",
-	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_3", "tower", "farm_stock_0",
-	"bughill_var_0", "bug_fill_var_1", "bug_fill_var_2", "", "wip_of_28", "wip_of_29",
-	"vegetation_var_0", "vegetation_var_1", "vegetation_var_2", "vegetation_var_3", "well", "smoker",
-	"artefact_var_0", "artefact_var_1", "", "", "wip_of_40", "wip_of_41"
+	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_4", "stone_var_1_stock_4", "house", "farm_stock_4", "", "", "", "", "", "",
+	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2", "", "", "", "", "", "",
+	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2", "", "", "", "", "", "",
+	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_16", "farm_stock_1", "", "", "", "", "", "",
+	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_3", "tower", "farm_stock_0", "", "", "", "", "", "",
+	"bughill_var_0", "bug_fill_var_1", "bug_fill_var_2", "", "wip_of_28", "wip_of_29", "", "", "", "", "", "",
+	"vegetation_var_0", "vegetation_var_1", "vegetation_var_2", "vegetation_var_3", "well", "smoker", "", "", "", "", "", "",
+	"artefact_var_0", "artefact_var_1", "", "", "wip_of_40", "wip_of_41", "", "", "", "", "", ""
 ]
 
 var landscape_sheet = [
-	"grass_durability_1", "grass_durability_2", "grass_durability_3", "grass_durability_4", "grass_durability_5", "",
-	"dirt_var_0", "dirt_var_1", "dirt_var_2", "dirt_var_3", "dirt_var_4", "",
-	"sand_var_0", "sand_var_1", "sand_var_2", "sand_var_3", "sand_var_4", "",
-	"water_var_0", "water_var_1", "water_var_2", "water_var_3", "water_var_4", "",
-	"burnt_var_0", "burnt_var_1", "burnt_var_2", "burnt_var_3", "burnt_var_4", "",
-	"", "", "", "", "", "",
-	"", "", "", "", "", ""
+	"grass_durability_1", "grass_durability_2", "grass_durability_3", "grass_durability_4", "grass_durability_5", "", "", "", "", "", "", "",
+	"dirt_var_0", "dirt_var_1", "dirt_var_2", "dirt_var_3", "dirt_var_4", "", "", "", "", "", "", "",
+	"sand_var_0", "sand_var_1", "sand_var_2", "sand_var_3", "sand_var_4", "", "", "", "", "", "", "",
+	"water_var_0", "water_var_1", "water_var_2", "water_var_3", "water_var_4", "", "", "", "", "", "", "",
+	"burnt_var_0", "burnt_var_1", "burnt_var_2", "burnt_var_3", "burnt_var_4", "", "", "", "", "", "", "",
+	"", "", "", "", "", "", "", "", "", "", "", "",
+	"", "", "", "", "", "", "", "", "", "", "", ""
 ]
 
 

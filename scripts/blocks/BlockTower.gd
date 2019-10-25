@@ -17,7 +17,7 @@ func time_update(time:float):
 	pass
 	
 func get_tile_id():
-	return 28
+	return 4 + 4*12
 
 func get_speed_factor():
 	return 2.0

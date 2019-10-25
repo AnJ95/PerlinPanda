@@ -31,17 +31,27 @@ show_max_value = true
 max_ressource_name = "artefacts_max"
 max_value = 0
 texture = ExtResource( 2 )
+do_update = true
+small = false
 
 [node name="Ressource" parent="." instance=ExtResource( 1 )]
 margin_top = 60.0
 margin_bottom = 130.0
+value = 1
 ressource_name = "population"
+show_max_value = false
+max_value = 1
 texture = ExtResource( 3 )
+do_update = true
+small = false
 
 [node name="EndScreen" type="Node2D" parent="."]
 editor/display_folded = true
 position = Vector2( 0, 20 )
 script = ExtResource( 4 )
+signal_listening_to = "island_restored"
+won = true
+anim_nodes = [ [  ], [ "TextMain", "ColorRect" ], "bamboo", "panda", "TextPandas", "TextSteps", "TextRessources", "TextTime", "BtnNext" ]
 
 [node name="ColorRect" type="ColorRect" parent="EndScreen"]
 editor/display_folded = true
@@ -84,7 +94,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = -0.00582023
+rotation = 0.00139247
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -221,8 +231,8 @@ color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="FailScreen"]
 visible = false
-position = Vector2( 392114, 112.369 )
-rotation = -0.0873035
+position = Vector2( 414388, 112.369 )
+rotation = 0.020887
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -329,14 +339,13 @@ costs_leaves = 4
 [node name="Street" parent="Buyables/Unlocked" instance=ExtResource( 9 )]
 margin_left = 135.0
 margin_right = 250.0
-block_tile_id = 16
+block_tile_id = 28
 costs_bamboo = 1
 costs_stone = 1
 
 [node name="Locked" type="HBoxContainer" parent="Buyables" groups=[
 "locked_buyables",
 ]]
-editor/display_folded = true
 visible = false
 margin_right = 1024.0
 margin_bottom = 92.0
@@ -344,14 +353,14 @@ custom_constants/separation = 20
 
 [node name="Farm" parent="Buyables/Locked" instance=ExtResource( 9 )]
 focus_mode = 2
-block_tile_id = 29
+block_tile_id = 53
 costs_bamboo = 5
 
 [node name="Tower" parent="Buyables/Locked" instance=ExtResource( 9 )]
 margin_left = 135.0
 margin_right = 250.0
 focus_mode = 2
-block_tile_id = 28
+block_tile_id = 52
 costs_bamboo = 4
 costs_leaves = 4
 
@@ -359,7 +368,7 @@ costs_leaves = 4
 margin_left = 270.0
 margin_right = 385.0
 focus_mode = 2
-block_tile_id = 40
+block_tile_id = 76
 costs_bamboo = 1
 costs_stone = 3
 
@@ -367,7 +376,7 @@ costs_stone = 3
 margin_left = 405.0
 margin_right = 520.0
 focus_mode = 2
-block_tile_id = 41
+block_tile_id = 77
 costs_bamboo = 2
 costs_stone = 1
 [connection signal="gui_input" from="EndScreen/BtnNext" to="EndScreen" method="on_gui_input"]

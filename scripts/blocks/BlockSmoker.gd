@@ -10,7 +10,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
-	return 41
+	return 5 + 6*12
 
 func get_speed_factor():
 	return 1.3

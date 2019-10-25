@@ -124,7 +124,9 @@ func shields_landscape_durability():
 	return false
 	
 func got_welled():
-	pass
+	if fire_or_null != null:
+		fire_or_null.extinguish()
+	
 	
 func is_passable():
 	return true

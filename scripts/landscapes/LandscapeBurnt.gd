@@ -29,6 +29,7 @@ func get_max_var():
 	return 4
 	
 func got_welled():
+	.got_welled()
 	map.set_landscape_by_descriptor(cell_pos, landscape_before)
 	
 func tick():

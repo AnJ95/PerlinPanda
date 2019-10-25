@@ -20,7 +20,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
-	return durability
+	return durability - 1
 
 func panda_in_center(_panda):
 	.panda_in_center(_panda)
@@ -57,6 +57,7 @@ func durability_has_reached_zero():
 	map.set_landscape_by_descriptor(cell_pos, "dirt")
 
 func got_welled():
+	.got_welled()
 	increase_durability()
 	if !map.blocks.has(cell_pos) and randi()%100 <= 30:
 		map.set_block_by_descriptor(cell_pos, "vegetation")

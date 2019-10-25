@@ -86,7 +86,8 @@ func remove():
 	map.landscapes.erase(cell_pos)
 
 func got_welled():
-	pass
+	if fire_or_null != null:
+		fire_or_null.extinguish()
 
 func get_adjacent_spreadable_percent():
 	var num_spreading = 0

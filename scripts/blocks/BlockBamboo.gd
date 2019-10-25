@@ -31,6 +31,7 @@ func get_max_stock():
 	return 3
 	
 func got_welled():
+	.got_welled()
 	increase_stock()
 
 func get_regrow_prob():

@@ -29,7 +29,7 @@ func can_be_build_on(map, cell_pos):
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 40
 func get_fire_increase_time():
 	return 10

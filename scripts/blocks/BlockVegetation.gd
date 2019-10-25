@@ -29,7 +29,7 @@ func get_ressource_amount_after_work_done():
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 80
 func get_fire_increase_time():
 	return 6

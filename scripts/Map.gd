@@ -201,15 +201,17 @@ func _process(delta:float):
 	for i in range(visions.size()):
 		var from = visions[i][0]
 		var rd = visions[i][1]
+		
+		visions[i][2] -= delta
 		var time = visions[i][2]
 		
 		generate_tile(from)
 		
-		for dst in range(1, rd+1):
-			if time <= vision_per_rd_time * dst:
+		for dst in range(0, rd+1):
+			if time <= vision_per_rd_time * (dst):
 				for pos in get_adjacent_tiles(from, rd-dst):
 					generate_tile(pos)
-		visions[i][2] -= delta
+		
 		if visions[i][2] <= 0:
 			remove_idx.append(i)
 			
@@ -530,8 +532,9 @@ func reset_tick_time_left():
 	tick_time_left += avg_tick_time_of_one_tile / float(map_landscape.get_used_cells().size())
 	
 func show_homes():
-	for panda in get_tree().get_nodes_in_group("panda"):
-		map_overlay.set_cellv(panda.home_pos, 0 + layer_offset * cell_infos[panda.home_pos].height)
+	pass
+	#for panda in get_tree().get_nodes_in_group("panda"):
+	#	map_overlay.set_cellv(panda.home_pos, 0 + layer_offset * cell_infos[panda.home_pos].height)
 
 func p(obj):
 	if print_ticking:

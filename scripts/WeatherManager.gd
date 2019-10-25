@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-var weather_time = 40.0
+var weather_time = 30.0
 
 # SEA LEVEL
 const TIDE_MIN_LEVEL = 5.5
@@ -13,7 +13,7 @@ const DAY_CYCLE_TIME = 120.0
 # RAIN CYCLE
 const RAIN_CYCLE_TIME = 180.0
 
-const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 20.0
+const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 8.0
 
 var sea_level = 0
 var day_time = 0.0
@@ -78,10 +78,23 @@ func process_lightning(delta, storm_level):
 	
 	if randi()%100 > PROB_TO_LIGHTNING_WHEN_TILE_SELECTED * storm_level:
 		return
-	
-	var l = map.map_landscape
-	var lightning = Lightning.instance().init(map, l.get_used_cells()[randi() % l.get_used_cells().size()])
-	map.get_node("Navigation2D/PandaHolder").add_child(lightning)
+
+	var cells = map.map_landscape.get_used_cells()
+	var id
+	var strike = false
+	var iterations = 0
+	while !strike and iterations < 100:
+		id = randi() % cells.size()
+		if map.blocks.has(cells[id]):
+			if randi()%100 < map.blocks[cells[id]].get_prob_lightning_strike():
+				strike = true
+		else:
+			if randi()%100 < map.landscapes[cells[id]].get_prob_lightning_strike():
+				strike = true
+		iterations += 1
+	if strike:
+		var lightning = Lightning.instance().init(map, cells[id])
+		map.get_node("Navigation2D/PandaHolder").add_child(lightning)
 
 var particle_duplicates = {}
 const particle_min_delta = 5

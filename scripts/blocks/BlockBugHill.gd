@@ -20,7 +20,7 @@ func bug_has_died():
 	spawn_num -= 1
 	
 func get_tile_id():
-	return  30
+	return  5*12
 	
 func get_max_var():
 	return 0

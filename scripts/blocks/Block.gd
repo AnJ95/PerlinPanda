@@ -158,13 +158,10 @@ func remove():
 ################################################
 ### FIRE
 var fire_or_null = null
-func try_catch_fire():
+func catch_fire():
 	# dont consider when landscape below is water
 	if map.landscapes[cell_pos].get_class() == "LandscapeWater":
 		return
-	if randi()%100 <= get_prob_fire_catch():
-		caught_fire()
-func caught_fire():
 	if fire_or_null == null:
 		if !Engine.editor_hint:
 			fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
@@ -173,7 +170,7 @@ func extinguished_fire():
 	fire_or_null = null
 	
 # Overrides
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 0
 func get_fire_increase_time():
 	return 7

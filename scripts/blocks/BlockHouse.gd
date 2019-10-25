@@ -9,12 +9,12 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	# DEBUG STUFF
 	if map.debug_mode:
-		map.grant_vision(cell_pos, 3)
+		map.grant_vision(cell_pos, 5)
 		for inv in [inventory, scheduled_inventory]:
 			for res in ["bamboo", "stone", "leaves"]:
 				inv.add(res, 20)
 	else:
-		map.grant_vision(cell_pos, 3)
+		map.grant_vision(cell_pos, 2)
 	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
@@ -26,8 +26,16 @@ func init(map, cell_pos, cell_info, args, nth):
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", light)
 	
 	
+	repeat_icon = nth.RepeatIcon.instance().init(map, cell_pos, self)
+	map.get_parent().get_node("MapControls").append()
+	
 	return self
 	
+################################################
+### REPEAT
+var repeat_icon
+
+
 func panda_in_center(panda):
 	.panda_in_center(panda)
 	# Foreign House
@@ -51,7 +59,7 @@ func remove():
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 40
 func get_fire_increase_time():
 	return 12

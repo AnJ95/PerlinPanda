@@ -59,7 +59,7 @@ func get_stack_increase_prob():
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 60
 func get_fire_increase_time():
 	return 11

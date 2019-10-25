@@ -119,43 +119,47 @@ func set_particle_emitting(emit:bool):
 ################################################
 ### FIRE
 var fire_or_null = null
-func try_catch_fire():
+
+func catch_fire():
 	# if block exists: try catching fire there instead
 	if map.blocks.has(cell_pos):
-		map.blocks[cell_pos].try_catch_fire()
+		map.blocks[cell_pos].catch_fire()
 	else:
-		if randi()%100 <= get_prob_fire_catch():
-			caught_fire()
-func caught_fire():
-	if fire_or_null == null:
-		if !Engine.editor_hint:
-			fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
-			map.get_node("Navigation2D/ParticleHolder").call_deferred("add_child", fire_or_null)
+		if fire_or_null == null:
+			if !Engine.editor_hint:
+				fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
+				map.get_node("Navigation2D/ParticleHolder").call_deferred("add_child", fire_or_null)
 func extinguished_fire():
 	fire_or_null = null
 func tick_fire():
 	# if is already on fire
 	if fire_or_null != null:
 		return
-
+		
+	# get prob to burn
+	var prob = get_prob_lightning_strike()
+	if map.blocks.has(cell_pos):
+		prob = map.blocks[cell_pos].get_prob_lightning_strike()
+	if randi()%100 > prob:
+		return
+	
 	var fire_levels = 0.0
 	var adj_tiles = 6.0
 	for adj in map.get_adjacent_tiles(cell_pos):
-		if !map.landscapes.has(adj):
-			continue
+		if !map.landscapes.has(adj): continue
 		var landscape = map.landscapes[adj]
 		if landscape.fire_or_null != null:
 			fire_levels += landscape.fire_or_null.fire_level
 	var score = (fire_levels / 3.0) / adj_tiles # 0 when nothing burning, 1 when all adj burning with max strength
-	score *= 8 # 0-8
-	#print(score)
+	score *= 10 # 0-10
+
 	if randi()%100 <= score * 100:
-		self.try_catch_fire() # spread Fire
+		self.catch_fire() # spread Fire
 
 
 # Overrides
-func get_prob_fire_catch():
-	return -1
+func get_prob_lightning_strike():
+	return 0
 func get_fire_increase_time():
 	return 10
 func got_burned_to_the_ground():

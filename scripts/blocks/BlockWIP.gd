@@ -47,7 +47,7 @@ func panda_in_center(panda):
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
+func get_prob_lightning_strike():
 	return 50
 func get_fire_increase_time():
 	return 8

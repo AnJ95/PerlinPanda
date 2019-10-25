@@ -41,6 +41,6 @@ func strike():
 	$Tween.start()
 	
 	# Landscape handles checking blocks!
-	map.landscapes[cell_pos].try_catch_fire()
+	map.landscapes[cell_pos].catch_fire()
 	pass
 	

@@ -70,7 +70,7 @@ func get_speed_factor():
 	
 ################################################
 ### FIRE
-func get_prob_fire_catch():
-	return 40
+func get_prob_lightning_strike():
+	return 20
 func get_fire_increase_time():
 	return 10

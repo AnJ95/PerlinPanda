@@ -11,6 +11,13 @@ func _ready():
 		locked_id += 1
 	
 	var locked_buyables = $Locked.get_children()
+	
+	# Unlock all in debug mode
+	if get_parent().get_parent().get_parent().get_node("Map").debug_mode:		
+		g.unlocked_buyables = []
+		for locked in $Locked.get_children():
+			g.unlocked_buyables.append(locked.locked_id)
+		
 	# add previously unlocked buildings
 	for locked_id in g.unlocked_buyables:
 		var locked = locked_buyables[locked_id]

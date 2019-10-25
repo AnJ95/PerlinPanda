@@ -54,10 +54,11 @@ onready var lex = preload("res://scripts/Lex.gd").new()
 onready var nth = {
 	"Panda":preload("res://scenes/Panda.tscn"),
 	"Bug":preload("res://scenes/Bug.tscn"),
-	"ParticlesSmoke":preload("res://scenes/Particles_smoke.tscn"),
-	"ParticlesArtefact":preload("res://scenes/Particles_artefact.tscn"),
-	"ParticlesDrops":preload("res://scenes/Particles_drops.tscn"),
-	"ParticlesSpray":preload("res://scenes/Particles_spray.tscn"),
+	"ParticlesSmoke":preload("res://scenes/particles/Particles_smoke.tscn"),
+	"ParticlesArtefact":preload("res://scenes/particles/Particles_artefact.tscn"),
+	"ParticlesDrops":preload("res://scenes/particles/Particles_drops.tscn"),
+	"ParticlesWelled":preload("res://scenes/particles/Particles_welled.tscn"),
+	"ParticlesSpray":preload("res://scenes/particles/Particles_spray.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn"),
 	"OrangeLight":preload("res://scenes/OrangeLight.tscn"),
 	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn")

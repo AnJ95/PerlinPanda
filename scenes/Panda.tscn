@@ -1,7 +1,7 @@
 [gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
-[ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scenes/particles/Particles_bamboo.tscn" type="PackedScene" id=2]
 [ext_resource path="res://assets/images/love.png" type="Texture" id=3]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
@@ -9,6 +9,7 @@
 [ext_resource path="res://assets/panda.png" type="Texture" id=7]
 [ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=8]
 [ext_resource path="res://scenes/OrangeLight.tscn" type="PackedScene" id=9]
+
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0, 0.836806, 1 )

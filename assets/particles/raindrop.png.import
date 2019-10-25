@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/raindrop.png-715473e9bcb15bf7eb361fbd34c33eb3.stex"
+path="res://.import/raindrop.png-4fe9149611a4857031d004224a5e228b.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/raindrop.png"
-dest_files=[ "res://.import/raindrop.png-715473e9bcb15bf7eb361fbd34c33eb3.stex" ]
+source_file="res://assets/particles/raindrop.png"
+dest_files=[ "res://.import/raindrop.png-4fe9149611a4857031d004224a5e228b.stex" ]
 
 [params]
 

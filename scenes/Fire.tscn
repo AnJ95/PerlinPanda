@@ -1,8 +1,9 @@
 [gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/Fire.gd" type="Script" id=1]
-[ext_resource path="res://assets/circleSmooth.png" type="Texture" id=2]
+[ext_resource path="res://assets/particles/circleSmooth.png" type="Texture" id=2]
 [ext_resource path="res://resources/Fire.tres" type="Texture" id=3]
+
 
 [sub_resource type="Gradient" id=1]
 

@@ -2,10 +2,11 @@
 
 [ext_resource path="res://scripts/Bug.gd" type="Script" id=1]
 [ext_resource path="res://assets/bug.png" type="Texture" id=2]
-[ext_resource path="res://scenes/Particles_bamboo.tscn" type="PackedScene" id=3]
+[ext_resource path="res://scenes/particles/Particles_bamboo.tscn" type="PackedScene" id=3]
 [ext_resource path="res://assets/images/stone.png" type="Texture" id=4]
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
 [ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=6]
+
 
 [node name="Bug" type="Node2D" groups=[
 "bug",

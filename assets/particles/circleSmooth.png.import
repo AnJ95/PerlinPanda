@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/circleSmooth.png-748ca0a711f8d5c26ad234c08eb7e406.stex"
+path="res://.import/circleSmooth.png-97cb76b30f3ac3cb0d0dacef4d83d19f.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/circleSmooth.png"
-dest_files=[ "res://.import/circleSmooth.png-748ca0a711f8d5c26ad234c08eb7e406.stex" ]
+source_file="res://assets/particles/circleSmooth.png"
+dest_files=[ "res://.import/circleSmooth.png-97cb76b30f3ac3cb0d0dacef4d83d19f.stex" ]
 
 [params]
 

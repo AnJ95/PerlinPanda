@@ -174,10 +174,10 @@ func next_path():
 		expected_inventory = next_expected_inventories.pop_front()
 	else:
 		path = null
-		map.blocks[home_pos].scheduled_inventory = map.blocks[home_pos].inventory.clone()
 		if repeat:
 			repeat()
 		else:
+			map.blocks[home_pos].scheduled_inventory = map.blocks[home_pos].inventory.clone()
 			expected_inventory = null
 			$Particles_sleeping.emitting = true
 			update_sprite(Vector2(1,1))

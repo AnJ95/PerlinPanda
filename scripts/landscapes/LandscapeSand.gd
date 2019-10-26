@@ -12,7 +12,7 @@ func get_max_var():
 
 var last_water_height = -1
 func time_update(_time:float):
-	var water_height = map.weather.get_sea_level()
+	var water_height = get_weather().get_sea_level()
 	
 	# if water rising and above threshold
 	set_particle_emitting(last_water_height > water_height and water_height - PARTICLE_DST < cell_info.precise_height)
@@ -24,8 +24,8 @@ func time_update(_time:float):
 func conv():
 	if fire_or_null != null:
 		fire_or_null.extinguish()
-	elif (map.blocks.has(cell_pos) and map.blocks[cell_pos].fire_or_null != null):
-		map.blocks[cell_pos].fire_or_null.extinguish()
+	elif (has_block() and get_block().fire_or_null != null):
+		get_block().extinguish()
 	map.set_landscape_by_descriptor(cell_pos, "water")
 
 func can_spread_grass():

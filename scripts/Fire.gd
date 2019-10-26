@@ -26,7 +26,6 @@ func _process(delta):
 		fire_increase_time = min(block.get_fire_increase_time(), fire_increase_time)
 	increase_fire_level(delta / fire_increase_time)
 	
-	#print(fire_level)
 	update_visuals()
 
 func increase_fire_level(add):

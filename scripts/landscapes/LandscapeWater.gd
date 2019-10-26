@@ -28,7 +28,7 @@ func time_update(time:float):
 			args.var = 0
 	last_time = time
 	
-	var water_height = map.weather.get_sea_level()
+	var water_height = get_weather().get_sea_level()
 	
 	var deep = (cell_info.height == map.layers - 1)
 	if is_originally_deep:

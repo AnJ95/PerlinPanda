@@ -23,7 +23,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	if particle_inst != null:
 		particle_inst.position = map.calc_px_pos_on_tile(cell_pos)
 		set_particle_emitting(false)
-		map.get_node("Navigation2D/ParticleHolder").add_child(particle_inst)
+		get_particle_holder().add_child(particle_inst)
 		
 	# Variant
 	if !args.has("var"):
@@ -123,13 +123,14 @@ var fire_or_null = null
 
 func catch_fire():
 	# if block exists: try catching fire there instead
-	if map.blocks.has(cell_pos):
-		map.blocks[cell_pos].catch_fire()
+	if has_block():
+		get_block().catch_fire()
 	else:
 		if fire_or_null == null:
 			if !Engine.editor_hint:
 				fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
-				map.get_node("Navigation2D/ParticleHolder").call_deferred("add_child", fire_or_null)
+				get_particle_holder().call_deferred("add_child", fire_or_null)
+				
 func extinguished_fire():
 	fire_or_null = null
 func tick_fire():
@@ -139,8 +140,7 @@ func tick_fire():
 		
 	# get prob to burn
 	var prob = get_prob_lightning_strike()
-	if map.blocks.has(cell_pos):
-		prob = map.blocks[cell_pos].get_prob_lightning_strike()
+	if has_block(): prob = get_block().get_prob_lightning_strike()
 	if randi()%100 > prob:
 		return
 	
@@ -167,4 +167,14 @@ func got_burned_to_the_ground():
 	map.set_landscape_by_descriptor(cell_pos, "burnt")
 	fire_or_null = null
 	pass
-
+	
+################################################
+### HELPERS AND GETTERS
+func has_block():
+	return map.blocks.has(cell_pos)
+func get_block():
+	return map.blocks[cell_pos]
+func get_weather():
+	return map.weather
+func get_particle_holder():
+	return map.get_node("Navigation2D/ParticleHolder")

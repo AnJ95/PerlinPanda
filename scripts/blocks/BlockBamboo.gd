@@ -34,30 +34,21 @@ func got_welled():
 	.got_welled()
 	increase_stock()
 
-func get_regrow_prob():
-	return 60
-	
-func get_regrow_prob_rain_bonus():
-	return 28
-	
-func get_regrow_prob_day_bonus():
-	return 28
+func get_regrow_prob(): 				return 25
+func get_regrow_prob_fertility_bonus(): return 60
+func get_regrow_prob_rain_bonus(): 		return 25
+func get_regrow_prob_day_bonus():		return 25
 
 func get_stack_increase_prob():
-	var num_spreading = 0
-	var num_non_spreading = 0
-	for adjacent in map.get_adjacent_tiles(cell_pos):
-		if map.landscapes.has(adjacent) and map.landscapes[adjacent] != null:
-			if map.landscapes[adjacent].can_spread_grass():
-				num_spreading += 1
-			else:
-				num_non_spreading += 1
-	if num_spreading > 0:
-		var prob_to_spread = (num_spreading / float(num_spreading + num_non_spreading))
-		prob_to_spread *= get_regrow_prob() + map.weather.get_rain_level() * get_regrow_prob_rain_bonus() + map.weather.get_day_bonus() * get_regrow_prob_day_bonus()
-		return prob_to_spread
-	return 0
-	
+	return get_regrow_prob()
+	+ get_landscape().fertility * get_regrow_prob_fertility_bonus()
+	+ get_weather().get_rain_level() * get_regrow_prob_rain_bonus()
+	+ get_weather().get_day_bonus() * get_regrow_prob_rain_bonus()
+
+################################################
+### FERTILITY
+func get_fertility_bonus(): return 0.1
+
 ################################################
 ### FIRE
 func get_prob_lightning_strike():

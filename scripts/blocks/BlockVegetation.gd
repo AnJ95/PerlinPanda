@@ -26,7 +26,9 @@ func get_ressource_amount_after_work_done():
 	if stock == 0:
 		remove()
 	return amount
-	
+################################################
+### FERTILITY
+func get_fertility_bonus(): return 0.1
 ################################################
 ### FIRE
 func get_prob_lightning_strike():

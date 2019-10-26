@@ -35,3 +35,7 @@ func get_particle_instance_or_null():
 func set_particle_emitting(emit):
 	.set_particle_emitting(emit)
 	particle_inst.get_node("Particles_oneshot").emitting = emit
+	
+################################################
+### FERTILITY
+func get_fertility_bonus(): return 0.1

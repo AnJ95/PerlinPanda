@@ -51,3 +51,7 @@ func panda_in_center(panda):
 	.panda_in_center(panda)
 	downgrade()
 	
+################################################
+### FERTILITY
+func get_fertility_bonus(): return -0.1
+	

@@ -50,6 +50,13 @@ func get_speed_factor():
 func got_welled():
 	if fire_or_null != null:
 		fire_or_null.extinguish()
+
+################################################
+### FERTILITY
+
+# Override me
+func get_fertility_bonus():
+	return 0
 	
 ###################################################	
 ### PARTICLES

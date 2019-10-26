@@ -18,6 +18,8 @@ func update_tile():
 
 	# set tile id
 	map.map_landscape.set_cellv(cell_pos, tile_id);
+	
+	update_fertility()
 
 func time_update(_time:float):
 	pass
@@ -27,6 +29,7 @@ func panda_in_center(panda):
 
 func tick():
 	tick_fire()
+	update_fertility()
 	pass
 
 func can_spread_grass():
@@ -40,25 +43,35 @@ func remove():
 	map.map_landscape.set_cellv(cell_pos, -1)
 	map.landscapes.erase(cell_pos)
 
-
-
-func get_adjacent_spreadable_percent():
-	var num_spreading = 0
-	var num_non_spreading = 0
-	for pos in map.get_adjacent_tiles(cell_pos):
-		var a = map.map_landscape.map_to_world(cell_pos, false)
-		var b = map.map_landscape.map_to_world(pos, false)
-		if map.landscapes.has(pos) and map.landscapes[pos] != null:
-			if a.distance_to(b) <= 105:
-				if map.landscapes[pos].can_spread_grass():
-					num_spreading += 1
-				else:
-					num_non_spreading += 1
-	if num_spreading == 0:
-		return 0
-	else:
-		return 100 * (num_spreading / float(num_spreading + num_non_spreading))
-
+################################################
+### FERTILITY
+	
+var fertility_particle
+var fertility = get_fertility_bonus() # overwritten, but good start for initial calc
+func update_fertility():
+	fertility = 0.0
+	fertility += cell_info.fertility
+	
+	fertility += 0.5 * get_fertility_bonus()
+	if has_block(): fertility += 0.5 * get_block().get_fertility_bonus()
+	
+	for adj in map.get_adjacent_tiles(cell_pos, 2):
+		if map.landscapes.has(adj):
+			var factor = map.y(map.are_tiles_adjacent(cell_pos, adj), 0.25/6.0, 0.25/12)
+			fertility += factor * map.landscapes[adj].fertility
+			
+	fertility = min(1, max(0, fertility))
+	
+	if fertility > 0.1 and fertility_particle == null:
+		init_fertility()
+		
+	if fertility_particle != null:
+		fertility_particle.update_fertility(fertility)
+		
+func init_fertility():
+	fertility_particle = nth.ParticlesFertility.instance()
+	fertility_particle.position = map.calc_px_pos_on_tile(cell_pos)
+	get_particle_holder().add_child(fertility_particle)
 
 ################################################
 ### FIRE

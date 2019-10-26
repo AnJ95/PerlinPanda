@@ -3,10 +3,10 @@ extends "Landscape.gd"
 
 var durability = 0
 
-const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY = 10#%
-const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING = 35#%
-
+const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY = 20#%
 const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS = 10#%
+
+const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING = 40#%
 const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS = 30#%
 
 
@@ -28,17 +28,22 @@ func panda_in_center(_panda):
 
 func tick():
 	.tick()
-	if randi()%100 <= get_adjacent_spreadable_percent():
+	if randi()%100 <= 100 * fertility:
 		if randi()%100 <= PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING + get_weather().get_rain_level() * PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS:
 			increase_durability()
-		
-	if durability >= max_durability() and !has_block():
-		if randi()%100 <= PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY + get_weather().get_rain_level() * PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS:
-			map.set_block_by_descriptor(cell_pos, "vegetation")
 
 func increase_durability():
-	durability = min(max_durability(), durability + 1)
+	durability += 1
+	
+	if randi()%100 <= 100 * fertility:
+		if durability > max_durability() and !has_block():
+			if randi()%100 <= PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY + get_weather().get_rain_level() * PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS:
+				map.set_block_by_descriptor(cell_pos, "vegetation")
+	
+	durability = min(max_durability(), durability)
+	
 	update_tile()
+	
 func decrease_durability():
 	if has_block() and get_block().shields_landscape_durability():
 		return
@@ -47,8 +52,6 @@ func decrease_durability():
 		durability_has_reached_zero()
 	else:
 		update_tile()
-
-
 
 func max_durability():
 	return 4
@@ -59,8 +62,6 @@ func durability_has_reached_zero():
 func got_welled():
 	.got_welled()
 	increase_durability()
-	if !has_block() and randi()%100 <= 30:
-		map.set_block_by_descriptor(cell_pos, "vegetation")
 	
 	
 func can_spread_grass():
@@ -68,6 +69,13 @@ func can_spread_grass():
 	
 func get_speed_factor():
 	return 0.75
+	
+################################################
+### FERTILITY
+func get_fertility_bonus():
+	if durability == null: durability = 0
+		
+	return 0.3 * (durability / float(max_durability()))
 	
 ################################################
 ### FIRE

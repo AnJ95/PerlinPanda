@@ -65,3 +65,7 @@ func tick():
 
 func get_particle_instance_or_null():
 	return nth.ParticlesDrops.instance()
+	
+################################################
+### FERTILITY
+func get_fertility_bonus(): return 0.2

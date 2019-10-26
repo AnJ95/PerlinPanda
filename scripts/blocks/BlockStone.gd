@@ -4,15 +4,10 @@ func get_class(): return "BlockStone"
 
 func init(map, cell_pos, cell_info, args, nth):
 	if !args.has("stock"):
-		if cell_info.fertility < -0.35:
-			stock = 4
-		if cell_info.fertility < -0.22:
-			stock = 3
-		elif cell_info.fertility < -0.11:
-			stock = 2
-		else:
-			stock = 1	
-
+		if cell_info.fertility < -0.35: stock = 4
+		elif cell_info.fertility < -0.22: stock = 3
+		elif cell_info.fertility < -0.11: stock = 2
+		else: stock = 1
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():

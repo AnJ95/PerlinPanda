@@ -83,6 +83,42 @@ var map_gens_lex = {
 }
 var map_gens = {}
 
+
+var level_defs = [
+	{
+		"circle_radii": [5],
+		"artefact_difficulties": ["easy"]
+	},
+	{
+		"circle_radii": [5, 5],
+		"artefact_difficulties": ["easy", "medium"]
+	},
+	{
+		"circle_radii": [7, 8],
+		"artefact_difficulties": ["medium", "medium"]
+	},
+	{
+		"circle_radii": [7, 8, 8],
+		"artefact_difficulties": ["medium", "medium", "hard"]
+	},
+	{
+		"circle_radii": [8, 8, 9],
+		"artefact_difficulties": ["medium", "hard", "hard"]
+	},
+	{
+		"circle_radii": [9, 9, 9],
+		"artefact_difficulties": ["hard", "hard", "hard"]
+	},
+	{
+		"circle_radii": [10, 10, 10],
+		"artefact_difficulties": ["hard", "hard", "hard"]
+	},
+	{
+		"circle_radii": [11, 11, 11],
+		"artefact_difficulties": ["hard", "hard", "hard"]
+	}
+]
+var level_def
 # [pos, rad]
 var map_generation_circles = []
 var start_pos = Vector2()
@@ -94,6 +130,11 @@ func _ready():
 		update_tileset_regions()
 	
 	var g = load("res://scripts/NonToolFix.gd").new().g()
+	if level_defs.size() < g.level:
+		printerr("Could not find level_def for level " + str(g.level))
+		level_def = level_defs[level_defs.size() - 1]
+	else:
+		level_def = level_defs[g.level - 1]
 	
 	if !is_preset:
 		# Clear everything
@@ -104,7 +145,7 @@ func _ready():
 			panda.queue_free()
 
 		# First set location of first 
-		var first_circle = [Vector2(0, 0), 4 + g.level]
+		var first_circle = [Vector2(0, 0), level_def.circle_radii[0]]
 		
 		# Then calc start pos
 		# set start pos around edge of first circle
@@ -118,15 +159,17 @@ func _ready():
 		var next_rad
 
 		map_generation_circles = [first_circle]
-		for _i in range(1, g.level):
+		for i in range(1, level_def.circle_radii.size()):
 			var too_close = true
 			var iterations = 0
 			while too_close and iterations < 10000:
 				var rand_circle = map_generation_circles[randi()%map_generation_circles.size()]
 				var last_rad = rand_circle[1]
 				var last_pos = rand_circle[0]
-				next_rad = last_rad
+				next_rad = level_def.circle_radii[i]
 				next_pos = last_pos + Vector2(last_rad + next_rad - 2, 0).rotated(fmod(randf(), 2*PI))
+				next_pos = Vector2(int(round(next_pos.x)), int(round(next_pos.y)))
+				next_pos = Vector2(next_pos.x-int(next_pos.x)%2, next_pos.y-int(next_pos.y)%2)
 				
 				too_close = false
 				for prev_circle in map_generation_circles:
@@ -139,8 +182,7 @@ func _ready():
 				printerr("## Map ## Too many iterations in map gen!")
 			# if loop done: result in next_pos & next_rad
 			map_generation_circles.append([next_pos, next_rad])
-			
-			
+		
 		
 		prepare_presets(start_pos)
 		generate_tile(start_pos)
@@ -168,19 +210,31 @@ var preset_poss = {}
 func prepare_presets(start_pos):
 	preset_cache = {}
 	preset_poss = {}
-	for circle in map_generation_circles:
-		var angle_center_start = circle[0].angle_to(start_pos)
-		var angle_center_preset = angle_center_start + PI
-		var dst_center_preset = circle[1] * 0.75
+	var taken_presets = []
+	for i in range(map_generation_circles.size()):
+		var circle = map_generation_circles[i]
+		var difficulty = level_def.artefact_difficulties[i]
 		
-		var pos = circle[0] + Vector2(dst_center_preset, 0).rotated(angle_center_preset)
+		var angle_center_start = calc_px_pos_on_tile(start_pos).angle_to(calc_px_pos_on_tile(circle[0]))
+		var angle_center_preset = fmod(angle_center_start + PI, 2*PI)
 		
+		var center_to_start = (calc_px_pos_on_tile(start_pos) - calc_px_pos_on_tile(circle[0])).normalized()
+		var center_to_present = -center_to_start * circle[1] * 0.75
+		
+		var pos = circle[0] + center_to_present
 		var cell_pos = Vector2(int(round(pos.x)), int(round(pos.y))) # will be [0,0] of the preset
-		#print(str(cell_pos) + " <--> " + str(start_pos))
 		cell_pos = Vector2(cell_pos.x-int(cell_pos.x)%2, cell_pos.y-int(cell_pos.y)%2)
 
-		var preset_id = randi()%1 + 1 #[1,1]
-		var preset = ensure_cache_singleton(preset_id)
+		
+		var preset = ensure_cache_singleton(difficulty)
+		var iterations = 0
+		while taken_presets.find(preset) != -1 and iterations < 100: # dont take duplicates
+			preset = ensure_cache_singleton(difficulty)
+			iterations += 1
+		if iterations >= 100:
+			printerr("Could not select unique artefact presets")
+		taken_presets.append(preset)
+		
 		if preset.has_node("Map"):
 			preset = preset.get_node("Map")
 		var preset_landscape = preset.get_node("Navigation2D/MapLandscape")
@@ -191,14 +245,38 @@ func prepare_presets(start_pos):
 			var landscape_id = preset_landscape.get_cellv(preset_pos)
 			var block_id = preset_blocks.get_cellv(preset_pos)
 			preset_poss[cell_pos+preset_pos] = [landscape_id, block_id]
+			
+		if Engine.editor_hint:
+			var c = load("res://scenes/DebugCircle.tscn").instance()
+			c.position = calc_px_pos_on_tile(circle[0])
+			c.scale = Vector2(2 + 3.5 * circle[1], 2 + 3.5 * circle[1])
+			get_parent().call_deferred("add_child", c)
+			
 		
 func is_part_of_preset(pos):
 	return preset_poss.has(pos)
 
-func ensure_cache_singleton(preset_id):
-	if !preset_cache.has(preset_id):
-		preset_cache[preset_id] = load("res://scenes/presets/%02d.tscn" % preset_id).instance()
-	return preset_cache[preset_id]
+func ensure_cache_singleton(difficulty):
+	
+	if !preset_cache.has(difficulty):
+		preset_cache[difficulty] = {}
+	
+	var preset_paths = []
+	var path = "res://scenes/presets/" + difficulty + "/"
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while (file_name != ""):
+			if !dir.current_is_dir() and [".DS_Store", ".", "..", "Thumbs.db"].find(file_name) == -1:
+				preset_paths.append(path + file_name)
+			file_name = dir.get_next()
+	else:
+		printerr("An error occurred when trying to access " + path)
+		
+	var id = randi() % preset_paths.size()
+	preset_cache[difficulty][id] = load(preset_paths[id]).instance()
+	return preset_cache[difficulty][id]
 	
 
 	
@@ -285,6 +363,7 @@ func generate_preset_tile(map_pos, landscape_id, block_id):
 	print("## Map ## loading preset " + str(map_pos) + " " + str(landscape_id) + "/" + str(block_id))
 	
 	cell_infos[map_pos].height = landscape_id / layer_offset
+	cell_infos[map_pos].precise_height = cell_infos[map_pos].height + 0.75
 	landscape_id %= layer_offset
 	block_id %= layer_offset
 	
@@ -314,7 +393,8 @@ func create_cell_info(cell_pos:Vector2):
 		if dst <= circle[1]:
 			oceanMalus = 0
 		else:
-			oceanMalus = min(oceanMalus, 0.96*(dst - circle[1]))
+			oceanMalus = min(oceanMalus, 1.8*(dst - circle[1]))
+	
 	preciseHeight = min(preciseHeight + oceanMalus, 6)
 	
 	# calc start bonus
@@ -359,6 +439,14 @@ func set_block_by_descriptor(cell_pos:Vector2, descriptor:String):
 func generate_tile(var cell_pos:Vector2):
 	if landscapes.has(cell_pos):
 		return
+		
+	if Engine.editor_hint:
+		
+		for c in map_generation_circles:
+			if cell_pos == c[0]:
+				cell_infos[cell_pos] = create_cell_info(cell_pos)
+				set_landscape_by_descriptor(cell_pos, "burnt")
+				return
 	
 	var cell_info = create_cell_info(cell_pos)
 	cell_infos[cell_pos] = cell_info

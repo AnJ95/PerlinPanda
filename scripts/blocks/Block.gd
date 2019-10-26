@@ -5,13 +5,13 @@ var stock:int
 func get_class(): return "Block"
 
 func init(map, cell_pos, cell_info, args, nth):
-	.init(map, cell_pos, cell_info, args, nth)
-
-	init_inventory()
-
 	# Set stock
 	if args.has("stock"):
 		stock = args.stock
+		
+	.init(map, cell_pos, cell_info, args, nth)
+
+	init_inventory()
 
 	return self
 
@@ -39,14 +39,14 @@ func decrease_stock():
 
 func update_tile():
 	var tile_id = get_tile_id()
-
+		
 	# add variance id offset (always to right)
 	tile_id += args.var
 
 	# add stock id offset if this is a ressource (always to top with rising stock)
 	if ressource_name_or_null() != null:
 		tile_id += (get_max_stock() - stock) * map.tile_cols
-
+		
 	# add tile id offset for height
 	tile_id += int(map.layer_offset * cell_info.height)
 

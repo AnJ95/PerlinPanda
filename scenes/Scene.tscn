@@ -28,6 +28,7 @@ layer = 2
 [node name="UI" parent="LayerUI" instance=ExtResource( 3 )]
 
 [node name="Map" parent="." instance=ExtResource( 4 )]
+preprocess_tile_sets_in_editor = false
 debug_mode = true
 show_case_size = 8
 

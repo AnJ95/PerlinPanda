@@ -38,7 +38,9 @@ func time_update(time:float):
 			var pos = map.calc_px_pos_on_tile(cell_pos)
 			for bug in map.get_tree().get_nodes_in_group("bug"):
 				if pos.distance_squared_to(bug.position) <= (2*105)*(2*105) and pos.distance_to(bug.position) <= (2*105):
-					bug.stepped_on(map.get_tree().get_nodes_in_group("panda")[0])
+					var pandas = map.get_tree().get_nodes_in_group("panda")
+					if pandas.size() > 0:
+						bug.stepped_on(pandas[0])
 
 func panda_in_center(panda):
 	.panda_in_center(panda)
@@ -48,12 +50,16 @@ func panda_in_center(panda):
 		var taken = panda.inventory.try_take("leaves", min(resUpdater.ressources["leaves"], can_get))
 		inventory.add("leaves", taken)
 
+################################################
+### PARTICLES
 func get_particle_instance_or_null():
-	return nth.ParticlesSmoke.instance()
-	
-func set_particle_emitting(emit):
+	var inst = nth.ParticlesSmoke.instance()
+	return inst
+
+func set_particle_emitting(emit:bool):
 	.set_particle_emitting(emit)
-	particle_inst.get_node("Particles_inner").emitting = emit
+	if particle_inst != null:
+		particle_inst.get_node("Fire").visible = emit
 	
 ################################################
 ### FIRE
@@ -66,5 +72,9 @@ func get_fire_increase_time():
 ### INVENTORY
 func has_inventory():
 	return true
+func adjust_inventory(inventory):
+	inventory.show_if_0 = true
+	inventory.show_max = true
+	return inventory
 func inventory_max_values():
 	return {"bamboo":0,"stone":0,"leaves":5}

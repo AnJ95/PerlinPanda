@@ -5,7 +5,7 @@
 
 [node name="RessourceUpdater" type="Node2D"]
 light_mask = 0
-position = Vector2( -130, 80 )
+position = Vector2( -195, 120 )
 script = ExtResource( 1 )
 ressources = {
 "bamboo": 0,
@@ -25,7 +25,7 @@ script = ExtResource( 2 )
 light_mask = 0
 margin_right = 130.0
 margin_bottom = 111.0
-mouse_filter = 1
+mouse_filter = 2
 color = Color( 0.65098, 0.631373, 0.529412, 1 )
 
 [node name="Black" type="ColorRect" parent="FollowLayer/Box"]
@@ -33,6 +33,7 @@ light_mask = 0
 margin_top = 106.0
 margin_right = 130.0
 margin_bottom = 111.0
+mouse_filter = 2
 color = Color( 0, 0, 0, 0.117647 )
 
 [node name="Ressources" type="VBoxContainer" parent="FollowLayer/Box"]
@@ -40,6 +41,7 @@ light_mask = 0
 margin_left = 25.0
 margin_right = 105.0
 margin_bottom = 111.0
+mouse_filter = 2
 custom_constants/separation = 0
 [connection signal="gui_input" from="FollowLayer/Box/RessourceUpdaterButton" to="FollowLayer/Box/RessourceUpdaterButton" method="on_gui_input"]
 [connection signal="mouse_entered" from="FollowLayer/Box/RessourceUpdaterButton" to="FollowLayer/Box/RessourceUpdaterButton" method="_mouse_entered"]

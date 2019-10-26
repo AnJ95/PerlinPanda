@@ -25,7 +25,6 @@ func init():
 func update_fertility(fertility):
 	if !inited: init()
 	var tier = fertility * frag
-	print(tier)
 	for i in range(0, frag):
 		get_children()[i].emitting = i+1 <= tier
 	return self

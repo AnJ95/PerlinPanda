@@ -7,15 +7,7 @@ func get_class(): return "Block"
 func init(map, cell_pos, cell_info, args, nth):
 	.init(map, cell_pos, cell_info, args, nth)
 
-	# Inventory
-	if has_inventory():
-		var Inventory = load("res://scenes/Inventory.tscn")
-		inventory = Inventory.instance()
-		inventory = adjust_inventory(inventory).init(self, true, {}, inventory_max_values())
-		inventory.position = map.calc_px_pos_on_tile(cell_pos) - Vector2(0, 100)
-		get_ui_holder().call_deferred("add_child", inventory)
-
-		scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+	init_inventory()
 
 	# Set stock
 	if args.has("stock"):
@@ -124,8 +116,18 @@ func got_burned_to_the_ground():
 var inventory
 var scheduled_inventory
 
-# Overrides
+func init_inventory():
+	if !has_inventory():
+		return
+		
+	
+	inventory = nth.Inventory.instance()
+	inventory = adjust_inventory(inventory).init(self, true, {}, inventory_max_values())
+	inventory.position = map.calc_px_pos_on_tile(cell_pos) - Vector2(0, 100)
+	get_ui_holder().call_deferred("add_child", inventory)
 
+	scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+# Overrides
 func adjust_inventory(inventory):
 	return inventory
 func has_inventory():

@@ -1,35 +1,99 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://scripts/Fire.gd" type="Script" id=1]
-[ext_resource path="res://assets/particles/circleSmooth.png" type="Texture" id=2]
-[ext_resource path="res://resources/Fire.tres" type="Texture" id=3]
+[ext_resource path="res://assets/particles/smoke_01.png" type="Texture" id=2]
+[ext_resource path="res://assets/particles/fire_01.png" type="Texture" id=3]
+[ext_resource path="res://assets/particles/circleSmooth.png" type="Texture" id=4]
 
+[sub_resource type="Gradient" id=11]
+offsets = PoolRealArray( 0, 0.271277, 0.702128, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.196078, 0.855469, 0.855469, 0.855469, 0.196078, 0.513726, 0.513726, 0.513726, 0 )
+
+[sub_resource type="GradientTexture" id=12]
+gradient = SubResource( 11 )
+
+[sub_resource type="Curve" id=8]
+_data = [ Vector2( 0, 0.126946 ), 0.0, 0.0, 0, 0, Vector2( 0.170156, 0.276546 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.109346 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=9]
+curve = SubResource( 8 )
+
+[sub_resource type="ParticlesMaterial" id=13]
+flag_disable_z = true
+spread = 5.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+radial_accel = 10.0
+angle = 360.0
+angle_random = 1.0
+scale_random = 0.1
+scale_curve = SubResource( 9 )
+color_ramp = SubResource( 12 )
+
+[sub_resource type="Gradient" id=14]
+offsets = PoolRealArray( 0, 0.287234, 0.664894, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.710938, 0.710938, 0.710938, 0.196078, 0.296875, 0.296875, 0.296875, 0.196078, 0.513726, 0.513726, 0.513726, 0 )
+
+[sub_resource type="GradientTexture" id=15]
+gradient = SubResource( 14 )
+
+[sub_resource type="ParticlesMaterial" id=16]
+flag_disable_z = true
+spread = 5.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+radial_accel = 10.0
+angle = 360.0
+angle_random = 1.0
+scale_random = 0.1
+scale_curve = SubResource( 9 )
+color_ramp = SubResource( 15 )
+
+[sub_resource type="Gradient" id=17]
+offsets = PoolRealArray( 0, 0.271277, 0.702128, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.352941, 0.352941, 0.352941, 0.407843, 0, 0, 0, 0.196078, 0.513726, 0.513726, 0.513726, 0 )
+
+[sub_resource type="GradientTexture" id=18]
+gradient = SubResource( 17 )
+
+[sub_resource type="ParticlesMaterial" id=19]
+flag_disable_z = true
+spread = 5.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 100.0
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+radial_accel = 10.0
+angle = 360.0
+angle_random = 1.0
+scale_random = 0.1
+scale_curve = SubResource( 9 )
+color_ramp = SubResource( 18 )
 
 [sub_resource type="Gradient" id=1]
-
 offsets = PoolRealArray( 0.0150943, 0.188679, 0.358491, 0.724528, 1 )
-colors = PoolColorArray( 1, 0.971715, 0, 0.196078, 1, 0.94902, 0, 0.313726, 1, 0.478431, 0, 0.352941, 0.976471, 0.239216, 0, 0.313726, 1, 0.54902, 0, 0.0784314 )
+colors = PoolColorArray( 1, 0.971715, 0, 0.196078, 1, 0.94902, 0, 0.313726, 1, 0.478431, 0, 0.352941, 0.976471, 0.239216, 0, 0.313726, 1, 0.54902, 0, 0 )
 
 [sub_resource type="GradientTexture" id=2]
-
 gradient = SubResource( 1 )
 
 [sub_resource type="Curve" id=3]
-
-_data = [ Vector2( 0.00466377, 0.328658 ), 0.0, 0.0, 0, 0, Vector2( 0.530151, 0.564525 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.3416 ), 0.0, 0.0, 0, 0, Vector2( 0.374232, 0.368 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.191314 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=4]
-
 curve = SubResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=7]
-
-emission_shape = 1
-emission_sphere_radius = 20.0
+[sub_resource type="ParticlesMaterial" id=5]
+emission_shape = 2
+emission_box_extents = Vector3( 10, 20, 1 )
 flag_disable_z = true
 spread = 20.21
 gravity = Vector3( 0, 0, 0 )
-initial_velocity = 90.0
+initial_velocity = 150.0
 initial_velocity_random = 0.2
 angular_velocity = 0.173529
 orbit_velocity = 0.0
@@ -38,52 +102,63 @@ linear_accel = -60.0
 scale_curve = SubResource( 4 )
 color_ramp = SubResource( 2 )
 
-[sub_resource type="ParticlesMaterial" id=6]
-
-emission_shape = 2
-emission_box_extents = Vector3( 5, 24, 1 )
-flag_disable_z = true
-gravity = Vector3( 0, 0, 0 )
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-angle = -90.0
-scale = 0.3
-scale_random = 0.3
-color_ramp = ExtResource( 3 )
-
 [node name="Fire" type="Node2D"]
 script = ExtResource( 1 )
+
+[node name="Smoke_1" type="Particles2D" parent="."]
+position = Vector2( 0, -30 )
+rotation = -1.5708
+scale = Vector2( 0.8, 0.8 )
+amount = 12
+lifetime = 6.0
+process_material = SubResource( 13 )
+texture = ExtResource( 2 )
+
+[node name="Smoke_2" type="Particles2D" parent="."]
+position = Vector2( 0, -30 )
+rotation = -1.5708
+scale = Vector2( 0.8, 0.8 )
+amount = 10
+lifetime = 8.0
+process_material = SubResource( 16 )
+texture = ExtResource( 2 )
+
+[node name="Smoke_3" type="Particles2D" parent="."]
+position = Vector2( 0, -30 )
+rotation = -1.5708
+scale = Vector2( 0.8, 0.8 )
+amount = 10
+lifetime = 10.0
+process_material = SubResource( 19 )
+texture = ExtResource( 2 )
 
 [node name="Outer_1" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-scale = Vector2( 0.8, 0.8 )
-lifetime = 1.2
-process_material = SubResource( 7 )
-texture = ExtResource( 2 )
+scale = Vector2( 0.6, 0.6 )
+amount = 7
+lifetime = 1.6
+process_material = SubResource( 5 )
+texture = ExtResource( 3 )
 
 [node name="Outer_2" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-lifetime = 1.2
-process_material = SubResource( 7 )
-texture = ExtResource( 2 )
+scale = Vector2( 0.8, 0.8 )
+amount = 3
+lifetime = 1.6
+process_material = SubResource( 5 )
+texture = ExtResource( 3 )
 
 [node name="Outer_3" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-scale = Vector2( 1.2, 1.2 )
-lifetime = 1.2
-process_material = SubResource( 7 )
-texture = ExtResource( 2 )
-
-[node name="Inner" type="Particles2D" parent="."]
-rotation = -1.5708
-process_material = SubResource( 6 )
-texture = ExtResource( 2 )
+amount = 5
+lifetime = 1.6
+process_material = SubResource( 5 )
+texture = ExtResource( 3 )
 
 [node name="Light2D" type="Light2D" parent="."]
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 texture_scale = 3.0
 energy = 0.5
-

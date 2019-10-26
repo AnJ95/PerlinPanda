@@ -69,8 +69,10 @@ func start_building(BlockWIP):
 	job_on = BlockWIP
 	job_time_left = BlockWIP.get_build_time()
 	
-	$Particles_bamboo.emitting = true
-	$Particles_stone.emitting = true
+	
+	$Particles_bamboo.emitting = BlockWIP.inventory.maximums.bamboo > 0
+	$Particles_stone.emitting = BlockWIP.inventory.maximums.stone > 0
+	$Particles_leaves.emitting = BlockWIP.inventory.maximums.leaves > 0
 	
 func start_working_on_ressource(ressource):
 	if ressource.ressource_name_or_null() == null:

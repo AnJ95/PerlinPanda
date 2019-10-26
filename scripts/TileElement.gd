@@ -95,7 +95,7 @@ func extinguished_fire():
 # Block and Landscape add custom behavior
 func catch_fire():
 	if fire_or_null == null and !Engine.editor_hint:
-		fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info)
+		fire_or_null = nth.Fire.instance().prep(map, cell_pos, cell_info, nth)
 		get_particle_holder().call_deferred("add_child", fire_or_null)
 
 # Override me

@@ -66,6 +66,8 @@ onready var nth = {
 	"ParticlesFertility":preload("res://scenes/particles/Particles_fertility.tscn"),
 	"ParticlesBugStomped":preload("res://scenes/particles/Particles_bug_stomped.tscn"),
 	"ParticlesBugHillStomped":preload("res://scenes/particles/Particles_bug_hill_stomped.tscn"),
+	"ParticlesFireExtinguished":preload("res://scenes/particles/Particles_fire_extinguished.tscn"),
+	"ParticlesFireBurned":preload("res://scenes/particles/Particles_fire_burned.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn"),
 	"OrangeLight":preload("res://scenes/OrangeLight.tscn"),
 	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn"),

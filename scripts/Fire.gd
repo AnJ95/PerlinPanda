@@ -5,12 +5,14 @@ export var is_deco = false
 var map
 var cell_pos
 var cell_info
+var nth
 var fire_level = 0.0
 
-func prep(map, cell_pos, cell_info):
+func prep(map, cell_pos, cell_info, nth):
 	self.map = map
 	self.cell_pos = cell_pos
 	self.cell_info = cell_info
+	self.nth = nth
 	position = map.calc_px_pos_on_tile(cell_pos)
 	return self
 
@@ -41,6 +43,12 @@ func increase_fire_level(add):
 			if map.blocks.has(cell_pos):
 				map.blocks[cell_pos].got_burned_to_the_ground()
 			map.landscapes[cell_pos].got_burned_to_the_ground()
+			
+			var particle = nth.ParticlesFireBurned.instance()
+			particle.position = position
+			map.landscapes[cell_pos].get_particle_holder().add_child(particle)
+			particle.emitting = true
+	
 			queue_free()
 	else:
 		fire_level = 2
@@ -50,6 +58,12 @@ func extinguish():
 	map.landscapes[cell_pos].extinguished_fire()
 	if map.blocks.has(cell_pos):
 		map.blocks[cell_pos].extinguished_fire()
+		
+	var particle = nth.ParticlesFireExtinguished.instance()
+	particle.position = position
+	map.landscapes[cell_pos].get_particle_holder().add_child(particle)
+	particle.emitting = true
+	
 	queue_free()
 		
 func decrease_fire_level(mal):

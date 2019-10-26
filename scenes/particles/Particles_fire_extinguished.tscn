@@ -1,0 +1,48 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://assets/particles/smoke_01.png" type="Texture" id=1]
+[ext_resource path="res://scripts/particles/DestroyAfter.gd" type="Script" id=2]
+
+[sub_resource type="Gradient" id=1]
+offsets = PoolRealArray( 0, 0.12234, 0.414894, 0.75, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 0.690196, 0.690196, 0.690196, 0.627451, 0.568627, 0.568627, 0.568627, 0.760784, 0.427451, 0.427451, 0.427451, 0.627451, 0.513726, 0.513726, 0.513726, 0 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.126946 ), 0.0, 0.0, 0, 0, Vector2( 0.170156, 0.276546 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.109346 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="CurveTexture" id=4]
+curve = SubResource( 3 )
+
+[sub_resource type="ParticlesMaterial" id=5]
+flag_disable_z = true
+spread = 82.04
+gravity = Vector3( 100, 0, 0 )
+initial_velocity = 300.0
+angular_velocity = 4.58743e-41
+orbit_velocity = 0.0
+orbit_velocity_random = 0.0
+linear_accel = -100.0
+linear_accel_random = 1.0
+radial_accel = 10.0
+damping = 42.48
+angle = 360.0
+angle_random = 1.0
+scale_random = 0.1
+scale_curve = SubResource( 4 )
+color_ramp = SubResource( 2 )
+
+[node name="Particles_fire_extinguished" type="Particles2D"]
+position = Vector2( 0, -30 )
+rotation = -1.5708
+scale = Vector2( 0.8, 0.8 )
+emitting = false
+amount = 10
+one_shot = true
+explosiveness = 0.56
+process_material = SubResource( 5 )
+texture = ExtResource( 1 )
+script = ExtResource( 2 )
+destroy_after = 3

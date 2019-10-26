@@ -124,6 +124,8 @@ func get_particle_holder():
 	return map.get_node("Navigation2D/ParticleHolder")
 func get_ui_holder():
 	return map.get_node("Navigation2D/UIHolder")
+func get_bug_holder():
+	return map.get_node("Navigation2D/BugHolder")
 		
 ###################################################	
 

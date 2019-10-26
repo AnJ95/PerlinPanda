@@ -191,9 +191,14 @@ func add_to_current_path(this_tile):
 						var in_house = house.scheduled_inventory.get(res)
 						var taking = min(missing_with_inv, in_house)
 						
+						# if negative, dont take!
+						if updater.ressources_max.has(res) and updater.ressources_max[res] < 0:
+							taking = 0
+							
 						# take more from start
 						taking_from_home.ressources[res] += taking
 						last_taking[res] = taking
+							
 						# update this blocks RessourceChanger
 						updater.ressources[res] += taking
 						updater.update()

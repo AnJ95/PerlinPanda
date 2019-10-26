@@ -52,14 +52,14 @@ func try_take(ressource, amount):
 	return actual_amount
 	
 func set(ressource, amount):
-	amount = max(amount, 0)
+	amount = max(amount, -get_max(ressource))
 	amount = min(amount, get_max(ressource))
 	inventory[ressource] = amount
 	update_view()
 
 func add(ressource, add):
 	var amount = get(ressource) + add
-	amount = max(amount, 0)
+	amount = max(amount, -get_max(ressource))
 	amount = min(amount, get_max(ressource))
 	set(ressource, amount)
 	if add > 0:
@@ -81,16 +81,14 @@ func update_view():
 		
 	var num_visible = 0
 	for res in ["bamboo", "stone", "leaves"]:
-		var val = 0
-		if has(res, 1):
-			val = get(res)
-		if val > 0 or (show_if_0 and get_max(res) > 0):
+		var val = get(res)
+		if val != 0 or (show_if_0 and get_max(res) != 0):
 			num_visible += 1
 
 		var node = $FollowLayer.get_node("Inventory_" + res)
 		node.show_max_value = show_max
 		node.max_value = get_max(res)
-		node.visible = val > 0 or (show_if_0 and get_max(res) > 0)
+		node.visible = val > 0 or (show_if_0 and get_max(res) != 0)
 			
 		node.rect_position.y = - (num_visible-1)*30
 	

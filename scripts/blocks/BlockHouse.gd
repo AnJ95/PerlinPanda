@@ -38,8 +38,13 @@ func panda_in_center(panda):
 	# Foreign House
 	if panda.home_pos != cell_pos and panda.perform_next_action():
 		var resUpdater = panda.get_next_ressource_updater()
-		for ressource in resUpdater.ressources:
-			var taken = panda.inventory.try_take(ressource, resUpdater.ressources[ressource])
+		for ressource in panda.inventory.inventory:
+			var taken
+			if resUpdater == null:
+				taken = panda.inventory.try_take(ressource, 99)
+			else:
+				taken = panda.inventory.try_take(ressource, resUpdater.ressources[ressource])
+				
 			inventory.add(ressource, taken)
 			scheduled_inventory.add(ressource, taken)
 			inventory.update_view()

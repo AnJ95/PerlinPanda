@@ -49,6 +49,8 @@ func input(event):
 					map.get_node("Navigation2D/PandaHolder").add_child(lightning)
 				if event.scancode == 65: # A
 					map.set_block_by_descriptor(cell_pos, "artefact")
-					
+				if event.scancode == 66: # B
+					map.set_block_by_descriptor(cell_pos, "bughill_var_2")
+					map.blocks[cell_pos].spawn()
 
 			

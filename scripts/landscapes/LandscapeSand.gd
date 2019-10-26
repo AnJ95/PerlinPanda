@@ -25,7 +25,7 @@ func conv():
 	if fire_or_null != null:
 		fire_or_null.extinguish()
 	elif (has_block() and get_block().fire_or_null != null):
-		get_block().extinguish()
+		get_block().fire_or_null.extinguish()
 	map.set_landscape_by_descriptor(cell_pos, "water")
 
 func can_spread_grass():

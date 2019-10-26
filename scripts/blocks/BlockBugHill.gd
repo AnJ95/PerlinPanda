@@ -11,9 +11,9 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 func spawn():
 	if spawn_num <= args.var:
-		var bug = nth.Bug.instance().prep(map, cell_pos, self)
-		if bug.rests():
-			map.get_node("Navigation2D/BugHolder").call_deferred("add_child", bug)
+		var bug = nth.Bug.instance().prep(map, cell_pos, self, nth)
+		if get_weather().get_day_bonus() < 0.3: # only spawn at night
+			get_bug_holder().call_deferred("add_child", bug)
 			spawn_num += 1
 	
 func bug_has_died():
@@ -42,10 +42,19 @@ func upgrade():
 	
 func downgrade():
 	args.var -= 1
+	
+	var particle = nth.ParticlesBugHillStomped.instance()
+	particle.position = map.calc_px_pos_on_tile(cell_pos)
+	get_bug_holder().add_child(particle)
+	particle.emitting = true
+	
 	if args.var < 0:
-		remove()
+		stomped()
 	else:
 		update_tile()
+
+func stomped():
+	remove()
 	
 func panda_in_center(panda):
 	.panda_in_center(panda)
@@ -53,5 +62,5 @@ func panda_in_center(panda):
 	
 ################################################
 ### FERTILITY
-func get_fertility_bonus(): return -0.1
+func get_fertility_bonus(): return -0.15
 	

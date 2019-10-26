@@ -44,3 +44,7 @@ func tick():
 
 func get_speed_factor():
 	return 1.1
+	
+################################################
+### FERTILITY
+func get_fertility_bonus(): return 0.25

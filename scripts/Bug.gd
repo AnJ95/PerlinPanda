@@ -1,16 +1,17 @@
 extends "Gatherer.gd"
 
 var hill
+var nth = nth
 
 const SPEED = 18
 var frame_time = 0.15
 var time_left = frame_time
 var angle = 0.0
 var target_pos = null
-
 	
-func prep(map, cell_pos, hill):
+func prep(map, cell_pos, hill, nth):
 	self.hill = hill
+	self.nth = nth
 	position = map.calc_px_pos_on_tile(cell_pos)
 	.init(map)
 	return self
@@ -42,19 +43,14 @@ func _process(delta: float) -> void:
 		var day_bonus = map.weather.get_day_bonus()
 		
 		if map.blocks.has(target_pos):
-			if collects() and map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
+			if map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
 				start_working_on_ressource(map.blocks[target_pos])
-			if rests() and map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill":
+			if map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill" and inventory.has("bamboo", 1):
 				for _i in range(0, inventory.get("bamboo")):
 					hill.upgrade()
 				queue_free()
 				hill.bug_has_died() # causes a respawn later
 		target_pos = null
-
-func collects():
-	return map.weather.get_day_bonus() < 0.0
-func rests():
-	return map.weather.get_day_bonus() >= 0.0
 		
 func get_next_target():
 	var cell_pos = map.calc_closest_tile_from(position)
@@ -65,16 +61,18 @@ func get_next_target():
 	for adjacent in map.get_adjacent_tiles(cell_pos):
 		if map.landscapes.has(adjacent) and (!map.blocks.has(adjacent) or map.blocks[adjacent].is_passable()):
 			valid.append(adjacent)
-		if map.blocks.has(adjacent) and map.blocks[adjacent].get_class() == "BlockBugHill":
-			home = adjacent
-		if map.blocks.has(adjacent) and map.blocks[adjacent].ressource_name_or_null() == "bamboo" and map.blocks[adjacent].stock > 0:
-			bamboo.append(adjacent)
+		if map.blocks.has(adjacent):
+			var block = map.blocks[adjacent]
+			if block.get_class() == "BlockBugHill" and inventory.has("bamboo", 1):
+				home = adjacent
+			if block.ressource_name_or_null() == "bamboo" and block.stock > 0:
+				bamboo.append(adjacent)
 	
 	var target
-	if rests() and home != null and inventory.has("bamboo", 1) and inventory.get("bamboo") > 0:
+	if home != null and inventory.has("bamboo", 1):
 		target = home
 	else:
-		if collects() and bamboo.size() > 0 and !inventory.has("bamboo", 1):
+		if bamboo.size() > 0 and !inventory.has("bamboo", 1): # DECISION: target bamboo only when inv empty?
 			target = bamboo[randi()%bamboo.size()]
 		else:
 			if valid.size() > 0:
@@ -96,7 +94,14 @@ func start_working_on_ressource(ressource):
 	
 func stepped_on(panda):
 	hill.bug_has_died()
-	inventory.move_to_other(panda.inventory)
+	if panda != null:
+		inventory.move_to_other(panda.inventory)
+	
+	var particle = nth.ParticlesBugStomped.instance()
+	particle.position = position
+	hill.get_bug_holder().add_child(particle)
+	particle.emitting = true
+	
 	queue_free()
 
 func get_sprite_angle():

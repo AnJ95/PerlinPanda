@@ -176,6 +176,8 @@ func set_from_smoker(panda_inventory, taking_from_home, house_inventory, block):
 	ressources_max = {}
 	ressources["leaves"] = min(panda_inventory.get("leaves"), block.inventory.get_free("leaves"))
 	ressources_max["leaves"] = panda_inventory.get("leaves") + house_inventory.get("leaves") - taking_from_home.ressources["leaves"]
+	ressources["bamboo"] = -block.inventory.get("bamboo")
+	ressources_max["bamboo"] =  -block.inventory.get_max("bamboo")
 	signum = -1
 	changeable = false
 	return self

@@ -69,5 +69,5 @@ func update_visuals():
 	$Smoke_2.emitting = strength >= 2
 	$Smoke_3.emitting = strength >= 3
 	
-	$Light2D.texture_scale = 2 + fire_level
-	$Light2D.energy = 0.4 + 0.1*fire_level
+	$Light2D.texture_scale = 3.5 + fire_level
+	$Light2D.energy = 0.6 + 0.133*fire_level

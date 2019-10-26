@@ -4,8 +4,6 @@ onready var unlocked_buyables = get_tree().get_nodes_in_group("unlocked_buyables
 onready var locked_buyables = get_tree().get_nodes_in_group("locked_buyables")[0]
 onready var buyables = $FollowLayer/Buyables
 
-var ressourceManager
-
 const unlock_possibilities = 3
 
 func _ready():
@@ -24,10 +22,6 @@ func _ready():
 		buyable.is_unlockable = true
 		buyable.unlockable_parent = self
 		buyables.add_child(buyable)
-		
-	# reposition UI
-	var ressourceManager = get_tree().get_nodes_in_group("ressource_manager")
-	if ressourceManager.size() > 0: self.ressourceManager = ressourceManager[0]
 		
 var appeared = false
 var time_left_to_appearing = 1.5
@@ -76,8 +70,7 @@ func on_click_buyable(buyable):
 var disappearing = false
 var time_left_until_disappeared = 1.5
 func after_select(dupl):
-	if dupl != null:
-		ressourceManager.on_artefact_selected(dupl)
+	get_tree().get_nodes_in_group("ressource_manager")[0].on_artefact_selected(dupl)
 	$Tween.interpolate_property(buyables, "modulate", buyables.modulate, Color(1,1,1,0), time_left_until_disappeared, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
 	$Tween.start()
 	disappearing = true

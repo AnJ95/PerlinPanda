@@ -40,6 +40,8 @@ func can_build_on(_map, _cell_pos):
 
 func remove():
 	.remove()
+	if fertility_particle != null:
+		fertility_particle.queue_free()
 	map.map_landscape.set_cellv(cell_pos, -1)
 	map.landscapes.erase(cell_pos)
 

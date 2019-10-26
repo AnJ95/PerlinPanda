@@ -1,11 +1,11 @@
 extends "Landscape.gd"
 
-const PROB_TO_GRASS_CONVERSION_WHEN_SPREADING = 40#%
-const PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS = 35#%
+const PROB_TO_GRASS_CONVERSION_WHEN_SPREADING = 45#%
+const PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS = 45#%
 
 const PROB_TO_SPAWN_BUG_HILL = 2#%
-const PROB_TO_SPAWN_BUG_HILL_DROUGHT_BONUS = 15#%
-const PROB_TO_SPAWN_BUG_HILL_NIGHT_BONUS = 15#%
+const PROB_TO_SPAWN_BUG_HILL_DROUGHT_BONUS = 12#%
+const PROB_TO_SPAWN_BUG_HILL_NIGHT_BONUS = 12#%
 
 
 
@@ -33,9 +33,12 @@ func tick():
 			return
 	
 	# Transform to grass
-	if (!has_block() or get_block().get_class() == "BlockBugHill") and randi()%100 <= 100*fertility:
+	if randi()%100 <= 100*fertility:
 		if randi()%100 <= PROB_TO_GRASS_CONVERSION_WHEN_SPREADING + get_weather().get_rain_level() * PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS:
 			map.set_landscape_by_descriptor(cell_pos, "grass")
+			if has_block() and get_block().get_class() == "BlockBugHill":
+				get_block().play_particle_animation()
+				get_block().remove()
 
 func get_speed_factor():
 	return 1

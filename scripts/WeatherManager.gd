@@ -33,6 +33,8 @@ onready var rain = $Center/Rain
 onready var clouds = $Center/Clouds
 onready var stormClouds = $Center/StormClouds
 
+onready var modifier = get_parent().get_node("Map").level_def.weather
+
 func _process(delta:float):
 	weather_time += delta
 	
@@ -45,8 +47,10 @@ func _process(delta:float):
 	rain_level = (sin(-2*PI * weather_time / RAIN_CYCLE_TIME) + 1) / 2.0
 	storm_level = rain_level * rain_level
 	
-	#rain_level = 1
-	#storm_level = 1
+	day_bonus += 2*modifier.day
+	day_level += modifier.day
+	rain_level += modifier.rain
+	storm_level += modifier.storm
 	
 	mod(day_time_modulate.interpolate(day_time / float(DAY_CYCLE_TIME)))
 	

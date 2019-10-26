@@ -80,13 +80,13 @@ func _unhandled_input(event: InputEvent):
 				
 		if house != null:
 			house = map.blocks[house.home_pos]
-			house.repeat_icon.house_mouse_enter()
+			if house.repeat_icon != null: house.repeat_icon.house_mouse_enter()
 			if currently_hovered_house != null and currently_hovered_house != house:
 				currently_hovered_house.repeat_icon.house_mouse_leave()
 			currently_hovered_house = house
 		else:
 			if currently_hovered_house != null:
-				currently_hovered_house.repeat_icon.house_mouse_leave()
+				if currently_hovered_house.repeat_icon != null: currently_hovered_house.repeat_icon.house_mouse_leave()
 			currently_hovered_house = null
 		
 		

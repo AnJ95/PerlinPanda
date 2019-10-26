@@ -43,16 +43,19 @@ func upgrade():
 func downgrade():
 	args.var -= 1
 	
-	var particle = nth.ParticlesBugHillStomped.instance()
-	particle.position = map.calc_px_pos_on_tile(cell_pos)
-	get_bug_holder().add_child(particle)
-	particle.emitting = true
+	play_particle_animation()
 	
 	if args.var < 0:
 		stomped()
 	else:
 		update_tile()
 
+func play_particle_animation():
+	var particle = nth.ParticlesBugHillStomped.instance()
+	particle.position = map.calc_px_pos_on_tile(cell_pos)
+	get_bug_holder().add_child(particle)
+	particle.emitting = true
+	
 func stomped():
 	remove()
 	

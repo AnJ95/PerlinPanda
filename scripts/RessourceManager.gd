@@ -43,10 +43,9 @@ func set_ressource(ressource_name, value, emit_signals=true):
 func on_artefact_selected(buyable):
 	add_ressource("artefacts", 1)
 	
-	# add to global
-	var g = load("res://scripts/NonToolFix.gd").new().g()
 	# dont add duplicate
-	if g.unlocked_buyables.find(buyable.locked_id) == -1:
+	var g = load("res://scripts/NonToolFix.gd").new().g()
+	if buyable != null and g.unlocked_buyables.find(buyable.locked_id) == -1:
 		g.unlocked_buyables.append(buyable.locked_id)
 	
 	if has_ressource("artefacts", ressources.artefacts_max): 

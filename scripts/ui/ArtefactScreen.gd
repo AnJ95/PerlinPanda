@@ -15,6 +15,8 @@ func _ready():
 	
 	# add Buyables to own UI
 	var selecteds = select_random_buyables()
+	if selecteds.size() == 0:
+		after_select(null)
 	for selected in selecteds:
 		var buyable = selected.duplicate()
 		# init properties to let Buyable know it's an unlockable
@@ -74,7 +76,8 @@ func on_click_buyable(buyable):
 var disappearing = false
 var time_left_until_disappeared = 1.5
 func after_select(dupl):
-	ressourceManager.on_artefact_selected(dupl)
+	if dupl != null:
+		ressourceManager.on_artefact_selected(dupl)
 	$Tween.interpolate_property(buyables, "modulate", buyables.modulate, Color(1,1,1,0), time_left_until_disappeared, Tween.TRANS_LINEAR, Tween.TRANS_LINEAR)
 	$Tween.start()
 	disappearing = true

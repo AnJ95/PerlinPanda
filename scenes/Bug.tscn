@@ -7,7 +7,6 @@
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
 [ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=6]
 
-
 [node name="Bug" type="Node2D" groups=[
 "bug",
 ]]
@@ -28,4 +27,3 @@ texture = ExtResource( 5 )
 
 [node name="Inventory" parent="." instance=ExtResource( 6 )]
 position = Vector2( 0, -85 )
-

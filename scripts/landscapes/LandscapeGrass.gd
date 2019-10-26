@@ -57,7 +57,7 @@ func durability_has_reached_zero():
 	map.set_landscape_by_descriptor(cell_pos, "dirt")
 
 func got_welled():
-	.got_welled()
+	.got_welled()	
 	increase_durability()
 	if !map.blocks.has(cell_pos) and randi()%100 <= 30:
 		map.set_block_by_descriptor(cell_pos, "vegetation")

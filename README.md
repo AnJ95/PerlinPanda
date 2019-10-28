@@ -1,13 +1,16 @@
 # PerlinPanda
 
+[![Build Status](https://travis-ci.org/AnJ95/PerlinPanda.svg?branch=master)](https://travis-ci.com/AnJ95/PerlinPanda)
+[![GitHub license](https://img.shields.io/badge/license-GPLv3-blue.svg?style=square)](https://github.com/AnJ95/PerlinPanda/blob/master/LICENSE.md)
+
 2D game written using the [Godot engine](https://godotengine.org/)
 
 ## Gameplay
 PerlinPanda is a 2D top-down style strategy game on a generated hexagonal map.
 The goal is to discover islands by building your panda infrastructure while taking care of your environment!
 
-![](https://github.com/AnJ95/PerlinPanda/blob/master/README/shot_01.png")
-![](https://github.com/AnJ95/PerlinPanda/blob/master/README/shot_02.png")
+![](./README/shot_01.png")
+![](./README/shot_02.png")
 
 ## Notable Technologies and Features
 * [OpenSimplexNoise](https://godotengine.org/article/simplex-noise-lands-godot-31) generated map

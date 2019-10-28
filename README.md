@@ -6,8 +6,8 @@
 PerlinPanda is a 2D top-down style strategy game on a generated hexagonal map.
 The goal is to discover islands by building your panda infrastructure while taking care of your environment!
 
-![](https://github.com/AnJ95/PerlinPanda/blob/master/README/shot_01.png")
-![](https://github.com/AnJ95/PerlinPanda/blob/master/README/shot_02.png")
+![](https://raw.githubusercontent.com/AnJ95/PerlinPanda/master/README/shot_01.png")
+![](https://github.com/AnJ95/PerlinPanda/master/README/shot_02.png")
 
 ## Notable Technologies and Features
 * [OpenSimplexNoise](https://godotengine.org/article/simplex-noise-lands-godot-31) generated map

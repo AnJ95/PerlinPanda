@@ -47,6 +47,7 @@ var c:Color = Color(0,0,0,0)
 func _unhandled_input(event: InputEvent):	
 	if !enable_visuals:
 		return
+		
 	# Hover effect: show panda path when mouse over house
 	if event is InputEventMouseMotion:
 		# first hide all lines
@@ -95,7 +96,10 @@ func _unhandled_input(event: InputEvent):
 			if currently_hovered_house.panda.line != null:
 				c.a = 0.8
 				currently_hovered_house.panda.line.default_color = c
-		
+				
+		# if is drawing path
+		if is_painting and hovered_cell != last_paint_tile:
+			add_and_try_end_path(hovered_cell, null)
 		
 	# Scrolling first
 	if get_parent().get_node("Camera2D").input(event):
@@ -113,6 +117,10 @@ func _unhandled_input(event: InputEvent):
 		cancel()
 	
 	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and !event.pressed:
+		is_painting = false
+		
+	
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
 		var rect = get_viewport().get_visible_rect().size
 		var cam = get_parent().get_node("Camera2D")
 		var click_pos = (event.position - rect / 2) * cam.zoom + cam.offset
@@ -121,18 +129,40 @@ func _unhandled_input(event: InputEvent):
 		var clicked_panda = get_house_in_range(click_pos)
 		var just_ended_path = false
 		
-		
+		# if active
 		if active and clicked_tile != null:
+			# Try (de)activate tile
 			if !cell_pos_not_already_in_path(clicked_tile):
 				toggle_tile(clicked_tile)
-			if clicked_panda == null or panda == clicked_panda or is_valid_next(get_last_cell_pos(), clicked_tile):
-				just_ended_path = add_to_current_path(clicked_tile)
-			else:
+			
+			# Try to add to path
+			if add_and_try_end_path(clicked_tile, clicked_panda):
 				cancel()
-				
+		
+		# Start new path if:
+		#   not just finished path in code above
+		#   clicked panda
+		#   panda is not already making path
+		#   is not trying to walk on that tile with other panda
 		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda) and (!active or is_valid_next(get_last_cell_pos(), clicked_tile)): #start new
 			try_start_path_from(clicked_panda)
-			#if clicked_panda.repeat:
+			is_painting = true
+			last_paint_tile = clicked_tile
+			
+var is_painting = false
+var last_paint_tile
+
+func add_and_try_end_path(tile, panda):
+	# Add to path if:
+	#   clicked a panda (or house)
+	#   did not click another panda
+	if (panda == null or self.panda == panda) and is_valid_next(get_last_cell_pos(), tile):
+		is_painting = true
+		last_paint_tile = tile
+		if add_to_current_path(tile):
+			is_painting = false
+			return true
+	return false
 
 func toggle_tile(tile):
 	if path[path.size() - 1 - 2] is Vector2 and path[path.size() - 1 - 2] == tile:

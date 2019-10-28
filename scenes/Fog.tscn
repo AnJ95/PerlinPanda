@@ -15,10 +15,10 @@ uniform sampler2D fog_pos_arr;
 uniform sampler2D clear_pos_arr;
 
 uniform float FOG_DECAY_START = 60.0;
-uniform float FOG_DECAY_END = 85.0;
+uniform float FOG_DECAY_END = 105.0;
 
-uniform float CLEAR_DECAY_START = 40.0;
-uniform float CLEAR_DECAY_END = 75.0;
+uniform float CLEAR_DECAY_START = 50.0;
+uniform float CLEAR_DECAY_END = 85.0;
 
 int get_at_arr(sampler2D pos_arr, ivec2 coord)
 {
@@ -63,7 +63,9 @@ float get_min_dst_to(vec2 px_pos, float mx, sampler2D pos_arr) {
 	
 
 void fragment() {
-
+	if (intensity <= 0.0) {
+		COLOR = vec4(1,1,1,0);
+	}
 	vec2 coord = SCREEN_UV*scale + offset;
 	vec4 noise1 = texture(noise_texture, coord + TIME * 0.02);
 	vec4 noise2 = texture(noise_texture, vec2(coord.y, coord.x) - TIME * 0.011);
@@ -100,13 +102,13 @@ void fragment() {
 	COLOR = col;
 }"
 
-[sub_resource type="ImageTexture" id=8]
+[sub_resource type="ImageTexture" id=2]
 flags = 0
 flags = 0
 
-[sub_resource type="Image" id=9]
+[sub_resource type="Image" id=3]
 data = {
-"data": PoolByteArray( 174, 3, 91, 0, 18, 3, 174, 0, 133, 0, 232, 1, 203, 0, 234, 1, 154, 3, 231, 2, 3, 1, 254, 3, 35, 2, 74, 3, 56, 1, 146, 3, 19, 0, 183, 2, 73, 0, 219, 1, 36, 0, 148, 3, 223, 0, 237, 0, 7, 3, 100, 1, 247, 0, 144, 1, 128, 2, 87, 1, 219, 128, 172, 0, 122, 0, 60, 0, 55, 128, 229, 128, 25, 0, 92, 0, 251, 0, 179, 0, 51, 0, 208, 128, 101, 0, 4, 0, 4, 128, 131, 0, 11, 128, 8, 1, 120, 0, 217, 129, 255, 129, 42, 0, 29, 1, 215, 128, 180, 128, 220, 128, 221, 0, 47, 128, 17, 1, 74, 128 ),
+"data": PoolByteArray( 75, 1, 82, 0, 208, 1, 80, 0, 166, 1, 255, 0, 0, 2, 225, 3, 190, 0, 102, 1, 178, 3, 147, 1, 224, 0, 240, 1, 92, 1, 230, 1, 193, 3, 9, 0, 62, 3, 219, 3, 186, 3, 96, 3, 191, 3, 108, 3, 44, 0, 98, 1, 0, 0, 124, 2, 214, 2, 45, 3, 9, 3, 50, 4, 36, 3, 156, 3, 134, 2, 235, 2, 94, 3, 62, 3, 109, 2, 98, 2, 154, 2, 168, 3, 163, 4, 63, 3, 238, 2, 205, 3, 211, 2, 129, 4, 127, 2, 160, 3, 234, 2, 225, 3, 120, 3, 181, 3, 182, 2, 155, 3, 131, 2, 130, 4, 167, 2, 147, 2 ),
 "format": "Red8",
 "height": 2,
 "mipmaps": false,
@@ -116,7 +118,7 @@ data = {
 [sub_resource type="ImageTexture" id=4]
 flags = 0
 flags = 0
-image = SubResource( 9 )
+image = SubResource( 3 )
 size = Vector2( 60, 2 )
 
 [sub_resource type="OpenSimplexNoise" id=5]
@@ -138,7 +140,7 @@ shader_param/CLEAR_DECAY_START = 40.0
 shader_param/CLEAR_DECAY_END = 75.0
 shader_param/noise_texture = SubResource( 6 )
 shader_param/fog_pos_arr = SubResource( 4 )
-shader_param/clear_pos_arr = SubResource( 8 )
+shader_param/clear_pos_arr = SubResource( 2 )
 
 [node name="Fog" type="TextureRect"]
 light_mask = 2

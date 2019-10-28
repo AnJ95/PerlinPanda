@@ -107,6 +107,7 @@ process_material = SubResource( 8 )
 texture = ExtResource( 3 )
 
 [node name="Fog" parent="Center" instance=ExtResource( 4 )]
+light_mask = 1
 margin_left = -510.531
 margin_right = 513.469
 texture = ExtResource( 5 )

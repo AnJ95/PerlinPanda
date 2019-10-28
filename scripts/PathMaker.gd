@@ -138,6 +138,7 @@ func _unhandled_input(event: InputEvent):
 			# Try to add to path
 			if add_and_try_end_path(clicked_tile, clicked_panda):
 				cancel()
+				just_ended_path = true
 		
 		# Start new path if:
 		#   not just finished path in code above

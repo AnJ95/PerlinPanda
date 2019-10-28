@@ -4,8 +4,10 @@ var home
 var home_pos
 var home_pos3
 
-const SPEED = 50
+const MIN_SPEED = 10
+const SPEED = 75
 const SPEED_FACTOR_PER_LAYER_UP = 0.9
+const SPEED_LOSS_PER_RES = {"bamboo":5, "stone":10, "leaves":2}
 
 # for path iteration
 var path = null
@@ -42,6 +44,7 @@ func _ready():
 
 func _process(delta: float) -> void:
 	._process(delta)
+	
 	# start animation
 	if show_start_anim:
 		if move_towards_then(start_anim_target, 12*SPEED, delta):
@@ -50,19 +53,38 @@ func _process(delta: float) -> void:
 		else:
 			return	
 	
+	
+	
+	
 	# wait idly if no path defined yet
 	if path == null or path.size() == 0:
+		$Particles_exhaustion.emitting = false
+		$Particles_exhaustion2.emitting = false
 		return
+	
+	# get speed
+	var speed_factor = calc_speed_factor()
 	
 	# gather and build, prevent walking if so
-	var speed_factor = calc_speed_factor()
-	var speed = speed_factor * SPEED
 	if gather_and_build(delta, speed_factor):
+		$Particles_exhaustion.emitting = false
+		$Particles_exhaustion2.emitting = false
 		return
+		
+	# Exhaustion
+	var ex = get_exhaustion()
+	$Particles_exhaustion.emitting = ex >= 10
+	$Particles_exhaustion2.emitting = $Particles_exhaustion.emitting
+	if $Particles_exhaustion.emitting:
+		var scale = min(2, 1 + (ex-10) / 40)
+		$Particles_exhaustion.scale.x = scale
+		$Particles_exhaustion.scale.y = scale
+	var speed = speed_factor * (SPEED-ex)
+	speed = max(MIN_SPEED, speed)
 
-	var target_pos = map.calc_px_pos_on_tile(path[curr_path_pos])
 	
 	# Check if current target in vicinity
+	var target_pos = map.calc_px_pos_on_tile(path[curr_path_pos])
 	if move_towards_then(path[curr_path_pos], speed, delta):
 		reached_cell()
 		ressourceManager.steps_taken += 1
@@ -77,6 +99,11 @@ func _process(delta: float) -> void:
 		if position.distance_squared_to(bug.position) < 2500 and position.distance_to(bug.position) < 50:
 			bug.stepped_on(self)
 
+func get_exhaustion():
+	var ex = 0.0
+	for res in inventory.inventory:
+		ex += inventory.get(res) * SPEED_LOSS_PER_RES[res]
+	return ex
 
 func is_ressource_updater(e):
 	return !e is bool and !e is Vector2 and e.get_filename().find("RessourceUpdater") > -1
@@ -215,7 +242,6 @@ func calc_speed_factor():
 		dhdx = map.cell_infos[last_target].height - map.cell_infos[path[curr_path_pos]].height
 	for _i in range(0, abs(dhdx)):
 		speed_factor *= SPEED_FACTOR_PER_LAYER_UP
-		
 	
 	if map.blocks.has(standing_on):
 		var block_standing_on = map.blocks[standing_on]

@@ -8,7 +8,7 @@
 # docker run \
 #	-e EXPORT_NAME="HTML5" \
 #	-e OUTPUT_FILENAME="index.html" \
-#	-v $(pwd):/build/src -v /tmp/output:/build/output gamedrivendesign/godot-export
+#	-v $(pwd):/build/src -v /tmp/output:/build/output AnJ95/PerlinPanda
 
 FROM alpine:edge
 

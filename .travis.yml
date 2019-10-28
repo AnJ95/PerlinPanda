@@ -8,17 +8,17 @@ env:
   - GAME_NAME="PerlinPanda"
 
 install:
-- docker pull gamedrivendesign/godot-export
+- docker pull AnJ95/PerlinPanda
 
 # Each of the following lines exports the game for a given platform.
 # You can specify the platform in the EXPORT_NAME variable
 # The exported game will be written to the folder specified after the second "-v" flag
 # "-v $(pwd)/output/html5:/build/output" writes the exported game to  the "output/html5" folder.
 script:
-- docker run -e EXPORT_NAME="HTML5"           -e OUTPUT_FILENAME="index.html"           -v $(pwd):/build/src -v $(pwd)/output/html5:/build/output   gamedrivendesign/godot-export
-- docker run -e EXPORT_NAME="Linux"       -e OUTPUT_FILENAME="${GAME_NAME}"         -v $(pwd):/build/src -v $(pwd)/output/linux:/build/output   gamedrivendesign/godot-export
-- docker run -e EXPORT_NAME="Windows" -e OUTPUT_FILENAME="${GAME_NAME}.exe"     -v $(pwd):/build/src -v $(pwd)/output/windows:/build/output gamedrivendesign/godot-export
-- docker run -e EXPORT_NAME="OSX"         -e OUTPUT_FILENAME="${GAME_NAME}-mac.zip" -v $(pwd):/build/src -v $(pwd)/output/mac:/build/output     gamedrivendesign/godot-export
+- docker run -e EXPORT_NAME="HTML5"           -e OUTPUT_FILENAME="index.html"           -v $(pwd):/build/src -v $(pwd)/output/html5:/build/output   AnJ95/PerlinPanda
+- docker run -e EXPORT_NAME="Linux"       -e OUTPUT_FILENAME="${GAME_NAME}"         -v $(pwd):/build/src -v $(pwd)/output/linux:/build/output   AnJ95/PerlinPanda
+- docker run -e EXPORT_NAME="Windows" -e OUTPUT_FILENAME="${GAME_NAME}.exe"     -v $(pwd):/build/src -v $(pwd)/output/windows:/build/output AnJ95/PerlinPanda
+- docker run -e EXPORT_NAME="OSX"         -e OUTPUT_FILENAME="${GAME_NAME}-mac.zip" -v $(pwd):/build/src -v $(pwd)/output/mac:/build/output     AnJ95/PerlinPanda
 
 # Now comes deployment related code.
 # To make this work, you need to set a GITHUB_TOKEN environment variable through

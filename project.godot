@@ -17,7 +17,7 @@ _global_script_class_icons={
 
 config/name="PerlinPanda"
 run/main_scene="res://scenes/Scene.tscn"
-config/icon="res://icon.png"
+config/icon="res://assets/logo.png"
 
 [autoload]
 

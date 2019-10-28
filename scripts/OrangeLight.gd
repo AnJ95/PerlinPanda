@@ -6,4 +6,4 @@ func _ready():
 	if weatherManager.size() > 0: self.weatherManager = weatherManager[0]
 	
 func _process(_delta:float):
-	energy = 1 * (1 - weatherManager.day_level)
+	energy = 1 * (1 - weatherManager.day.now())

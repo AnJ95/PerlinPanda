@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
 [ext_resource path="res://scenes/particles/Particles_bamboo.tscn" type="PackedScene" id=2]
@@ -11,13 +11,13 @@
 [ext_resource path="res://scenes/OrangeLight.tscn" type="PackedScene" id=9]
 
 [sub_resource type="Gradient" id=1]
-offsets = PoolRealArray( 0, 0.836806, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.117647, 1, 1, 1, 0 )
+offsets = PoolRealArray( 0, 0.347222, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.0663137, 1, 1, 1, 0 )
 
 [sub_resource type="GradientTexture" id=2]
 gradient = SubResource( 1 )
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="ParticlesMaterial" id=3]
 emission_shape = 1
 emission_sphere_radius = 12.86
 flag_disable_z = true
@@ -34,14 +34,7 @@ angle_random = 0.67
 scale = 0.2
 color_ramp = SubResource( 2 )
 
-[sub_resource type="Gradient" id=5]
-offsets = PoolRealArray( 0, 0.753472, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
-
-[sub_resource type="GradientTexture" id=6]
-gradient = SubResource( 5 )
-
-[sub_resource type="ParticlesMaterial" id=7]
+[sub_resource type="ParticlesMaterial" id=4]
 emission_shape = 1
 emission_sphere_radius = 5.0
 flag_disable_z = true
@@ -49,12 +42,12 @@ spread = 10.0
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 40.0
 initial_velocity_random = 0.2
+angular_velocity = 2.90812e-23
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle = -73.7
 angle_random = 0.1
 scale = 0.2
-color_ramp = SubResource( 6 )
 
 [node name="Panda" type="Node2D" groups=[
 "panda",
@@ -80,7 +73,7 @@ emitting = false
 amount = 20
 lifetime = 6.9
 one_shot = true
-process_material = SubResource( 4 )
+process_material = SubResource( 3 )
 texture = ExtResource( 5 )
 
 [node name="Particles_sleeping" type="Particles2D" parent="."]
@@ -89,7 +82,7 @@ rotation = -1.13446
 emitting = false
 amount = 3
 lifetime = 4.5
-process_material = SubResource( 7 )
+process_material = SubResource( 4 )
 texture = ExtResource( 6 )
 
 [node name="Sprite" type="Sprite" parent="."]

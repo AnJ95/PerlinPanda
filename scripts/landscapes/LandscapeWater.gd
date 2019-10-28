@@ -28,7 +28,7 @@ func time_update(time:float):
 			args.var = 0
 	last_time = time
 	
-	var water_height = get_weather().get_sea_level()
+	var water_height = get_weather().tide.now()
 	
 	cell_info.height = floor(water_height)
 	

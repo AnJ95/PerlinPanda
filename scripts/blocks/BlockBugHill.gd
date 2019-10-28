@@ -12,7 +12,7 @@ func init(map, cell_pos, cell_info, args, nth):
 func spawn():
 	if spawn_num <= args.var:
 		var bug = nth.Bug.instance().prep(map, cell_pos, self, nth)
-		if get_weather().get_day_bonus() < 0.3: # only spawn at night
+		if get_weather().day.now() < 0.6: # only spawn at night
 			get_bug_holder().call_deferred("add_child", bug)
 			spawn_num += 1
 	

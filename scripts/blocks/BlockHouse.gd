@@ -2,6 +2,7 @@ extends "Block.gd"
 
 var panda
 var repeat_icon
+var light
 
 func get_class(): return "BlockHouse"
 
@@ -19,10 +20,11 @@ func init(map, cell_pos, cell_info, args, nth):
 	
 	if !Engine.editor_hint:
 		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
+		panda.home = self
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", panda)
 		map.show_homes()
 		
-		var light = nth.OrangeLight.instance()
+		light = nth.OrangeLight.instance()
 		light.position = map.calc_px_pos_on_tile(cell_pos)
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", light)
 	
@@ -59,6 +61,8 @@ func remove():
 	panda.remove()
 	if repeat_icon != null:
 		repeat_icon.queue_free()
+	if light != null:
+		light.queue_free()
 	.remove()
 	
 ################################################

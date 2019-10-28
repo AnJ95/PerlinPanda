@@ -1,26 +1,25 @@
 extends CanvasLayer
 
-var weather_time = 30.0
+onready var Cycle = preload("res://scripts/WeatherCycle.gd")
 
-# SEA LEVEL
+# CONSTS
+const DAY_CYCLE_TIME = 120
 const TIDE_MIN_LEVEL = 5.5
 const TIDE_MAX_LEVEL = 4.5
-const TIDE_CYCLE_TIME = 50
 
-# DAY CYCLE
-const DAY_CYCLE_TIME = 120.0
+var weather_time = 30.0
 
-# RAIN CYCLE
-const RAIN_CYCLE_TIME = 180.0
+onready var modifier = get_parent().get_node("Map").level_def.weather
+
+onready var day = Cycle.new().init(DAY_CYCLE_TIME, (3/2.0)*PI, [0, 1], modifier.day)
+onready var tide = Cycle.new().init(50, 0, [TIDE_MAX_LEVEL, TIDE_MIN_LEVEL], 0)
+onready var rain = Cycle.new().init(180, PI, [0, 1], modifier.rain)
+onready var storm = Cycle.new().init(180, PI, [0, 1], 1, modifier.storm)
+onready var fog = Cycle.new().init(150, PI, [0, 1], 1)
+
+onready var cycles = [day, tide, rain, storm, fog]
 
 const PROB_TO_LIGHTNING_WHEN_TILE_SELECTED = 8.0
-
-var sea_level = 0
-var day_time = 0.0
-var day_level = 0.0
-var day_bonus = 0.0
-var rain_level = 0
-var storm_level = 0.0
 
 const lightning_time_per_tile = 50.0
 var time_to_next_lightning = 0
@@ -29,47 +28,54 @@ onready var Lightning = preload("res://scenes/Lightning.tscn")
 
 export var day_time_modulate:Gradient
 
-onready var rain = $Center/Rain
-onready var clouds = $Center/Clouds
-onready var stormClouds = $Center/StormClouds
+onready var rainNode = $Center/Rain
+onready var cloudNode = $Center/Clouds
+onready var stormCloudNode = $Center/StormClouds
+onready var fogNode = $Center/Fog
 
-onready var modifier = get_parent().get_node("Map").level_def.weather
+var cam
+func _ready():
+	cam = get_tree().get_nodes_in_group("camera")[0]
+	
+	
+	
+var delme = 0
+func _process(delta):
 
-func _process(delta:float):
 	weather_time += delta
 	
-	# Calculate current states and boni
-	var s = sin(weather_time * 2.0*PI / TIDE_CYCLE_TIME)
-	sea_level = TIDE_MAX_LEVEL + (TIDE_MIN_LEVEL-TIDE_MAX_LEVEL) * ((s + 1) / 2.0)
-	day_time = fmod(weather_time, DAY_CYCLE_TIME)
-	day_bonus = -cos(2*PI * weather_time / DAY_CYCLE_TIME)
-	day_level = (day_bonus+1) / 2.0
-	rain_level = (sin(-2*PI * weather_time / RAIN_CYCLE_TIME) + 1) / 2.0
-	storm_level = rain_level * rain_level
+	for cycle in cycles:
+		cycle.set_time(weather_time)
+		
+	if int(weather_time/5) != int((weather_time - delta) / 5):
+		p("########")
+		p("day:    " + str(day.now()))
+		p("tide:   " + str(tide.now()))
+		p("rain:   " + str(rain.now()))
+		p("storm:  " + str(storm.now()))
+		p("fog:    " + str(fog.now()))
 	
-	day_bonus += 2*modifier.day
-	day_level += modifier.day
-	rain_level += modifier.rain
-	storm_level += modifier.storm
+	mod(day_time_modulate.interpolate(fmod(weather_time, DAY_CYCLE_TIME) / float(DAY_CYCLE_TIME)))
 	
-	mod(day_time_modulate.interpolate(day_time / float(DAY_CYCLE_TIME)))
 	
-	process_storm(delta, storm_level)
-	process_rain(delta, rain_level)
+	process_storm(delta)
+	process_rain()
+	process_fog()
 
 func is_storming():
-	return storm_level > 0.6
-func process_storm(delta, storm_level):
-	set_particle_amount(stormClouds, y(is_storming(), interpol(0.6, 1.0, storm_level, 10, 20), 0))
-	process_lightning(delta, storm_level)
+	return storm.now() > 0.6
+func process_storm(delta):
+	set_particle_amount(stormCloudNode, y(is_storming(), interpol(0.6, 1.0, storm.now(), 10, 20), 0))
+	process_lightning(delta)
 
 func is_raining():
-	return rain_level > 0.6
-func process_rain(_delta, rain_level):
-	set_particle_amount(clouds, y(is_raining(), interpol(0.6, 1.0, rain_level, 10, 20), 0))
-	set_particle_amount(rain, y(is_raining(), interpol(0.6, 1.0, rain_level, 5, 80), 0))
+	return rain.now() > 0.6
+	
+func process_rain():
+	set_particle_amount(cloudNode, y(is_raining(), interpol(0.6, 1.0, rain.now(), 10, 20), 0))
+	set_particle_amount(rainNode, y(is_raining(), interpol(0.6, 1.0, rain.now(), 5, 80), 0))
 
-func process_lightning(delta, storm_level):
+func process_lightning(delta):
 	if !is_storming():
 		return
 		
@@ -80,7 +86,7 @@ func process_lightning(delta, storm_level):
 	var map = get_parent().get_node("Map")
 	time_to_next_lightning += lightning_time_per_tile / float(map.landscapes.size())
 	
-	if randi()%100 > PROB_TO_LIGHTNING_WHEN_TILE_SELECTED * storm_level:
+	if randi()%100 > PROB_TO_LIGHTNING_WHEN_TILE_SELECTED * storm.now():
 		return
 
 	var cells = map.map_landscape.get_used_cells()
@@ -100,6 +106,24 @@ func process_lightning(delta, storm_level):
 		var lightning = Lightning.instance().init(map, cells[id])
 		map.get_node("Navigation2D/PandaHolder").add_child(lightning)
 
+
+func process_fog():
+	var vp = get_viewport().get_visible_rect().size
+	
+	var param_offset = Vector2(cam.offset.x, -cam.offset.y) / vp
+	var param_scale = cam.zoom.x
+	param_offset += Vector2(-0.5 * param_scale, -0.5 * param_scale)
+	
+	fogNode.material.set_shader_param("intensity", fog.now())
+	fogNode.material.set_shader_param("offset", param_offset)
+	fogNode.material.set_shader_param("scale", param_scale)
+	
+func add_fog_pos(pos:Vector2):
+	if fogNode == null:
+		$Center/Fog.add_fog_pos(pos)
+	else:
+		fogNode.add_fog_pos(pos)
+
 var particle_duplicates = {}
 const particle_min_delta = 5
 const particles_max = 80
@@ -118,24 +142,11 @@ func set_particle_amount(particle:Particles2D, amount:int):
 	for p in range(0, particle_duplicates[particle].size()):
 		var dupl = particle_duplicates[particle][p]
 		dupl.emitting = amount >= (p+1) * particle_min_delta
-	
 					
 func mod(col:Color):
 	get_parent().get_node("Modulate").color = col
 	
-func get_sea_level():
-	return sea_level
-	
-func get_rain_level():
-	return rain_level
-	
-func get_day_time():
-	return day_time
 
-func get_day_bonus():
-	return day_bonus
-	
-	
 ####################################
 func interpol(minIn, maxIn, nowIn, minOut, maxOut):
 	var t = (nowIn - minIn) / float(maxIn - minIn)
@@ -147,3 +158,7 @@ static func y(c, a, b):
 		return a
 	else:
 		return b
+		
+func p(obj):
+	if get_parent().get_node("Map").print_weather:
+		print("## Weather ## " + str(obj))

@@ -40,8 +40,6 @@ func _process(delta: float) -> void:
 	
 	# Check if current target in vicinity
 	if move_towards_then(target_pos, SPEED, delta):
-		var day_bonus = map.weather.get_day_bonus()
-		
 		if map.blocks.has(target_pos):
 			if map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
 				start_working_on_ressource(map.blocks[target_pos])

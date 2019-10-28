@@ -12,7 +12,7 @@ func get_max_var():
 
 var last_water_height = -1
 func time_update(_time:float):
-	var water_height = get_weather().get_sea_level()
+	var water_height = get_weather().tide.now()
 	
 	# if water rising and above threshold
 	set_particle_emitting(last_water_height > water_height and water_height - PARTICLE_DST < cell_info.precise_height)

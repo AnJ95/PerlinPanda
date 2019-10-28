@@ -1,0 +1,156 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://assets/particles/circle.png" type="Texture" id=1]
+[ext_resource path="res://scripts/Fog.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform float intensity : hint_range(0.1, 2.0);
+uniform sampler2D noise_texture : hint_albedo;
+
+uniform vec2 offset;
+uniform float scale;
+uniform sampler2D fog_pos_arr;
+uniform sampler2D clear_pos_arr;
+
+uniform float FOG_DECAY_START = 60.0;
+uniform float FOG_DECAY_END = 85.0;
+
+uniform float CLEAR_DECAY_START = 40.0;
+uniform float CLEAR_DECAY_END = 75.0;
+
+int get_at_arr(sampler2D pos_arr, ivec2 coord)
+{
+	// retrieve r component on the desired array position
+	float texture_value = texelFetch(pos_arr, coord, 0).r;
+	// the resulting value is in srgb space, so convert it back to linear space
+	texture_value *= 255.;
+	return int(texture_value);
+}
+
+vec2 get_pos(sampler2D pos_arr, int i)
+{
+	int maj_x = get_at_arr(pos_arr, ivec2(2*i+1, 0));
+	int maj_y = get_at_arr(pos_arr, ivec2(2*i+1, 1));
+	
+	int sign_x = 1 - (maj_x & (1 << 7)) * 2;
+	int sign_y = 1 - (maj_y & (1 << 7)) * 2;
+	return vec2(
+		float(sign_x * (get_at_arr(pos_arr,ivec2(2*i, 0)) + 256*(maj_x & ((1 << 7) -1)))),
+		-float(sign_y * (get_at_arr(pos_arr, ivec2(2*i, 1)) + 256*(maj_y & ((1 << 7) -1))))
+	);
+}
+
+float man_distance(vec2 a, vec2 b)  {
+	return abs(a.x - b.x) + abs(a.y - b.y);
+}
+
+float get_min_dst_to(vec2 px_pos, float mx, sampler2D pos_arr) {
+	float min_dst = 1000.0;
+	ivec2 txtSize = textureSize(pos_arr, 0);
+	for (int i = 0; i < txtSize.x / 2; i++) {
+		vec2 pos = get_pos(pos_arr, i);
+		if (man_distance(px_pos, pos) < 2. * mx) {
+			float dst = distance(px_pos, pos);
+			if (dst < FOG_DECAY_END) {
+				min_dst = min(min_dst, dst);
+			}
+		}
+	}
+	return min_dst;
+}
+	
+
+void fragment() {
+
+	vec2 coord = SCREEN_UV*scale + offset;
+	vec4 noise1 = texture(noise_texture, coord + TIME * 0.02);
+	vec4 noise2 = texture(noise_texture, vec2(coord.y, coord.x) - TIME * 0.011);
+
+	
+	vec2 px_pos = vec2(coord.x * 1024., coord.y * 600.);
+	
+	float min_dst = get_min_dst_to(px_pos, FOG_DECAY_END, fog_pos_arr);
+	float fog_here = 0.;
+	if (min_dst < FOG_DECAY_END) {
+		if (min_dst < FOG_DECAY_START) {
+			fog_here = 1.;
+		} else {
+			fog_here = 1. - (min_dst - FOG_DECAY_START) / (FOG_DECAY_END - FOG_DECAY_START);
+		}
+	}
+	
+	min_dst = get_min_dst_to(px_pos, CLEAR_DECAY_END, clear_pos_arr);
+	if (min_dst < CLEAR_DECAY_END) {
+		if (min_dst < CLEAR_DECAY_START) {
+			fog_here = 0.;
+		} else {
+			fog_here -= 1. - (min_dst - CLEAR_DECAY_START) / (CLEAR_DECAY_END - CLEAR_DECAY_START);
+		}
+	}
+	
+	//fog_here = min(0., max(1., fog_here));
+	
+	vec4 final = mix(noise1, noise2, 0.5);
+	final.a = (final.r / 2. + 0.5) * intensity * fog_here;
+	
+	
+	//
+	//final.a = fog_here;
+	
+	COLOR = final;
+}"
+
+[sub_resource type="ImageTexture" id=8]
+flags = 0
+flags = 0
+
+[sub_resource type="Image" id=9]
+data = {
+"data": PoolByteArray( 154, 2, 63, 3, 197, 2, 82, 1, 228, 0, 132, 3, 167, 2, 232, 1, 193, 2, 224, 2, 95, 2, 194, 1, 181, 2, 78, 0, 95, 1, 90, 0, 19, 3, 171, 2, 141, 3, 234, 3, 184, 0, 145, 1, 70, 0, 235, 3, 87, 2, 55, 1, 13, 2, 168, 3, 38, 0, 116, 1, 252, 3, 234, 3, 54, 4, 253, 2, 40, 4, 254, 3, 153, 2, 94, 4, 93, 4, 47, 4, 49, 4, 168, 4, 167, 4, 168, 3, 101, 4, 110, 4, 161, 3, 91, 2, 64, 4, 139, 2, 109, 3, 142, 2, 18, 3, 124, 3, 91, 2, 47, 4, 134, 3, 94, 2, 142, 3, 114, 2 ),
+"format": "Red8",
+"height": 2,
+"mipmaps": false,
+"width": 60
+}
+
+[sub_resource type="ImageTexture" id=4]
+flags = 0
+flags = 0
+image = SubResource( 9 )
+size = Vector2( 60, 2 )
+
+[sub_resource type="OpenSimplexNoise" id=5]
+
+[sub_resource type="NoiseTexture" id=6]
+width = 1024
+height = 600
+seamless = true
+noise = SubResource( 5 )
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 1 )
+shader_param/intensity = 1.0
+shader_param/offset = null
+shader_param/scale = 1.0
+shader_param/FOG_DECAY_START = 80.0
+shader_param/FOG_DECAY_END = 115.0
+shader_param/CLEAR_DECAY_START = 40.0
+shader_param/CLEAR_DECAY_END = 75.0
+shader_param/noise_texture = SubResource( 6 )
+shader_param/fog_pos_arr = SubResource( 4 )
+shader_param/clear_pos_arr = SubResource( 8 )
+
+[node name="Fog" type="TextureRect"]
+light_mask = 2
+material = SubResource( 7 )
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+mouse_filter = 2
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 2
+script = ExtResource( 2 )

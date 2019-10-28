@@ -1,5 +1,6 @@
 extends "Gatherer.gd"
 
+var home
 var home_pos
 var home_pos3
 

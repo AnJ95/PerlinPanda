@@ -42,8 +42,8 @@ func get_regrow_prob_day_bonus():		return 25
 func get_stack_increase_prob():
 	return get_regrow_prob()
 	+ get_landscape().fertility * get_regrow_prob_fertility_bonus()
-	+ get_weather().get_rain_level() * get_regrow_prob_rain_bonus()
-	+ get_weather().get_day_bonus() * get_regrow_prob_rain_bonus()
+	+ get_weather().rain.now() * get_regrow_prob_rain_bonus()
+	+ get_weather().day.now() * get_regrow_prob_rain_bonus()
 
 ################################################
 ### FERTILITY

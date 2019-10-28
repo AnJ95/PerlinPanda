@@ -14,6 +14,7 @@ export var debug_mode = false
 export var print_ticking = false
 export var print_path_maker = false
 export var print_panda_pathing = false
+export var print_weather = true
 
 # Consts
 export var tile_cols:int = 12
@@ -254,7 +255,7 @@ func prepare_presets(start_pos):
 			var block_id = preset_blocks.get_cellv(preset_pos)
 			preset_poss[cell_pos+preset_pos] = [landscape_id, block_id]
 			
-		if Engine.editor_hint:
+		if false and Engine.editor_hint:
 			var c = load("res://scenes/DebugCircle.tscn").instance()
 			c.position = calc_px_pos_on_tile(circle[0])
 			c.scale = Vector2(2 + 3.5 * circle[1], 2 + 3.5 * circle[1])

@@ -90,16 +90,14 @@ void fragment() {
 		}
 	}
 	
-	//fog_here = min(0., max(1., fog_here));
-	
-	vec4 final = mix(noise1, noise2, 0.5);
-	final.a = (final.r / 2. + 0.5) * intensity * fog_here;
+	//fog_here = 1.;
+	fog_here = max(0., min(1., fog_here));
 	
 	
-	//
-	//final.a = fog_here;
+	vec4 col = mix(noise1, noise2, 0.5);
+	col.a = (col.r / 2. + 0.5) * intensity * fog_here;
 	
-	COLOR = final;
+	COLOR = col;
 }"
 
 [sub_resource type="ImageTexture" id=8]
@@ -108,7 +106,7 @@ flags = 0
 
 [sub_resource type="Image" id=9]
 data = {
-"data": PoolByteArray( 154, 2, 63, 3, 197, 2, 82, 1, 228, 0, 132, 3, 167, 2, 232, 1, 193, 2, 224, 2, 95, 2, 194, 1, 181, 2, 78, 0, 95, 1, 90, 0, 19, 3, 171, 2, 141, 3, 234, 3, 184, 0, 145, 1, 70, 0, 235, 3, 87, 2, 55, 1, 13, 2, 168, 3, 38, 0, 116, 1, 252, 3, 234, 3, 54, 4, 253, 2, 40, 4, 254, 3, 153, 2, 94, 4, 93, 4, 47, 4, 49, 4, 168, 4, 167, 4, 168, 3, 101, 4, 110, 4, 161, 3, 91, 2, 64, 4, 139, 2, 109, 3, 142, 2, 18, 3, 124, 3, 91, 2, 47, 4, 134, 3, 94, 2, 142, 3, 114, 2 ),
+"data": PoolByteArray( 174, 3, 91, 0, 18, 3, 174, 0, 133, 0, 232, 1, 203, 0, 234, 1, 154, 3, 231, 2, 3, 1, 254, 3, 35, 2, 74, 3, 56, 1, 146, 3, 19, 0, 183, 2, 73, 0, 219, 1, 36, 0, 148, 3, 223, 0, 237, 0, 7, 3, 100, 1, 247, 0, 144, 1, 128, 2, 87, 1, 219, 128, 172, 0, 122, 0, 60, 0, 55, 128, 229, 128, 25, 0, 92, 0, 251, 0, 179, 0, 51, 0, 208, 128, 101, 0, 4, 0, 4, 128, 131, 0, 11, 128, 8, 1, 120, 0, 217, 129, 255, 129, 42, 0, 29, 1, 215, 128, 180, 128, 220, 128, 221, 0, 47, 128, 17, 1, 74, 128 ),
 "format": "Red8",
 "height": 2,
 "mipmaps": false,
@@ -134,8 +132,8 @@ shader = SubResource( 1 )
 shader_param/intensity = 1.0
 shader_param/offset = null
 shader_param/scale = 1.0
-shader_param/FOG_DECAY_START = 80.0
-shader_param/FOG_DECAY_END = 115.0
+shader_param/FOG_DECAY_START = 60.0
+shader_param/FOG_DECAY_END = 85.0
 shader_param/CLEAR_DECAY_START = 40.0
 shader_param/CLEAR_DECAY_END = 75.0
 shader_param/noise_texture = SubResource( 6 )

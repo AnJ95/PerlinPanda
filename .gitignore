@@ -9,4 +9,4 @@ data_*/
 
 # Personal ignores
 art/
-build/
+#build/

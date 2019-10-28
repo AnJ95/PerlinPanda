@@ -11,11 +11,11 @@ var weather_time = 30.0
 
 onready var modifier = get_parent().get_node("Map").level_def.weather
 
-onready var day = Cycle.new().init(DAY_CYCLE_TIME, (3/2.0)*PI, [0, 1], modifier.day)
-onready var tide = Cycle.new().init(50, 0, [TIDE_MAX_LEVEL, TIDE_MIN_LEVEL], 0)
-onready var rain = Cycle.new().init(180, PI, [0, 1], modifier.rain)
+onready var day = Cycle.new().init(DAY_CYCLE_TIME, (3/2.0)*PI, [0, 1], 0, modifier.day)
+onready var tide = Cycle.new().init(50, 0, [TIDE_MAX_LEVEL, TIDE_MIN_LEVEL], 0, modifier.tide)
+onready var rain = Cycle.new().init(180, PI, [0, 1], 0, modifier.rain)
 onready var storm = Cycle.new().init(180, PI, [0, 1], 1, modifier.storm)
-onready var fog = Cycle.new().init(150, PI, [0, 1], 1)
+onready var fog = Cycle.new().init(150, PI, [-1, 1], 1, modifier.fog)
 
 onready var cycles = [day, tide, rain, storm, fog]
 
@@ -114,7 +114,7 @@ func process_fog():
 	var param_scale = cam.zoom.x
 	param_offset += Vector2(-0.5 * param_scale, -0.5 * param_scale)
 	
-	fogNode.material.set_shader_param("intensity", fog.now())
+	fogNode.material.set_shader_param("intensity", max(fog.now(), 0))
 	fogNode.material.set_shader_param("offset", param_offset)
 	fogNode.material.set_shader_param("scale", param_scale)
 	

@@ -39,7 +39,7 @@ func input(event):
 		return false
 		
 	if has_selected_building():
-		if event.button_index == BUTTON_RIGHT:
+		if event.button_index == BUTTON_RIGHT and !event.pressed:
 			cancel()
 			return true
 			

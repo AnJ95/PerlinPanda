@@ -38,10 +38,8 @@ func time_update(time:float):
 			var pos = map.calc_px_pos_on_tile(cell_pos)
 			for bug in map.get_tree().get_nodes_in_group("bug"):
 				if pos.distance_squared_to(bug.position) <= (2*105)*(2*105) and pos.distance_to(bug.position) <= (2*105):
-					var pandas = map.get_tree().get_nodes_in_group("panda")
-					if pandas.size() > 0:
-						bug.stepped_on(null)
-						inventory.add("bamboo", bug.inventory.get("bamboo"))
+					bug.stepped_on(null)
+					inventory.add("bamboo", bug.inventory.get("bamboo"))
 
 func panda_in_center(panda):
 	.panda_in_center(panda)

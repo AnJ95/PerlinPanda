@@ -1,0 +1,15 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://resources/WalkBoostEffect.shader" type="Shader" id=1]
+[ext_resource path="res://assets/particles/hex.png" type="Texture" id=2]
+[ext_resource path="res://scripts/WalkBoostEffect.gd" type="Script" id=3]
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = ExtResource( 1 )
+shader_param/play_shader = true
+shader_param/show_bg = false
+
+[node name="WalkBoostEffect" type="Sprite"]
+material = SubResource( 2 )
+texture = ExtResource( 2 )
+script = ExtResource( 3 )

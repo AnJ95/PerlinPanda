@@ -250,6 +250,7 @@ func create_ressource_updater(block):
 	if block.get_class() == "BlockWIP":									updater = create_ressource_updater_from_block_wip(block)
 	if block.get_class() == "BlockHouse" and block.cell_pos != path[0]:	updater = create_ressource_updater_from_foreign_house(block)
 	if block.get_class() == "BlockSmoker":								updater = create_ressource_updater_from_smoker(block)
+	if block.get_class() == "BlockTownCenter":							updater = create_ressource_updater_from_town_center(block)
 	return updater
 		
 		
@@ -263,6 +264,8 @@ func create_ressource_updater_from_own_house(block):
 	return RessourceUpdater.instance().set_from_own_house(inventory, taking_from_home, null, block)
 func create_ressource_updater_from_smoker(block):
 	return RessourceUpdater.instance().set_from_smoker(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
+func create_ressource_updater_from_town_center(block):
+	return RessourceUpdater.instance().set_from_town_center(inventory, taking_from_home, map.blocks[panda.home_pos].scheduled_inventory, block)
 				
 func is_valid_next(last_tile, this_tile):
 	return (!map.blocks.has(this_tile) or map.blocks[this_tile].is_passable()) and map.map_landscape.get_cellv(this_tile) >= 0 and map.are_tiles_adjacent(last_tile, this_tile) and (cell_pos_not_already_in_path(this_tile) or (map.blocks.has(this_tile) and map.blocks[this_tile].multiple_in_one_path_allowed()))

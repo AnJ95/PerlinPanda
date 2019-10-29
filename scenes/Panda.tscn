@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=25 format=2]
 
 [ext_resource path="res://scripts/Panda.gd" type="Script" id=1]
 [ext_resource path="res://scenes/particles/Particles_bamboo.tscn" type="PackedScene" id=2]
@@ -7,25 +7,26 @@
 [ext_resource path="res://assets/images/leaves.png" type="Texture" id=5]
 [ext_resource path="res://assets/images/love.png" type="Texture" id=6]
 [ext_resource path="res://assets/zzz.png" type="Texture" id=7]
-[ext_resource path="res://assets/panda.png" type="Texture" id=8]
-[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=9]
-[ext_resource path="res://scenes/OrangeLight.tscn" type="PackedScene" id=10]
+[ext_resource path="res://resources/WalkBoostEffect.shader" type="Shader" id=8]
+[ext_resource path="res://assets/panda.png" type="Texture" id=9]
+[ext_resource path="res://scenes/Inventory.tscn" type="PackedScene" id=10]
+[ext_resource path="res://scenes/OrangeLight.tscn" type="PackedScene" id=11]
 
-[sub_resource type="Curve" id=5]
+[sub_resource type="Curve" id=1]
 max_value = 360.0
 _data = [ Vector2( 0, 277.895 ), 0.0, 0.0, 0, 0, Vector2( 1, 10.116 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=6]
-curve = SubResource( 5 )
+[sub_resource type="CurveTexture" id=2]
+curve = SubResource( 1 )
 
-[sub_resource type="Gradient" id=7]
+[sub_resource type="Gradient" id=3]
 offsets = PoolRealArray( 0, 0.994681, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.0663137, 1, 1, 1, 0 )
 
-[sub_resource type="GradientTexture" id=8]
-gradient = SubResource( 7 )
+[sub_resource type="GradientTexture" id=4]
+gradient = SubResource( 3 )
 
-[sub_resource type="ParticlesMaterial" id=9]
+[sub_resource type="ParticlesMaterial" id=5]
 emission_shape = 1
 emission_sphere_radius = 12.86
 flag_disable_z = true
@@ -38,19 +39,19 @@ angular_velocity_random = 0.31
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle = -30.0
-angle_curve = SubResource( 6 )
+angle_curve = SubResource( 2 )
 scale = 0.5
 scale_random = 0.4
-color_ramp = SubResource( 8 )
+color_ramp = SubResource( 4 )
 
-[sub_resource type="Curve" id=10]
+[sub_resource type="Curve" id=6]
 max_value = 360.0
 _data = [ Vector2( 0, 212.306 ), 0.0, 0.0, 0, 0, Vector2( 1, 240.818 ), 0.0, 0.0, 0, 0 ]
 
-[sub_resource type="CurveTexture" id=11]
-curve = SubResource( 10 )
+[sub_resource type="CurveTexture" id=7]
+curve = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=12]
+[sub_resource type="ParticlesMaterial" id=8]
 emission_shape = 1
 emission_sphere_radius = 12.86
 flag_disable_z = true
@@ -63,19 +64,19 @@ angular_velocity_random = 0.31
 orbit_velocity = 0.0
 orbit_velocity_random = 0.0
 angle = 30.0
-angle_curve = SubResource( 11 )
+angle_curve = SubResource( 7 )
 scale = 0.5
 scale_random = 0.4
-color_ramp = SubResource( 8 )
+color_ramp = SubResource( 4 )
 
-[sub_resource type="Gradient" id=1]
+[sub_resource type="Gradient" id=9]
 offsets = PoolRealArray( 0, 0.347222, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0.0663137, 1, 1, 1, 0 )
 
-[sub_resource type="GradientTexture" id=2]
-gradient = SubResource( 1 )
+[sub_resource type="GradientTexture" id=10]
+gradient = SubResource( 9 )
 
-[sub_resource type="ParticlesMaterial" id=3]
+[sub_resource type="ParticlesMaterial" id=11]
 emission_shape = 1
 emission_sphere_radius = 12.86
 flag_disable_z = true
@@ -90,9 +91,9 @@ orbit_velocity_random = 0.0
 angle = -90.0
 angle_random = 0.67
 scale = 0.2
-color_ramp = SubResource( 2 )
+color_ramp = SubResource( 10 )
 
-[sub_resource type="ParticlesMaterial" id=4]
+[sub_resource type="ParticlesMaterial" id=12]
 emission_shape = 1
 emission_sphere_radius = 5.0
 flag_disable_z = true
@@ -106,6 +107,11 @@ orbit_velocity_random = 0.0
 angle = -73.7
 angle_random = 0.1
 scale = 0.2
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = ExtResource( 8 )
+shader_param/play_shader = false
+shader_param/show_bg = true
 
 [node name="Panda" type="Node2D" groups=[
 "panda",
@@ -122,7 +128,7 @@ rotation = -1.0472
 amount = 3
 randomness = 0.69
 visibility_rect = Rect2( -200, -200, 400, 400 )
-process_material = SubResource( 9 )
+process_material = SubResource( 5 )
 texture = ExtResource( 3 )
 
 [node name="Particles_exhaustion2" parent="." instance=ExtResource( 2 )]
@@ -131,7 +137,7 @@ rotation = -2.0944
 amount = 3
 randomness = 0.69
 visibility_rect = Rect2( -200, -200, 400, 400 )
-process_material = SubResource( 12 )
+process_material = SubResource( 8 )
 texture = ExtResource( 3 )
 
 [node name="Particles_stone" parent="." instance=ExtResource( 2 )]
@@ -149,7 +155,7 @@ emitting = false
 amount = 20
 lifetime = 6.9
 one_shot = true
-process_material = SubResource( 3 )
+process_material = SubResource( 11 )
 texture = ExtResource( 6 )
 
 [node name="Particles_sleeping" type="Particles2D" parent="."]
@@ -158,16 +164,17 @@ rotation = -1.13446
 emitting = false
 amount = 3
 lifetime = 4.5
-process_material = SubResource( 4 )
+process_material = SubResource( 12 )
 texture = ExtResource( 7 )
 
 [node name="Sprite" type="Sprite" parent="."]
+material = SubResource( 13 )
 position = Vector2( 0, -10 )
-texture = ExtResource( 8 )
+texture = ExtResource( 9 )
 hframes = 2
 
-[node name="Inventory" parent="." instance=ExtResource( 9 )]
+[node name="Inventory" parent="." instance=ExtResource( 10 )]
 position = Vector2( 0, -110 )
 
-[node name="OrangeLight" parent="." instance=ExtResource( 10 )]
-position = Vector2( 0, -10.6732 )
+[node name="OrangeLight" parent="." instance=ExtResource( 11 )]
+position = Vector2( 0, -11.2337 )

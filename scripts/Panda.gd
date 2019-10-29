@@ -4,10 +4,10 @@ var home
 var home_pos
 var home_pos3
 
-const MIN_SPEED = 10
+const MIN_SPEED = 15
 const SPEED = 75
-const SPEED_FACTOR_PER_LAYER_UP = 0.9
-const SPEED_LOSS_PER_RES = {"bamboo":5, "stone":10, "leaves":2}
+const SPEED_FACTOR_PER_LAYER_UP = 0.92
+const SPEED_LOSS_PER_RES = {"bamboo":3, "stone":6, "leaves":1}
 
 # for path iteration
 var path = null
@@ -45,6 +45,11 @@ func _ready():
 func _process(delta: float) -> void:
 	._process(delta)
 	
+	process_effects()
+	var speed_bonus = 1.0
+	if current_effects.has("speed"):
+		speed_bonus = current_effects.speed[0]
+	
 	# start animation
 	if show_start_anim:
 		if move_towards_then(start_anim_target, 12*SPEED, delta):
@@ -63,7 +68,7 @@ func _process(delta: float) -> void:
 	var speed_factor = calc_speed_factor()
 	
 	# gather and build, prevent walking if so
-	if gather_and_build(delta, speed_factor):
+	if gather_and_build(delta, speed_bonus*speed_factor):
 		$Particles_exhaustion.emitting = false
 		$Particles_exhaustion2.emitting = false
 		return
@@ -76,7 +81,9 @@ func _process(delta: float) -> void:
 		var scale = min(2, 1 + (ex-10) / 40)
 		$Particles_exhaustion.scale.x = scale
 		$Particles_exhaustion.scale.y = scale
-	var speed = speed_factor * (SPEED-ex)
+		$Particles_exhaustion2.scale.x = scale
+		$Particles_exhaustion2.scale.y = scale
+	var speed = speed_bonus * speed_factor * (SPEED-ex)
 	speed = max(MIN_SPEED, speed)
 
 	
@@ -390,6 +397,22 @@ func draw_orange_line():
 	
 	line.get_parent().add_child(repeat_line)
 
+####################################
+## EFFECT
+var current_effects = {}
+func apply_effect(boni, time):
+	for bonus in boni:
+		current_effects[bonus] = [boni[bonus], map.time + time]
+		
+func process_effects():
+	var to_delete = []
+	for bonus in current_effects:
+		if current_effects[bonus][1] < map.time:
+			to_delete.append(bonus)
+	for bonus in to_delete:
+		current_effects.erase(bonus)
+		
+	$Sprite.material.set_shader_param("play_shader", current_effects.has("speed"))
 
 ####################################
 ## INVENTORY

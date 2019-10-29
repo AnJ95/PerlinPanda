@@ -5,7 +5,7 @@ var home_pos
 var home_pos3
 
 const MIN_SPEED = 15
-const SPEED = 75
+const SPEED = 80
 const SPEED_FACTOR_PER_LAYER_UP = 0.92
 const SPEED_LOSS_PER_RES = {"bamboo":3, "stone":6, "leaves":1}
 

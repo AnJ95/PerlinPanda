@@ -4,7 +4,7 @@ extends "Landscape.gd"
 var durability = 0
 
 const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY = 20#%
-const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS = 10#%
+const PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS = 20#%
 
 const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING = 40#%
 const PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS = 30#%
@@ -79,7 +79,7 @@ func get_speed_factor():
 func get_fertility_bonus():
 	if durability == null: durability = 0
 		
-	return 0.3 * (durability / float(max_durability()))
+	return 0.4 * (durability / float(max_durability()))
 	
 ################################################
 ### FIRE

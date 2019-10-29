@@ -182,6 +182,15 @@ func set_from_smoker(panda_inventory, taking_from_home, house_inventory, block):
 	changeable = false
 	return self
 	
+func set_from_town_center(panda_inventory, taking_from_home, house_inventory, block):
+	ressources = {}
+	ressources_max = {}
+	ressources["bamboo"] = min(panda_inventory.get("bamboo"), block.inventory.get_free("bamboo"))
+	ressources_max["bamboo"] = panda_inventory.get("bamboo") + house_inventory.get("bamboo") - taking_from_home.ressources["bamboo"]
+	signum = -1
+	changeable = false
+	return self
+	
 func set_from_wip_block(panda_inventory, taking_from_home, house_inventory, block):
 	ressources = {}
 	ressources_max = {}

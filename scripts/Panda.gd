@@ -25,7 +25,7 @@ var start_anim_target
 
 
 
-func prep(map, cell_pos, cell_info):
+func prep(map, cell_pos, cell_info, nth):
 	.init(map)
 	self.home_pos3 = Vector3(cell_pos.x, cell_pos.y, cell_info.height)
 	self.home_pos = cell_pos
@@ -320,7 +320,7 @@ func remove():
 ## REPEAT
 
 func repeat():
-	var pathMaker = load("res://scenes/PathMaker.tscn").instance().init(false)
+	var pathMaker = nth.PathMaker.instance().init(false)
 	map.get_parent().add_child(pathMaker)
 	
 	pathMaker.try_start_path_from(self)

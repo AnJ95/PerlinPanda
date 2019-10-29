@@ -10,7 +10,7 @@ void fragment() {
 	if (play_shader) {
 		if (col_before.a > 0.0) {
 			if (show_bg) {
-				col_after = mix(col_before, vec4(1,1,1, col_before.a), (sin(6.0*UV.x + 8.0*UV.y + 6.0*TIME)+1.0)/2.0);
+				col_after = mix(col_before, vec4(1,1,1, col_before.a), 0.2*(sin(7.0*UV.x + 9.0*UV.y + 9.0*TIME)+1.0)/2.0);
 			} else {
 				col_after.a = min((sin(6.0*UV.x + 8.0*UV.y + 6.0*TIME)+1.0)/2.0, col_before.a);
 			}

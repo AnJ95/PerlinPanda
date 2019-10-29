@@ -1,6 +1,7 @@
 extends Node2D
 
 var map
+var nth
 var ressourceManager
 
 var timer = 0
@@ -15,8 +16,9 @@ var job_time_left = 1
 
 onready var inventory = $Inventory
 
-func init(map):
+func init(map, nth):
 	self.map = map
+	self.nth = nth
 	
 func _ready():
 	ressourceManager = get_tree().get_nodes_in_group("ressource_manager")

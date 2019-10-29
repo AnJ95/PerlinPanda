@@ -19,7 +19,7 @@ func init(map, cell_pos, cell_info, args, nth):
 		map.grant_vision(cell_pos, 2)
 	
 	if !Engine.editor_hint:
-		panda = nth.Panda.instance().prep(map, cell_pos, cell_info)
+		panda = nth.Panda.instance().prep(map, cell_pos, cell_info, nth)
 		panda.home = self
 		map.get_node("Navigation2D/PandaHolder").call_deferred("add_child", panda)
 		map.show_homes()

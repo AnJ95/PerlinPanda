@@ -136,7 +136,7 @@ func init_inventory():
 	inventory.position = map.calc_px_pos_on_tile(cell_pos) - Vector2(0, 100)
 	get_ui_holder().call_deferred("add_child", inventory)
 
-	scheduled_inventory = load("res://scenes/Inventory.tscn").instance().init(self, true, {}, inventory_max_values())
+	scheduled_inventory = nth.Inventory.instance().init(self, true, {}, inventory_max_values())
 # Overrides
 func adjust_inventory(inventory):
 	return inventory

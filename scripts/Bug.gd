@@ -1,7 +1,6 @@
 extends "Gatherer.gd"
 
 var hill
-var nth = nth
 
 const SPEED = 18
 var frame_time = 0.15
@@ -11,9 +10,8 @@ var target_pos = null
 	
 func prep(map, cell_pos, hill, nth):
 	self.hill = hill
-	self.nth = nth
 	position = map.calc_px_pos_on_tile(cell_pos)
-	.init(map)
+	.init(map, nth)
 	return self
 	
 func inventory_emptied(_res_name, value): # TODO DELME

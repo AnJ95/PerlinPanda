@@ -73,7 +73,8 @@ func is_raining():
 	
 func process_rain():
 	set_particle_amount(cloudNode, y(is_raining(), interpol(0.6, 1.0, rain.now(), 10, 20), 0))
-	set_particle_amount(rainNode, y(is_raining(), interpol(0.6, 1.0, rain.now(), 5, 80), 0))
+	print(y(is_raining(), interpol(0.6, 1.0, rain.now(), 1.0, 4.0), 0))
+	rainNode.material.set_shader_param("amount", y(is_raining(), interpol(0.6, 1.0, rain.now(), 1.0, 4.0), 0))
 
 func process_lightning(delta):
 	if !is_storming():

@@ -1,10 +1,11 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://scripts/WeatherManager.gd" type="Script" id=1]
 [ext_resource path="res://assets/particles/circleSmooth.png" type="Texture" id=2]
-[ext_resource path="res://assets/particles/raindrop.png" type="Texture" id=3]
-[ext_resource path="res://scenes/Fog.tscn" type="PackedScene" id=4]
-[ext_resource path="res://assets/images/love.png" type="Texture" id=5]
+[ext_resource path="res://assets/rain.png" type="Texture" id=3]
+[ext_resource path="res://assets/black.png" type="Texture" id=4]
+[ext_resource path="res://scenes/Fog.tscn" type="PackedScene" id=5]
+[ext_resource path="res://assets/images/love.png" type="Texture" id=6]
 
 [sub_resource type="Gradient" id=1]
 offsets = PoolRealArray( 0.0547112, 0.186885, 0.252459, 0.344262, 0.59375, 0.690625, 0.73125, 0.771875, 0.85, 0.948598 )
@@ -52,18 +53,30 @@ scale = 2.7
 scale_random = 0.3
 color_ramp = SubResource( 6 )
 
-[sub_resource type="ParticlesMaterial" id=8]
-emission_shape = 2
-emission_box_extents = Vector3( 1, 600, 1 )
-flag_disable_z = true
-spread = 5.0
-gravity = Vector3( 200, 50, 0 )
-initial_velocity = 800.0
-initial_velocity_random = 0.2
-angular_velocity = 1.08103e-40
-orbit_velocity = 0.0
-orbit_velocity_random = 0.0
-angle = 90.0
+[sub_resource type="Shader" id=8]
+code = "shader_type canvas_item;
+
+uniform int amount;
+uniform sampler2D rain_texture;
+
+void fragment() {
+	ivec2 tmp = textureSize(rain_texture, 0);
+	vec2 rain_texture_size = vec2(float(tmp.x), float(tmp.y));
+	
+	COLOR = vec4(0.,0.,0.,0.);
+	for (float i = 0.0; i < float(amount); i+=1.0) {
+		vec4 color = texture(rain_texture, vec2(sin(i), sin(0.5*i)) + UV*3.0 + vec2((0.5 + i*0.1)*TIME, -(2.2 + i*0.3)*TIME));
+		if (color.a > COLOR.a) {
+			COLOR = color
+		}
+	}
+	
+}"
+
+[sub_resource type="ShaderMaterial" id=9]
+shader = SubResource( 8 )
+shader_param/amount = -7
+shader_param/rain_texture = ExtResource( 3 )
 
 [node name="WeatherManager" type="CanvasLayer" groups=[
 "weather_manager",
@@ -96,17 +109,16 @@ visibility_rect = Rect2( -2000, -2000, 4000, 4000 )
 process_material = SubResource( 7 )
 texture = ExtResource( 2 )
 
-[node name="Rain" type="Particles2D" parent="Center"]
-position = Vector2( 0, -300 )
-rotation = 1.74533
-emitting = false
-amount = 100
-lifetime = 0.9
-visibility_rect = Rect2( -2000, -2000, 4000, 4000 )
-process_material = SubResource( 8 )
-texture = ExtResource( 3 )
+[node name="Rain" type="TextureRect" parent="Center"]
+material = SubResource( 9 )
+margin_left = -512.0
+margin_top = -300.0
+margin_right = 512.0
+margin_bottom = 300.0
+mouse_filter = 2
+texture = ExtResource( 4 )
+expand = true
+stretch_mode = 1
 
-[node name="Fog" parent="Center" instance=ExtResource( 4 )]
-margin_left = -510.531
-margin_right = 513.469
-texture = ExtResource( 5 )
+[node name="Fog" parent="Center" instance=ExtResource( 5 )]
+texture = ExtResource( 6 )

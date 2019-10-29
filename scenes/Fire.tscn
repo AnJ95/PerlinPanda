@@ -13,7 +13,7 @@ colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 0.196078, 0.855469, 0.855469, 0.85
 gradient = SubResource( 1 )
 
 [sub_resource type="Curve" id=3]
-_data = [ Vector2( 0, 0.126946 ), 0.0, 0.0, 0, 0, Vector2( 0.170156, 0.276546 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.109346 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.543934 ), 0.0, 0.0, 0, 0, Vector2( 0.236599, 0.763934 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=4]
 curve = SubResource( 3 )
@@ -85,14 +85,14 @@ colors = PoolColorArray( 1, 0.971715, 0, 0.196078, 1, 0.94902, 0, 0.313726, 1, 0
 gradient = SubResource( 12 )
 
 [sub_resource type="Curve" id=14]
-_data = [ Vector2( 0, 0.3416 ), 0.0, 0.0, 0, 0, Vector2( 0.374232, 0.368 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.191314 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 0.896 ), 0.0, 0.0, 0, 0, Vector2( 0.345756, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0.3328 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="CurveTexture" id=15]
 curve = SubResource( 14 )
 
 [sub_resource type="ParticlesMaterial" id=16]
 emission_shape = 2
-emission_box_extents = Vector3( 10, 20, 1 )
+emission_box_extents = Vector3( 7, 14, 1 )
 flag_disable_z = true
 spread = 20.21
 gravity = Vector3( 0, 0, 0 )
@@ -118,8 +118,7 @@ energy = 0.5
 [node name="Smoke_1" type="Particles2D" parent="."]
 position = Vector2( 0, -30 )
 rotation = -1.5708
-scale = Vector2( 0.8, 0.8 )
-amount = 12
+amount = 6
 lifetime = 6.0
 process_material = SubResource( 5 )
 texture = ExtResource( 3 )
@@ -127,8 +126,8 @@ texture = ExtResource( 3 )
 [node name="Smoke_2" type="Particles2D" parent="."]
 position = Vector2( 0, -30 )
 rotation = -1.5708
-scale = Vector2( 0.8, 0.8 )
-amount = 10
+scale = Vector2( 1.05, 1.05 )
+amount = 5
 lifetime = 8.0
 process_material = SubResource( 8 )
 texture = ExtResource( 3 )
@@ -136,8 +135,8 @@ texture = ExtResource( 3 )
 [node name="Smoke_3" type="Particles2D" parent="."]
 position = Vector2( 0, -30 )
 rotation = -1.5708
-scale = Vector2( 0.8, 0.8 )
-amount = 10
+scale = Vector2( 1.1, 1.1 )
+amount = 5
 lifetime = 10.0
 process_material = SubResource( 11 )
 texture = ExtResource( 3 )
@@ -145,17 +144,16 @@ texture = ExtResource( 3 )
 [node name="Outer_1" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-scale = Vector2( 0.6, 0.6 )
-amount = 7
-lifetime = 1.6
+amount = 4
+lifetime = 1.4
 process_material = SubResource( 16 )
 texture = ExtResource( 4 )
 
 [node name="Outer_2" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-scale = Vector2( 0.8, 0.8 )
-amount = 3
+scale = Vector2( 1.05, 1.05 )
+amount = 2
 lifetime = 1.6
 process_material = SubResource( 16 )
 texture = ExtResource( 4 )
@@ -163,7 +161,8 @@ texture = ExtResource( 4 )
 [node name="Outer_3" type="Particles2D" parent="."]
 position = Vector2( 0, -10 )
 rotation = -1.5708
-amount = 5
+scale = Vector2( 1.1, 1.1 )
+amount = 2
 lifetime = 1.6
 process_material = SubResource( 16 )
 texture = ExtResource( 4 )

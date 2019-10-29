@@ -28,7 +28,11 @@ func can_be_build_on(map, cell_pos):
 func ressource_name_or_null():
 	return "stone"
 func ressource_work_time():
-	return 20
+	var mountains = 0
+	for adj in map.get_adjacent_tiles(cell_pos):
+		if map.blocks.has(adj) and map.blocks[adj].get_class() == "BlockMountain":
+			mountains += 1
+	return 22 - 3.5 * mountains
 func get_max_stock():
 	return 0
 func get_ressource_amount_after_work_done():

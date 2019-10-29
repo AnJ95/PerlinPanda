@@ -7,7 +7,7 @@ func init(map, cell_pos, cell_info, args, nth):
 	return .init(map, cell_pos, cell_info, args, nth)
 	
 func get_tile_id():
-	return 6 + 1*12
+	return 6 + 1*12 + map.y(active, -12, 0)
 
 func get_speed_factor():
 	return 2.0
@@ -44,6 +44,7 @@ func time_update(time:float):
 	if !active:
 		if inventory.has("bamboo", 1):
 			active = true
+			update_tile()
 			set_particle_emitting(true)
 			effect_start_time = map.time
 			
@@ -56,6 +57,7 @@ func time_update(time:float):
 	if active:
 		if time - effect_start_time > EFFECT_TIME:
 			active = false
+			update_tile()
 			set_particle_emitting(false)
 			for node in effect_nodes:
 				node.queue_free()

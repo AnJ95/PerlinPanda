@@ -65,7 +65,7 @@ void fragment() {
 	
 	COLOR = vec4(0.,0.,0.,0.);
 	for (float i = 0.0; i < float(amount); i+=1.0) {
-		vec4 color = texture(rain_texture, vec2(sin(i), sin(0.5*i)) + UV*3.0 + vec2((0.5 + i*0.1)*TIME, -(2.2 + i*0.3)*TIME));
+		vec4 color = texture(rain_texture, vec2(sin(i), sin(0.5*i)) + UV*0.005 + vec2((0.5 + i*0.1)*TIME, -(2.2 + i*0.3)*TIME));
 		if (color.a > COLOR.a) {
 			COLOR = color
 		}
@@ -75,7 +75,7 @@ void fragment() {
 
 [sub_resource type="ShaderMaterial" id=9]
 shader = SubResource( 8 )
-shader_param/amount = -7
+shader_param/amount = 1
 shader_param/rain_texture = ExtResource( 3 )
 
 [node name="WeatherManager" type="CanvasLayer" groups=[
@@ -118,7 +118,7 @@ margin_bottom = 300.0
 mouse_filter = 2
 texture = ExtResource( 4 )
 expand = true
-stretch_mode = 1
+stretch_mode = 2
 
 [node name="Fog" parent="Center" instance=ExtResource( 5 )]
 texture = ExtResource( 6 )

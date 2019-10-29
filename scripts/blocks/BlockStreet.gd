@@ -9,7 +9,7 @@ func get_tile_id():
 	return 4 + 2*12
 
 func get_speed_factor():
-	return 2.6
+	return 2.3
 	
 func multiple_in_one_path_allowed():
 	return true

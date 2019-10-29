@@ -126,6 +126,8 @@ func get_ui_holder():
 	return map.get_node("Navigation2D/UIHolder")
 func get_bug_holder():
 	return map.get_node("Navigation2D/BugHolder")
+func get_middle_holder():
+	return map.get_node("Navigation2D/MiddleHolder")
 		
 ###################################################	
 

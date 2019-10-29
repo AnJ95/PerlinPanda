@@ -51,7 +51,7 @@ func time_update(time:float):
 			for tile in get_affected_tiles():
 				var inst = nth.WalkBoostEffect.instance().init(map, tile, self)
 				effect_nodes.append(inst)
-				get_particle_holder().add_child(inst)
+				get_middle_holder().add_child(inst)
 				
 
 	if active:

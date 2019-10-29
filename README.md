@@ -7,7 +7,7 @@
 
 ## Gameplay
 PerlinPanda is a 2D top-down style strategy game on a generated hexagonal map.
-The goal is to discover islands by building your panda infrastructure while taking care of your environment!
+The goal is to explore islands and to build your panda infrastructure while taking care of your environment!
 
 ![](./README/shot_01.png")
 ![](./README/shot_02.png")

@@ -8,7 +8,8 @@ env:
   - GAME_NAME="PerlinPanda"
 
 install:
-- docker pull anj95/perlinpanda
+- docker pull gamedrivendesign/godot-export
+
 
 # Each of the following lines exports the game for a given platform.
 # You can specify the platform in the EXPORT_NAME variable

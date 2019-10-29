@@ -80,11 +80,19 @@ func set_position(pos:Vector2):
 	return self
 	
 func select_random_buyables():
+	var g = load("res://scripts/NonToolFix.gd").new().g()
+	var level = g.level
+	
+	var locked_valid_buyables = []
+	for buyable in locked_buyables.get_children():
+		if buyable.from_level <= level:
+			locked_valid_buyables.append(buyable)
+	
 	var selected_ids = []
-	var left = locked_buyables.get_children().size()
+	var left = locked_valid_buyables.size()
 	for _i in range(min(unlock_possibilities, left)):
 		var selected_id = randi()%left
-		while selected_ids.find(selected_id) != -1:
+		while selected_ids.find(selected_id) != -1 or locked_buyables.get_children()[selected_id].from_level > level:
 			selected_id = randi()%left
 		selected_ids.append(selected_id)
 

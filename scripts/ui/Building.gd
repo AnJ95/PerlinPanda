@@ -5,6 +5,7 @@ export var block_tile_id:int setget set_block_tile_id
 export var costs_bamboo:int setget set_costs_bamboo
 export var costs_stone:int setget set_costs_stone
 export var costs_leaves:int setget set_costs_leaves
+export var from_level:int = 1
 
 export var col_inactive:Color = Color(0.0,0.0,0.0, 0.07)
 export var col_active:Color = Color(0.4,0.7,0.3, 1.0)

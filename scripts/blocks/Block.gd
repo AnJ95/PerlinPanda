@@ -1,7 +1,5 @@
 extends "res://scripts/TileElement.gd"
 
-var stock:int
-
 func get_class(): return "Block"
 
 func init(map, cell_pos, cell_info, args, nth):
@@ -18,24 +16,9 @@ func init(map, cell_pos, cell_info, args, nth):
 func panda_in_center(panda):
 	.panda_in_center(panda)
 
-	if ressource_name_or_null() != null and panda.perform_next_action() and stock > 0 and panda.inventory.get_free(ressource_name_or_null()) >= 1:
+	if ressource_name_or_null() != null and panda.perform_next_action() and (stock > 0 or is_infinite_ressource()) and panda.inventory.get_free(ressource_name_or_null()) >= 1:
 		panda.start_working_on_ressource(self)
 
-func get_ressource_amount_after_work_done():
-	# if stock was 0 before (only when multiple pandas or other influences decreased stock)
-	if stock == 0:
-		return 0
-	# decrease stock by one
-	decrease_stock()
-	return 1
-
-func increase_stock():
-	stock = min(int(get_max_stock()), int(stock) + 1)
-	update_tile()
-
-func decrease_stock():
-	stock = max(0, int(stock) - 1)
-	update_tile()
 
 func update_tile():
 	var tile_id = get_tile_id()
@@ -59,12 +42,7 @@ func tick():
 		increase_stock()
 		map.p("... increased stock of ressource " + ressource_name_or_null() + " from " + str(stock_before) + " to " + str(stock))
 
-func get_max_stock():
-	return 0
-func ressource_name_or_null():
-	return null
-func ressource_work_time():
-	return 0
+
 func time_update(_time:float):
 	pass
 
@@ -95,6 +73,38 @@ func remove():
 	map.blocks.erase(cell_pos)
 	map.map_blocks.set_cellv(cell_pos, -1)
 
+
+
+	
+################################################
+### RESSOURCE
+var stock:int
+func ressource_name_or_null():
+	return null
+func ressource_work_time():
+	return 0
+func is_infinite_ressource():
+	return false
+
+func get_ressource_amount_after_work_done():
+	# if stock was 0 before (only when multiple pandas or other influences decreased stock)
+	if stock == 0 and !is_infinite_ressource():
+		return 0
+	# decrease stock by one
+	decrease_stock()
+	return 1
+
+func get_max_stock():
+	return 0
+	
+func increase_stock():
+	stock = min(int(get_max_stock()), int(stock) + 1)
+	update_tile()
+
+func decrease_stock():
+	stock = max(0, int(stock) - 1)
+	update_tile()
+	
 ################################################
 ### FIRE
 func catch_fire():

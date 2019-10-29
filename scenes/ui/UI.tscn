@@ -31,19 +31,12 @@ show_max_value = true
 max_ressource_name = "artefacts_max"
 max_value = 0
 texture = ExtResource( 2 )
-do_update = true
-small = false
 
 [node name="Ressource" parent="." instance=ExtResource( 1 )]
 margin_top = 60.0
 margin_bottom = 130.0
-value = 1
 ressource_name = "population"
-show_max_value = false
-max_value = 1
 texture = ExtResource( 3 )
-do_update = true
-small = false
 
 [node name="EndScreen" type="Node2D" parent="."]
 editor/display_folded = true
@@ -94,7 +87,7 @@ color = Color( 0, 0, 0, 0.117647 )
 [node name="panda" type="Sprite" parent="EndScreen"]
 visible = false
 position = Vector2( 488.363, 90.8026 )
-rotation = -0.0139153
+rotation = -0.00702265
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -231,8 +224,8 @@ color = Color( 0, 0, 0, 0.117647 )
 
 [node name="panda" type="Sprite" parent="FailScreen"]
 visible = false
-position = Vector2( 825440, 112.369 )
-rotation = -0.20873
+position = Vector2( 999786, 112.369 )
+rotation = -0.10534
 scale = Vector2( 1.46118, 1.46118 )
 texture = ExtResource( 6 )
 hframes = 2
@@ -328,7 +321,7 @@ script = ExtResource( 8 )
 ]]
 margin_right = 1024.0
 margin_bottom = 92.0
-custom_constants/separation = 20
+custom_constants/separation = 8
 
 [node name="HouseLv1" parent="Buyables/Unlocked" instance=ExtResource( 9 )]
 block_tile_id = 4
@@ -337,8 +330,8 @@ costs_stone = 2
 costs_leaves = 4
 
 [node name="Street" parent="Buyables/Unlocked" instance=ExtResource( 9 )]
-margin_left = 135.0
-margin_right = 250.0
+margin_left = 123.0
+margin_right = 238.0
 block_tile_id = 28
 costs_bamboo = 1
 costs_stone = 1
@@ -379,5 +372,23 @@ focus_mode = 2
 block_tile_id = 77
 costs_bamboo = 2
 costs_stone = 1
+
+[node name="TownCenter" parent="Buyables/Locked" instance=ExtResource( 9 )]
+margin_left = 540.0
+margin_right = 655.0
+focus_mode = 2
+block_tile_id = 18
+costs_bamboo = 5
+costs_stone = 5
+costs_leaves = 5
+
+[node name="Mine" parent="Buyables/Locked" instance=ExtResource( 9 )]
+margin_left = 675.0
+margin_right = 790.0
+focus_mode = 2
+block_tile_id = 7
+costs_bamboo = 6
+costs_stone = 6
+costs_leaves = 2
 [connection signal="gui_input" from="EndScreen/BtnNext" to="EndScreen" method="on_gui_input"]
 [connection signal="gui_input" from="FailScreen/BtnNext" to="FailScreen" method="on_gui_input"]

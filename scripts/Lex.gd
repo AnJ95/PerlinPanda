@@ -1,9 +1,9 @@
 extends Node
 
 var block_sheet = [
-	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_4", "stone_var_1_stock_4", "house", "farm_stock_4", "", "", "", "", "", "",
-	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2", "", "", "", "", "", "",
-	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2", "", "", "", "", "", "",
+	"bamboo_var_0_stock_3", "bamboo_var_1_stock_3", "stone_var_0_stock_4", "stone_var_1_stock_4", "house", "farm_stock_4", "towncenter_stock_1", "mine", "", "", "", "",
+	"bamboo_var_0_stock_2", "bamboo_var_1_stock_2", "stone_var_0_stock_3", "stone_var_1_stock_3", "wip_of_4", "farm_stock_2", "towncenter_stock_0", "wip_of_7", "", "", "", "",
+	"bamboo_var_0_stock_1", "bamboo_var_1_stock_1", "stone_var_0_stock_2", "stone_var_1_stock_2", "street", "farm_stock_2", "wip_of_18", "", "", "", "", "",
 	"bamboo_var_0_stock_0", "bamboo_var_1_stock_0", "stone_var_0_stock_1", "stone_var_1_stock_1", "wip_of_28", "farm_stock_1", "", "", "", "", "", "",
 	"mountain_var_0", "mountain_var_1", "mountain_var_2", "mountain_var_3", "tower", "farm_stock_0", "", "", "", "", "", "",
 	"bughill_var_0", "bughill_var_1", "bughill_var_2", "", "wip_of_52", "wip_of_53", "", "", "", "", "", "",
@@ -35,7 +35,9 @@ var block_scripts = {
 	"tower": load("res://scripts/blocks/BlockTower.gd"),
 	"well": load("res://scripts/blocks/BlockWell.gd"),
 	"smoker": load("res://scripts/blocks/BlockSmoker.gd"),
-	"artefact": load("res://scripts/blocks/BlockArtefact.gd")
+	"artefact": load("res://scripts/blocks/BlockArtefact.gd"),
+	"towncenter": load("res://scripts/blocks/BlockTownCenter.gd"),
+	"mine": load("res://scripts/blocks/BlockMine.gd")
 }
 
 var landscape_scripts = {

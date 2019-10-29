@@ -52,10 +52,7 @@ func _process(delta: float) -> void:
 			$Particles_sleeping.emitting = true
 		else:
 			return	
-	
-	
-	
-	
+
 	# wait idly if no path defined yet
 	if path == null or path.size() == 0:
 		$Particles_exhaustion.emitting = false

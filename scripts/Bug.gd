@@ -41,8 +41,9 @@ func _process(delta: float) -> void:
 	# Check if current target in vicinity
 	if move_towards_then(target_pos, SPEED, delta):
 		if map.blocks.has(target_pos):
-			if map.blocks[target_pos].ressource_name_or_null() == "bamboo" and map.blocks[target_pos].stock > 0:
-				start_working_on_ressource(map.blocks[target_pos])
+			var block = map.blocks[target_pos]
+			if block.ressource_name_or_null() == "bamboo" and (block.stock > 0 or block.is_infinite_ressource()):
+				start_working_on_ressource(block)
 			if map.blocks.has(target_pos) and map.blocks[target_pos].get_class() == "BlockBugHill" and inventory.has("bamboo", 1):
 				for _i in range(0, inventory.get("bamboo")):
 					hill.upgrade()
@@ -63,7 +64,7 @@ func get_next_target():
 			var block = map.blocks[adjacent]
 			if block.get_class() == "BlockBugHill" and inventory.has("bamboo", 1):
 				home = adjacent
-			if block.ressource_name_or_null() == "bamboo" and block.stock > 0:
+			if block.ressource_name_or_null() == "bamboo" and (block.stock > 0 or block.is_infinite_ressource()):
 				bamboo.append(adjacent)
 	
 	var target

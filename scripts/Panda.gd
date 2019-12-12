@@ -26,7 +26,7 @@ var start_anim_target
 
 
 func prep(map, cell_pos, cell_info, nth):
-	.init(map)
+	.init(map, nth)
 	self.home_pos3 = Vector3(cell_pos.x, cell_pos.y, cell_info.height)
 	self.home_pos = cell_pos
 	return self
@@ -206,7 +206,7 @@ func next_path():
 		expected_inventory = next_expected_inventories.pop_front()
 	else:
 		path = null
-		if repeat:
+		if do_repeat:
 			repeat()
 		else:
 			map.blocks[home_pos].scheduled_inventory = map.blocks[home_pos].inventory.clone()
@@ -341,13 +341,13 @@ func repeat():
 				if pathMaker.path[pathMaker.path.size()-2] is bool and repeat_path.size() > i+1 and repeat_path[i+1] is bool:
 					pathMaker.path[pathMaker.path.size()-2] = repeat_path[i+1]
 					
-var repeat = false
+var do_repeat = false
 var repeat_path
 var repeat_next_paths
 var repeat_line
-func set_repeat(repeat):
-	map.blocks[home_pos].repeat_icon.set_pressed(repeat)
-	if repeat:
+func set_repeat(do_repeat):
+	map.blocks[home_pos].repeat_icon.set_pressed(do_repeat)
+	if do_repeat:
 		repeat_path = path
 		repeat_next_paths = []; for e in next_paths: repeat_next_paths.append(e)
 		draw_orange_line()
@@ -369,7 +369,7 @@ func set_repeat(repeat):
 		if repeat_line != null:
 			repeat_line.hide()
 			
-	self.repeat = repeat
+	self.do_repeat = do_repeat
 			
 	
 func draw_orange_line():

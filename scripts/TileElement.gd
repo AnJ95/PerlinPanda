@@ -33,7 +33,7 @@ func get_tile_id():
 func get_max_var():
 	return 0
 	
-func panda_in_center(panda):
+func panda_in_center(_panda):
 	if fire_or_null != null:
 		fire_or_null.extinguish()
 

@@ -154,7 +154,7 @@ func set_from_ressource_block(panda_inventory, _taking_from_home, _house_invento
 	changeable = false
 	return self
 	
-func set_from_foreign_house(panda_inventory, taking_from_home, house_inventory, block):
+func set_from_foreign_house(panda_inventory, taking_from_home, house_inventory, _block):
 	ressources = {}
 	ressources_max = {}
 	for res in panda_inventory.inventory:

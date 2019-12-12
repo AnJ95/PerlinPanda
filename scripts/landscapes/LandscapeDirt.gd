@@ -28,9 +28,7 @@ func tick():
 	.tick()
 	# Spawn bug hill
 	if !has_block():
-		var prob = PROB_TO_SPAWN_BUG_HILL
-		+ (1 - get_weather().rain.now()) * PROB_TO_SPAWN_BUG_HILL_DROUGHT_BONUS
-		+ (1 - get_weather().day.now()) * PROB_TO_SPAWN_BUG_HILL_NIGHT_BONUS
+		var prob = PROB_TO_SPAWN_BUG_HILL + (1 - get_weather().rain.now()) * PROB_TO_SPAWN_BUG_HILL_DROUGHT_BONUS + (1 - get_weather().day.now()) * PROB_TO_SPAWN_BUG_HILL_NIGHT_BONUS
 		
 		if randi()%100 <= prob:
 			map.set_block_by_descriptor(cell_pos, "bughill")
@@ -38,8 +36,7 @@ func tick():
 	
 	# Transform to grass
 	if randi()%100 <= 100*fertility:
-		var prob = PROB_TO_GRASS_CONVERSION_WHEN_SPREADING
-		+ get_weather().rain.now() * PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS
+		var prob = PROB_TO_GRASS_CONVERSION_WHEN_SPREADING + get_weather().rain.now() * PROB_TO_GRASS_CONVERSION_WHEN_SPREADING_RAIN_BONUS
 		
 		if randi()%100 <= prob:
 			map.set_landscape_by_descriptor(cell_pos, "grass")

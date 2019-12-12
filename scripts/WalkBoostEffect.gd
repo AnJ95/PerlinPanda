@@ -19,7 +19,7 @@ func init(map, cell_pos, ownr):
 	
 	return self
 	
-func _process(delta):
+func _process(_delta):
 	var pos = map.calc_px_pos_on_tile(cell_pos)
 	for panda in map.get_tree().get_nodes_in_group("panda"):
 		if pos.distance_squared_to(panda.position) <= (2*105)*(2*105) and pos.distance_to(panda.position) <= (2*105):

@@ -29,8 +29,7 @@ func panda_in_center(_panda):
 func tick():
 	.tick()
 	if randi()%100 <= 100 * fertility:
-		var prob = PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING
-		+ get_weather().rain.now() * PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS
+		var prob = PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING + get_weather().rain.now() * PROB_TO_INCREASE_DURABILITY_WHEN_SPREADING_RAIN_BONUS
 		if randi()%100 <= prob:
 			increase_durability()
 
@@ -39,8 +38,7 @@ func increase_durability():
 	
 	if randi()%100 <= 100 * fertility:
 		if durability > max_durability() and !has_block():
-			var prob = PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY
-			+ get_weather().rain.now() * PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS
+			var prob = PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY + get_weather().rain.now() * PROB_TO_GROW_VEGETATION_WHEN_MAX_DURABILITY_RAIN_BONUS
 			if randi()%100 <= prob:
 				map.set_block_by_descriptor(cell_pos, "vegetation")
 	

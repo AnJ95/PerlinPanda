@@ -45,7 +45,7 @@ func house_mouse_leave():
 		hide()
 
 
-func _process(delta):
+func _process(_delta):
 	if mouse_on:
 		if can_currently_repeat() or pressed:
 			show()

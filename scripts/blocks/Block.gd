@@ -102,7 +102,7 @@ func increase_stock():
 	update_tile()
 
 func decrease_stock():
-	stock = max(0, int(stock) - 1)
+	stock = int(max(0, int(stock) - 1))
 	update_tile()
 	
 ################################################

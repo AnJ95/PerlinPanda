@@ -74,7 +74,8 @@ onready var nth = {
 	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn"),
 	"RepeatIcon":preload("res://scenes/ui/RepeatIcon.tscn"),
 	"Inventory":preload("res://scenes/Inventory.tscn"),
-	"WalkBoostEffect":preload("res://scenes/WalkBoostEffect.tscn")
+	"WalkBoostEffect":preload("res://scenes/WalkBoostEffect.tscn"),
+	"PathMaker":preload("res://scenes/PathMaker.tscn")
 	}
 
 # OpenSimplex

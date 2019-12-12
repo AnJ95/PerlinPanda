@@ -1,30 +1,13 @@
 tool
 extends TextureRect
 
-var fog_pos_arr = []
-func _ready():
-	if Engine.editor_hint:
-		for _i in range(30):
-			fog_pos_arr.append(Vector2(randi()%1024, 600+randi()%600))
-	update_fog_pos_array()
-		
-
-func add_fog_pos(pos):
-	fog_pos_arr.append(pos)
-	update_fog_pos_array()
-	
-
-
 const BYTE = 0xFF
 const SIGN = (1 << 7)
 const BYTE_NO_SIGN = BYTE - SIGN
-
-func update_fog_pos_array():
-	var txt = create_texture_from_pos_array(fog_pos_arr)
-
-	# Upload the texture to my shader
-	material.set_shader_param("fog_pos_arr", txt)
 	
+	
+# NOT USED
+# Creates a sampler2D for shaders from an array of vec2s
 func create_texture_from_pos_array(pos_arr):
 	# You'll have to get thoose the way you want
 	var array_width = 2 * pos_arr.size()
@@ -52,12 +35,3 @@ func create_texture_from_pos_array(pos_arr):
 	texture.create_from_image(img, 0)
 	
 	return texture
-	
-func _process(delta):
-	var pos_arr = []
-	for panda in get_tree().get_nodes_in_group("panda"):
-		pos_arr.append(panda.position)
-		pos_arr.append(panda.home.light.position)
-	
-	var txt = create_texture_from_pos_array(pos_arr)
-	material.set_shader_param("clear_pos_arr", txt)

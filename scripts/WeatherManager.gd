@@ -39,7 +39,6 @@ func _ready():
 	
 	
 	
-var delme = 0
 func _process(delta):
 
 	weather_time += delta
@@ -73,7 +72,6 @@ func is_raining():
 	
 func process_rain():
 	set_particle_amount(cloudNode, y(is_raining(), interpol(0.6, 1.0, rain.now(), 10, 20), 0))
-	print(y(is_raining(), interpol(0.6, 1.0, rain.now(), 1.0, 4.0), 0))
 	rainNode.material.set_shader_param("amount", y(is_raining(), interpol(0.6, 1.0, rain.now(), 1.0, 4.0), 0))
 
 func process_lightning(delta):
@@ -119,11 +117,11 @@ func process_fog():
 	fogNode.material.set_shader_param("offset", param_offset)
 	fogNode.material.set_shader_param("scale", param_scale)
 	
-func add_fog_pos(pos:Vector2):
-	if fogNode == null:
-		$Center/Fog.add_fog_pos(pos)
-	else:
-		fogNode.add_fog_pos(pos)
+#func add_fog_pos(pos:Vector2):
+#	if fogNode == null:
+#		$Center/Fog.add_fog_pos(pos)
+#	else:
+#		fogNode.add_fog_pos(pos)
 
 var particle_duplicates = {}
 const particle_min_delta = 5

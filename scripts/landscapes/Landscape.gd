@@ -4,7 +4,6 @@ func get_class(): return "Landscape"
 
 func init(map, cell_pos, cell_info, args, nth):
 	.init(map, cell_pos, cell_info, args, nth)
-	init_fog()
 	return self
 
 
@@ -119,19 +118,3 @@ func got_burned_to_the_ground():
 	map.set_landscape_by_descriptor(cell_pos, "burnt")
 	pass
 	
-################################################
-### FOG
-var fog_mask
-const FOG_FROM = 0.15
-const FOG_MAX = 0.3
-func init_fog():
-	var hum = cell_info.humidity
-	
-	if hum >= FOG_FROM: 
-		get_weather().add_fog_pos(map.calc_px_pos_on_tile(cell_pos))
-		#fog_mask = nth.FogMask.instance()
-		#fog_mask.position = map.calc_px_pos_on_tile(cell_pos)
-		#if hum <= FOG_MAX: fog_mask.energy = min(hum-FOG_FROM, FOG_MAX-FOG_FROM) / float(FOG_MAX-FOG_FROM)
-		#else: fog_mask.energy = 1
-		#get_particle_holder().add_child(fog_mask)
-			

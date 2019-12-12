@@ -110,7 +110,7 @@ scale = 0.2
 
 [sub_resource type="ShaderMaterial" id=13]
 shader = ExtResource( 8 )
-shader_param/play_shader = false
+shader_param/play_shader = true
 shader_param/show_bg = true
 
 [node name="Panda" type="Node2D" groups=[

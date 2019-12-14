@@ -197,6 +197,7 @@ func _ready():
 		
 		prepare_presets(start_pos)
 		generate_tile(start_pos)
+		prepare_rivers()
 		show_homes()
 	
 		if !Engine.editor_hint:
@@ -262,6 +263,56 @@ func prepare_presets(start_pos):
 			c.position = calc_px_pos_on_tile(circle[0])
 			c.scale = Vector2(2 + 3.5 * circle[1], 2 + 3.5 * circle[1])
 			get_parent().call_deferred("add_child", c)
+
+
+var rivers = []
+func prepare_rivers():
+	# valid = no building
+	# goal = water
+	
+	for circle in map_generation_circles:
+		var river = []
+		var start_candidates = get_adjacent_tiles(circle[0], 3)
+		
+		var start = null
+		var highest = 100
+		for candidate in start_candidates:
+			var height = create_cell_info(candidate).precise_height
+			if start == null or highest > height:
+				start = candidate
+				highest = height
+		
+		print("## River ## making river from " + str(start))
+		if start == null:
+			printerr("## River ## could find valid start")
+			continue
+			
+		var current = start
+		river.append(current)
+		while create_cell_info(current).height < layers - 1:
+			var adjs = get_adjacent_tiles(current, 1)
+			
+			var next = null
+			var lowest = -100
+		
+			for adj in adjs:
+				
+				var height = create_cell_info(adj).precise_height
+				if adj == null or lowest < height:
+					next = adj
+					lowest = height
+					
+			if next == null:
+				printerr("## River ## could find valid next tile from " + str(current))
+				continue
+			
+			current = next
+			river.append(current)
+		
+		print("## River ## Path is " + str(river))
+		rivers.append(river)
+				
+			
 			
 		
 func is_part_of_preset(pos):

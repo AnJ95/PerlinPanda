@@ -75,12 +75,13 @@ onready var nth = {
 	"RepeatIcon":preload("res://scenes/ui/RepeatIcon.tscn"),
 	"Inventory":preload("res://scenes/Inventory.tscn"),
 	"WalkBoostEffect":preload("res://scenes/WalkBoostEffect.tscn"),
-	"PathMaker":preload("res://scenes/PathMaker.tscn")
+	"PathMaker":preload("res://scenes/PathMaker.tscn"),
+	"River":preload("res://scenes/River.tscn")
 	}
 
 # OpenSimplex
 var map_gens_lex = {
-	"height" : {"octaves": 3, "period": 10.0, "persistence": 0.8, "seed": randi()},
+	"height" : {"octaves": 3, "period": 10.0, "persistence": 0.8, "seed": randi()+2},
 	"fertility" : {"octaves": 5, "period": 0.2, "persistence": 0.8, "seed": randi()},
 	"humidity" : {"octaves": 4, "period": 4.0, "persistence": 0.8, "seed": randi()}
 }
@@ -196,8 +197,8 @@ func _ready():
 		
 		
 		prepare_presets(start_pos)
-		generate_tile(start_pos)
 		prepare_rivers()
+		generate_tile(start_pos)
 		show_homes()
 	
 		if !Engine.editor_hint:
@@ -272,11 +273,13 @@ func prepare_rivers():
 	
 	for circle in map_generation_circles:
 		var river = []
-		var start_candidates = get_adjacent_tiles(circle[0], 3)
+		var start_candidates = get_adjacent_tiles(circle[0], circle[1]*0.2)
 		
 		var start = null
 		var highest = 100
 		for candidate in start_candidates:
+			if candidate == start_pos or is_part_of_preset(candidate):
+				continue
 			var height = create_cell_info(candidate).precise_height
 			if start == null or highest > height:
 				start = candidate
@@ -289,21 +292,22 @@ func prepare_rivers():
 			
 		var current = start
 		river.append(current)
-		while create_cell_info(current).height < layers - 1:
+		while current != null and create_cell_info(current).height < layers - 1 and !create_cell_info(current).isOcean:
 			var adjs = get_adjacent_tiles(current, 1)
 			
 			var next = null
 			var lowest = -100
 		
 			for adj in adjs:
-				
 				var height = create_cell_info(adj).precise_height
-				if adj == null or lowest < height:
+				# (is currently deepest adj) and (is valid pos)
+				if (adj == null or lowest < height) and (adj != start_pos and !is_part_of_preset(adj) and !river.has(adj) and abs(create_cell_info(adj).height - create_cell_info(current).height) <= 1):
 					next = adj
 					lowest = height
 					
 			if next == null:
 				printerr("## River ## could find valid next tile from " + str(current))
+				current = null
 				continue
 			
 			current = next
@@ -311,8 +315,6 @@ func prepare_rivers():
 		
 		print("## River ## Path is " + str(river))
 		rivers.append(river)
-				
-			
 			
 		
 func is_part_of_preset(pos):
@@ -448,12 +450,14 @@ func create_cell_info(cell_pos:Vector2):
 	# linearly scale [0, 1] to [1, 0] and then to [6, 0]
 	preciseHeight = (1 - preciseHeight) * layers
 	
+	var isOcean = true
 	var oceanMalus = 6
 	# Shape island for base of circles
 	for circle in map_generation_circles:
 		var dst = cell_pos.distance_to(circle[0])
 		if dst <= circle[1]:
 			oceanMalus = 0
+			isOcean = false
 		else:
 			oceanMalus = min(oceanMalus, 1.8*(dst - circle[1]))
 	
@@ -469,6 +473,9 @@ func create_cell_info(cell_pos:Vector2):
 	cell_info.humidity = map_gens.humidity.get_noise_2dv(cell_pos) + 0.08 * start_bonus
 	cell_info.precise_height = preciseHeight + (2 - preciseHeight) * start_bonus
 	cell_info.height = min(max(floor(cell_info.precise_height), 0), layers-1)
+	cell_info.isOcean = isOcean and cell_info.precise_height >= layers-1
+	cell_info.river_prev = []
+	cell_info.river_next = []
 
 	return cell_info
 
@@ -520,7 +527,7 @@ func generate_tile(var cell_pos:Vector2):
 		#load_preset_tile(map_pos, preset_id, preset_pos)
 		generate_preset_tile(cell_pos, preset_info[0], preset_info[1])
 		return
-
+		
 	var landscape = ""
 	var block = ""
 
@@ -546,6 +553,18 @@ func generate_tile(var cell_pos:Vector2):
 	#### BLOCKS
 	if cell_pos == start_pos:
 		block = "house"
+		
+	if block == "":
+		for river in rivers:
+			if river.has(cell_pos):
+				for i in range(river.size()):
+					if river[i] == cell_pos:
+						if i > 0:
+							cell_info.river_prev.append(river[i-1])
+						if i + 1 < river.size():
+							cell_info.river_next.append(river[i+1])
+							
+				block = "river"
 		
 	if block == "" and landscape == "dirt":
 		if int(cell_info.humidity * 100) % 3 == 0:

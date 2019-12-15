@@ -37,7 +37,8 @@ var block_scripts = {
 	"smoker": load("res://scripts/blocks/BlockSmoker.gd"),
 	"artefact": load("res://scripts/blocks/BlockArtefact.gd"),
 	"towncenter": load("res://scripts/blocks/BlockTownCenter.gd"),
-	"mine": load("res://scripts/blocks/BlockMine.gd")
+	"mine": load("res://scripts/blocks/BlockMine.gd"),
+	"river": load("res://scripts/blocks/BlockRiver.gd")
 }
 
 var landscape_scripts = {

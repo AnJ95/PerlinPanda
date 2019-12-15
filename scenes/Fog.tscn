@@ -77,34 +77,34 @@ void fragment() {
 	COLOR = col;
 }"
 
-[sub_resource type="OpenSimplexNoise" id=13]
+[sub_resource type="OpenSimplexNoise" id=2]
 octaves = 2
 period = 128.0
 
-[sub_resource type="NoiseTexture" id=14]
+[sub_resource type="NoiseTexture" id=3]
 width = 1024
 height = 1024
 seamless = true
-noise = SubResource( 13 )
+noise = SubResource( 2 )
 
-[sub_resource type="OpenSimplexNoise" id=5]
+[sub_resource type="OpenSimplexNoise" id=4]
 
-[sub_resource type="NoiseTexture" id=6]
+[sub_resource type="NoiseTexture" id=5]
 width = 1024
 height = 600
 seamless = true
-noise = SubResource( 5 )
+noise = SubResource( 4 )
 
-[sub_resource type="ShaderMaterial" id=7]
+[sub_resource type="ShaderMaterial" id=6]
 shader = SubResource( 1 )
 shader_param/intensity = 1.0
 shader_param/offset = null
 shader_param/scale = 1.0
-shader_param/noise_texture = SubResource( 6 )
-shader_param/noise_mask = SubResource( 14 )
+shader_param/noise_texture = SubResource( 5 )
+shader_param/noise_mask = SubResource( 3 )
 
 [node name="Fog" type="TextureRect"]
-material = SubResource( 7 )
+material = SubResource( 6 )
 margin_left = -512.0
 margin_top = -300.0
 margin_right = 512.0

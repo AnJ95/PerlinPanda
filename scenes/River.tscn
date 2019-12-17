@@ -1,9 +1,26 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://scripts/River.gd" type="Script" id=1]
 [ext_resource path="res://assets/riverMask.png" type="Texture" id=2]
 
-[sub_resource type="Shader" id=5]
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform sampler2D river : hint_albedo;
+
+void fragment() {
+	//if (texture(river, UV).a >= 1f)
+	COLOR = vec4(1f, 0f, 0f, 1f);
+}"
+
+[sub_resource type="ViewportTexture" id=2]
+viewport_path = NodePath("Viewport")
+
+[sub_resource type="ShaderMaterial" id=3]
+shader = SubResource( 1 )
+shader_param/river = SubResource( 2 )
+
+[sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
 
 uniform sampler2D noise_texture : hint_albedo;
@@ -21,17 +38,20 @@ float redness(vec4 col) {
 
 
 void fragment() {
-	vec4 noise = texture(noise_texture, UV + 0.05*TIME * direction);
-	vec4 noise_alpha = texture(noise_texture, UV + 0.064739*TIME * direction);
+	vec4 noise_1 = texture(noise_texture, vec2(2f,1f)*UV + 0.2*TIME * direction);
+	vec4 noise_2 = texture(noise_texture, vec2(2f,1f)*UV - 0.014739*TIME * direction);
 	vec4 mask_text = texture(TEXTURE, UV);
-	vec4 mask_descend_text = texture(TEXTURE, UV-vec2(0, 7.0 / texture_h));
+	//vec4 mask_descend_text = texture(TEXTURE, UV-vec2(0, 7.0 / texture_h));
 	float mask = mask_text.a;
-	float mask_descend = mask_descend_text.a;
+	//float mask_descend = mask_descend_text.a;
 	
-	vec4 noise_color = COLOR * vec4(2f*0.2, 2f*0.4, 2f*0.8, 2f * mask * noise_alpha.r);
+	vec4 noise_color = mix(vec4(0.1, 0.3, 0.8, 1f), vec4(0.5, 0.8, 1, 1f), mix(noise_1, noise_2, 0.3).r);
+	noise_color.a = min(noise_color.a, mask);
 	
+	//vec4 noise_color = COLOR * vec4(2f*0.2, 2f*0.4, 2f*0.8, 2f * mask * noise_alpha.r);
 	COLOR = noise_color;
 	
+	/*
 	vec2 vec;
 	float intensity;
 	if (mask < 1f)
@@ -47,33 +67,33 @@ void fragment() {
 		COLOR = mix(vec4(0.69, 0.65, 0.3, 1f), noise_color,  mask_descend);
 	if (mask_descend <= 0f && mask > 0f && mask < 1f)
 		COLOR = mix(vec4(0.69, 0.65, 0.3, 1f), vec4(0.89, 0.85, 0.4, 1f),  1f-mask);
-		
+	*/
 	
-	COLOR.a = min(COLOR.a, 1f - redness(mask_text));
+	//COLOR.a = min(COLOR.a, 1f - redness(mask_text));
 		
 }
 
 
 "
 
-[sub_resource type="OpenSimplexNoise" id=3]
-seed = 238675
+[sub_resource type="OpenSimplexNoise" id=5]
 
-[sub_resource type="NoiseTexture" id=4]
+[sub_resource type="NoiseTexture" id=6]
 seamless = true
-noise = SubResource( 3 )
+noise = SubResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=6]
-shader = SubResource( 5 )
+[sub_resource type="ShaderMaterial" id=7]
+shader = SubResource( 4 )
 shader_param/direction = Vector2( 0, -1 )
-shader_param/texture_h = 200.0
-shader_param/texture_w = 116.0
-shader_param/noise_texture = SubResource( 4 )
+shader_param/texture_h = 600.0
+shader_param/texture_w = 256.0
+shader_param/noise_texture = SubResource( 6 )
 
 [node name="River" type="Node2D"]
+material = SubResource( 3 )
 script = ExtResource( 1 )
 
 [node name="Sprite" type="Sprite" parent="."]
-material = SubResource( 6 )
+material = SubResource( 7 )
 position = Vector2( 0, 30.7447 )
 texture = ExtResource( 2 )

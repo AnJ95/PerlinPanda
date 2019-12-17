@@ -69,6 +69,7 @@ onready var nth = {
 	"ParticlesBugHillStomped":preload("res://scenes/particles/Particles_bug_hill_stomped.tscn"),
 	"ParticlesFireExtinguished":preload("res://scenes/particles/Particles_fire_extinguished.tscn"),
 	"ParticlesFireBurned":preload("res://scenes/particles/Particles_fire_burned.tscn"),
+	"ParticlesWaterFalls":preload("res://scenes/particles/Particles_water_falls.tscn"),
 	"Fire":preload("res://scenes/Fire.tscn"),
 	"OrangeLight":preload("res://scenes/OrangeLight.tscn"),
 	"ArtefactScreen":preload("res://scenes/ui/ArtefactScreen.tscn"),
@@ -76,7 +77,7 @@ onready var nth = {
 	"Inventory":preload("res://scenes/Inventory.tscn"),
 	"WalkBoostEffect":preload("res://scenes/WalkBoostEffect.tscn"),
 	"PathMaker":preload("res://scenes/PathMaker.tscn"),
-	"River":preload("res://scenes/River.tscn")
+	"River":preload("res://scenes/River.tscn"),
 	}
 
 # OpenSimplex

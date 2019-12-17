@@ -12,7 +12,7 @@ func get_tile_id():
 
 func ressource_work_time():
 	return 2
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 2.5
 	
 func get_max_stock():

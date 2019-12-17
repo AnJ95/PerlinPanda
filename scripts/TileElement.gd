@@ -44,7 +44,7 @@ func update_tile():
 func tick():
 	pass
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 1.0
 	
 func got_welled():

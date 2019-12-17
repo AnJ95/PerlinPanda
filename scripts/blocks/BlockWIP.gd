@@ -17,7 +17,7 @@ func inst_actual_block():
 func get_tile_id():
 	return args.of + 12
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 1.2
 	
 func ressource_name_or_null():

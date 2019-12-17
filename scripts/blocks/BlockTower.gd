@@ -11,7 +11,7 @@ func init(map, cell_pos, cell_info, args, nth):
 func get_tile_id():
 	return 4 + 4*12
 
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 2.0
 	
 func multiple_in_one_path_allowed():

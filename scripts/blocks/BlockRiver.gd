@@ -21,6 +21,7 @@ func add_river_parts(list, prev_or_next=true):
 		rot = rot/(2.0*PI)*360.0 + 90
 		var river = nth.River.instance()
 		map.get_node("Navigation2D/MiddleHolder").add_child(river.init(pos, rot, prev_or_next))
+		river_parts.append(river)
 		if height - map.create_cell_info(adj).height == -1:
 			add_falls_particles(pos, rot)
 
@@ -41,8 +42,22 @@ func remove():
 func get_tile_id():
 	return 11 + 6*12
 
-func get_speed_factor():
-	return 2.3
+func get_speed_factor(panda):
+	
+	# get similarities of river directions in distance across unit circle
+	var min_dst = 100 ;var max_dst = 0
+	for river in river_parts:
+		var dst = panda.direction.distance_to(Vector2(1,0).rotated(deg2rad(river_parts[0]._flow_angle)))
+		min_dst = min(dst, min_dst); max_dst = max(dst, max_dst)
+	
+ 	# calc walk boost
+	var factor = 1
+	if min_dst < 1:
+		factor *= 1 + 1.3 * min(1, max(0, 1-min_dst))
+	if max_dst > 1:
+		factor *= 1 - 0.5 * min(1, max(0, max_dst-1))
+		
+	return factor
 
 func shields_landscape_durability():
 	return true

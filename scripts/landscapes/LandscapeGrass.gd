@@ -69,7 +69,7 @@ func got_welled():
 func can_spread_grass():
 	return true
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 0.75
 	
 ################################################

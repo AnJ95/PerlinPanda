@@ -19,7 +19,7 @@ func init(map, cell_pos, cell_info, args, nth):
 func get_tile_id():
 	return 4 + 6*12
 
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 0.7
 	
 func get_build_time():

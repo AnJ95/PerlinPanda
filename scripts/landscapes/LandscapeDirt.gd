@@ -44,5 +44,5 @@ func tick():
 				get_block().play_particle_animation()
 				get_block().remove()
 
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 1

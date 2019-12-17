@@ -42,7 +42,7 @@ func tick():
 		else:
 			update_tile()
 
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 1.1
 	
 ################################################

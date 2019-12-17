@@ -230,7 +230,7 @@ func calc_speed_factor():
 	var standing_on = map.calc_closest_tile_from(position)
 	
 	var landscape_standing_on = map.landscapes[standing_on]
-	speed_factor *= landscape_standing_on.get_speed_factor()
+	speed_factor *= landscape_standing_on.get_speed_factor(self)
 	
 	for panda in get_tree().get_nodes_in_group("panda"):
 		if panda != self:
@@ -249,10 +249,10 @@ func calc_speed_factor():
 	
 	if map.blocks.has(standing_on):
 		var block_standing_on = map.blocks[standing_on]
-		speed_factor *= block_standing_on.get_speed_factor()
+		speed_factor *= block_standing_on.get_speed_factor(self)
 	
 	if map.debug_mode:
-		speed_factor *= 3.5
+		speed_factor *= 1#3.5
 	
 	return speed_factor
 		

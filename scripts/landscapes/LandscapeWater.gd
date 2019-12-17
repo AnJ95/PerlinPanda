@@ -45,7 +45,7 @@ func conv():
 func can_spread_grass():
 	return true
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 0.25
 	
 func can_build_on(_map, _cell_pos):

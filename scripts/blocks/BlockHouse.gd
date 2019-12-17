@@ -54,7 +54,7 @@ func panda_in_center(panda):
 func get_tile_id():
 	return  4
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 1.5
 	
 func remove():

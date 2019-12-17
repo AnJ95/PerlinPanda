@@ -25,7 +25,7 @@ func get_tile_id():
 func get_max_var():
 	return 0
 	
-func get_speed_factor():
+func get_speed_factor(_panda):
 	return 0.8
 
 func prevents_landscape_tick():

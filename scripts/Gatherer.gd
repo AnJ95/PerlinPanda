@@ -92,9 +92,11 @@ func stop_particles():
 	$Particles_leaves.emitting = false
 ####################################
 ## MOVEMENT
+var direction = Vector2(0,0)
 func move_towards_then(target_cell, speed, delta):
 	var target_pos = map.calc_px_pos_on_tile(target_cell)
 	
+	direction = (target_pos - position).normalized()
 	# Check if current target in vicinity
 	var d:float = position.distance_to(target_pos)
 	

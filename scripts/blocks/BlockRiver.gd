@@ -50,7 +50,7 @@ func get_speed_factor(panda):
 		var dst = panda.direction.distance_to(Vector2(1,0).rotated(deg2rad(river_parts[0]._flow_angle)))
 		min_dst = min(dst, min_dst); max_dst = max(dst, max_dst)
 	
- 	# calc walk boost
+	# calc walk boost
 	var factor = 1
 	if min_dst < 1:
 		factor *= 1 + 1.3 * min(1, max(0, 1-min_dst))

@@ -10,23 +10,63 @@ var last_mouse_pos = Vector2()
 
 onready var map = get_parent().get_node("Map")
 
+const ALLOW_MOUSE_WHEEL_ZOOM = true
 const ALLOW_MOUSE_DRAG = true
 const ALLOW_WASD_DRAG = true
+const ALLOW_TOUCH = true
+
 
 const WASD_CAM_MOVE_ACCEL = 29.0
 const WASD_CAM_MOVE_MAX_VEL = 400
 var wasd_cam_move_vel = Vector2(0, 0)
 
-func input(event):
+const MAX_ZOOM = 3.5
+const MIN_ZOOM = 1.0
+
+const MAX_ZOOM_VEC = Vector2(MAX_ZOOM, MAX_ZOOM)
+const MIN_ZOOM_VEC = Vector2(MIN_ZOOM, MIN_ZOOM)
+
+var events = {}
+var zoom0
+var dst0
+var zoom1
+var dst1
+const percision = 10
 	
-		
-	if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
-		zoom.x = min(3.5, zoom.x * 1.03)
-		zoom.y = min(3.5, zoom.y * 1.03)
-	if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
-		zoom.x = max(1, zoom.x / 1.03)
-		zoom.y = max(1, zoom.y / 1.03)
-		
+func input(event):
+	#######################################################
+	# ZOOM
+	if ALLOW_MOUSE_WHEEL_ZOOM:
+		if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_UP and event.is_pressed():
+			zoom.x = min(MAX_ZOOM, zoom.x * 1.03)
+			zoom.y = min(MAX_ZOOM, zoom.y * 1.03)
+		if event is InputEventMouseButton and event.button_index == BUTTON_WHEEL_DOWN and event.is_pressed():
+			zoom.x = max(MIN_ZOOM, zoom.x / 1.03)
+			zoom.y = max(MIN_ZOOM, zoom.y / 1.03)
+			
+	#######################################################
+	# TOUCH ZOOM
+	if ALLOW_TOUCH:
+		if event is InputEventScreenTouch:
+			if event.is_pressed():
+				events[event.index] = event
+				if is_zooming():
+					zoom0 = zoom
+					dst0 = get_pinch_dist()
+			else:
+				events.erase(event.index)
+		if event is InputEventScreenDrag:
+			events[event.index] = event
+			if is_zooming():
+				dst1 = get_pinch_dist()
+				if abs(dst0 - dst1) > percision:
+					zoom1 = zoom0 * dst0/dst1
+					zoom.x = max(MIN_ZOOM, min(MAX_ZOOM, zoom1.x))
+					zoom.y = max(MIN_ZOOM, min(MAX_ZOOM, zoom1.y))
+				if event.index == 0:
+					offset -= event.relative * zoom.x
+	#######################################################
+	# TOUCH DRAG
 	if ALLOW_MOUSE_DRAG:
 		if event is InputEventMouseButton and event.button_index == BUTTON_RIGHT:
 			if event.is_pressed():
@@ -44,7 +84,8 @@ func input(event):
 					has_dragged = true
 					offset = drag_offset - event.position
 					return true
-		
+	#######################################################
+	# DEBUG
 	if map.debug_mode:
 		if event is InputEventKey and !event.pressed:
 			var rect = get_viewport().get_visible_rect().size
@@ -61,6 +102,29 @@ func input(event):
 					map.set_block_by_descriptor(cell_pos, "bughill_var_2")
 					map.blocks[cell_pos].spawn()
 
+
+######################################################
+# HELPERS FOR ZOOMING
+func is_zooming():
+	return events.size()>1
+
+func map_pos(pos):
+	var mtx = get_viewport().get_canvas_transform()
+	var mt = mtx.affine_inverse()
+	var p = mt.xform(pos)
+	return p 
+	
+func get_pinch_dist():
+	var first_event = null
+	var result 
+	for event in events:
+		if first_event != null:
+			result = events[event].position.distance_to(first_event.position)
+			break
+		first_event = events[event]
+	return result
+	
+######################################################
 func _process(delta):
 	if !ALLOW_WASD_DRAG:
 		return

@@ -55,7 +55,7 @@ func _process(delta):
 		p("storm:  " + str(storm.now()))
 		p("fog:    " + str(fog.now()))
 	
-	mod(day_time_modulate.interpolate(fmod(weather_time, DAY_CYCLE_TIME) / float(DAY_CYCLE_TIME)))
+	mod(day_time_modulate.interpolate(fmod(weather_time, S*DAY_CYCLE_TIME) / float(S*DAY_CYCLE_TIME)))
 	
 	
 	process_storm(delta)

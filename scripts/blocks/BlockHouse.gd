@@ -68,9 +68,9 @@ func remove():
 ################################################
 ### FIRE
 func get_prob_lightning_strike():
-	return 40
+	return 25
 func get_fire_increase_time():
-	return 12
+	return 14
 
 ################################################
 ### INVENTORY

@@ -93,12 +93,12 @@ var level_defs = [
 	{
 		"circle_radii": [5],
 		"artefact_difficulties": ["easy"],
-		"weather": {"day":0.1, "rain":0.0, "storm":-0.4, "tide": 0, "fog":0 }
+		"weather": {"day":0.1, "rain":0.0, "storm":-0.26, "tide": 0, "fog":0 }
 	},
 	{
 		"circle_radii": [5, 5],
 		"artefact_difficulties": ["easy", "medium"],
-		"weather": {"day":0.0, "rain":0.0, "storm":-0.25, "tide": 0, "fog":0 }
+		"weather": {"day":0.0, "rain":0.0, "storm":-0.18, "tide": 0, "fog":0 }
 	},
 	{
 		"circle_radii": [6, 6],
@@ -118,17 +118,17 @@ var level_defs = [
 	{
 		"circle_radii": [7, 8, 9],
 		"artefact_difficulties": ["hard", "hard", "hard"],
-		"weather": {"day":-0.2, "rain":0.0, "storm":0.25, "tide": 0, "fog":0 }
+		"weather": {"day":-0.2, "rain":0.0, "storm":0.18, "tide": 0, "fog":0 }
 	},
 	{
 		"circle_radii": [8, 9, 10],
 		"artefact_difficulties": ["hard", "hard", "hard"],
-		"weather": {"day":-0.2, "rain":0.0, "storm":0.3, "tide": 0, "fog":0 }
+		"weather": {"day":-0.2, "rain":0.0, "storm":0.26, "tide": 0, "fog":0 }
 	},
 	{
 		"circle_radii": [9, 10, 11],
 		"artefact_difficulties": ["hard", "hard", "hard"],
-		"weather": {"day":-0.25, "rain":0.0, "storm":0.35, "tide": 0, "fog":0 }
+		"weather": {"day":-0.25, "rain":0.0, "storm":0.34, "tide": 0, "fog":0 }
 	}
 ]
 var level_def

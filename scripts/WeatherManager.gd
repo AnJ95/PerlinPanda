@@ -3,6 +3,7 @@ extends CanvasLayer
 onready var Cycle = preload("res://scripts/WeatherCycle.gd")
 
 # CONSTS
+const S = 1
 const DAY_CYCLE_TIME = 120
 const TIDE_MIN_LEVEL = 5.5
 const TIDE_MAX_LEVEL = 4.5
@@ -11,11 +12,11 @@ var weather_time = 30.0
 
 onready var modifier = get_parent().get_node("Map").level_def.weather
 
-onready var day = Cycle.new().init(DAY_CYCLE_TIME, (3/2.0)*PI, [0, 1], 0, modifier.day)
-onready var tide = Cycle.new().init(50, 0, [TIDE_MAX_LEVEL, TIDE_MIN_LEVEL], 0, modifier.tide)
-onready var rain = Cycle.new().init(180, PI, [0, 1], 0, modifier.rain)
-onready var storm = Cycle.new().init(180, PI, [0, 1], 1, modifier.storm)
-onready var fog = Cycle.new().init(150, PI, [-1, 1], 1, modifier.fog)
+onready var day = Cycle.new().init(S*DAY_CYCLE_TIME, (3/2.0)*PI, [0, 1], 0, modifier.day)
+onready var tide = Cycle.new().init(S*50, 0, [TIDE_MAX_LEVEL, TIDE_MIN_LEVEL], 0, modifier.tide)
+onready var rain = Cycle.new().init(S*180, PI, [0, 1], 0, modifier.rain)
+onready var storm = Cycle.new().init(S*360, PI, [0, 1], 1, modifier.storm)
+onready var fog = Cycle.new().init(S*150, PI, [-1, 1], 1, modifier.fog)
 
 onready var cycles = [day, tide, rain, storm, fog]
 
@@ -46,7 +47,7 @@ func _process(delta):
 	for cycle in cycles:
 		cycle.set_time(weather_time)
 		
-	if int(weather_time/5) != int((weather_time - delta) / 5):
+	if int(weather_time/1) != int((weather_time - delta) / 1):
 		p("########")
 		p("day:    " + str(day.now()))
 		p("tide:   " + str(tide.now()))
@@ -62,7 +63,7 @@ func _process(delta):
 	process_fog()
 
 func is_storming():
-	return storm.now() > 0.6
+	return storm.now() > 0.75
 func process_storm(delta):
 	set_particle_amount(stormCloudNode, y(is_storming(), interpol(0.6, 1.0, storm.now(), 10, 20), 0))
 	process_lightning(delta)

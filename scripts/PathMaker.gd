@@ -99,7 +99,7 @@ func _unhandled_input(event: InputEvent):
 				
 		# if is drawing path
 		if is_painting and hovered_cell != last_paint_tile:
-			add_and_try_end_path(hovered_cell, null)
+			add_and_try_end_path(hovered_cell)
 		
 	# Scrolling first
 	if get_parent().get_node("Camera2D").input(event):
@@ -136,16 +136,15 @@ func _unhandled_input(event: InputEvent):
 				toggle_tile(clicked_tile)
 			
 			# Try to add to path
-			if add_and_try_end_path(clicked_tile, clicked_panda):
+			if add_and_try_end_path(clicked_tile):
 				cancel()
 				just_ended_path = true
 		
 		# Start new path if:
 		#   not just finished path in code above
-		#   clicked panda
 		#   panda is not already making path
-		#   is not trying to walk on that tile with other panda
-		if !just_ended_path and clicked_panda != null and (!active or panda != clicked_panda) and (!active or is_valid_next(get_last_cell_pos(), clicked_tile)): #start new
+		#   Did actually select a panda
+		if !just_ended_path and !active and clicked_panda != null:
 			try_start_path_from(clicked_panda)
 			is_painting = true
 			last_paint_tile = clicked_tile
@@ -153,11 +152,8 @@ func _unhandled_input(event: InputEvent):
 var is_painting = false
 var last_paint_tile
 
-func add_and_try_end_path(tile, panda):
-	# Add to path if:
-	#   clicked a panda (or house)
-	#   did not click another panda
-	if (panda == null or self.panda == panda) and is_valid_next(get_last_cell_pos(), tile):
+func add_and_try_end_path(tile):
+	if is_valid_next(get_last_cell_pos(), tile):
 		is_painting = true
 		last_paint_tile = tile
 		if add_to_current_path(tile):
